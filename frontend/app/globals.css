@@ -2,120 +2,94 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ================================
-   GLOBAL THEME (Astrodex Inspired)
-   ================================ */
+/* =========================
+   Global Theme (Zip-like)
+========================= */
 
+:root {
+  --bg-root: #0b0e11;
+  --bg-panel: #12161c;
+  --bg-card: #161b22;
+
+  --border-subtle: rgba(255,255,255,0.08);
+
+  --text-primary: #eaecef;
+  --text-secondary: #9aa4b2;
+  --text-muted: #6b7280;
+
+  --accent: #a855f7; /* purple */
+  --green: #16c784;
+  --red: #ea3943;
+}
+
+html,
 body {
-  @apply bg-gradient-to-b from-[#0A0A0F] to-[#000000] text-white min-h-screen;
-  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-root);
+  color: var(--text-primary);
 }
 
-/* =====================================
-   Glass Card Component (Global Utility)
-   ===================================== */
+/* ===== Common Layout ===== */
 
-.glass-card {
-  @apply 
-    bg-black/40 
-    backdrop-blur-xl 
-    border border-white/10 
-    rounded-2xl 
-    shadow-xl;
+.app-root {
+  background: var(--bg-root);
+  min-height: 100dvh;
 }
 
-/* =====================================
-   Gradient Headings (Astrodex Style)
-   ===================================== */
-
-h1.gradient-title,
-.gradient-title {
-  @apply 
-    text-transparent 
-    bg-clip-text 
-    bg-gradient-to-r 
-    from-purple-400 
-    to-blue-400 
-    font-extrabold;
+/* Panels (Chart / Order / Book) */
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
 }
 
-/* =====================================
-   Dark Input (Premium UI)
-   ===================================== */
-
-.input-dark {
-  @apply 
-    w-full 
-    bg-black/60 
-    border border-white/10 
-    text-white 
-    rounded-lg 
-    p-3 
-    focus:outline-none 
-    focus:ring-2 
-    focus:ring-purple-500/40 
-    transition;
+/* Cards */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
 }
 
-/* =====================================
-   Premium Buttons
-   ===================================== */
+/* Section divider */
+.divider {
+  border-top: 1px solid var(--border-subtle);
+}
 
+/* Headings */
+h1, h2, h3 {
+  color: var(--text-primary);
+}
+
+/* Muted text */
+.text-muted {
+  color: var(--text-secondary);
+}
+
+/* Buttons */
 .btn-primary {
-  @apply 
-    p-3 
-    rounded-lg 
-    bg-gradient-to-r from-purple-500 to-indigo-600
-    hover:opacity-90 
-    transition 
-    shadow-lg 
-    active:scale-95;
+  background: var(--accent);
+  color: white;
+  border-radius: 10px;
+  padding: 10px 14px;
 }
 
-.btn-green {
-  @apply 
-    p-3 
-    rounded-lg 
-    bg-gradient-to-r from-green-500 to-emerald-600
-    hover:opacity-90 
-    transition 
-    shadow-lg 
-    active:scale-95;
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  border-radius: 10px;
 }
 
-.btn-red {
-  @apply 
-    p-3 
-    rounded-lg 
-    bg-gradient-to-r from-red-500 to-rose-600
-    hover:opacity-90 
-    transition 
-    shadow-lg 
-    active:scale-95;
+/* OrderBook colors */
+.text-ask {
+  color: var(--red);
+}
+.text-bid {
+  color: var(--green);
 }
 
-/* =====================================
-   Navigation Hover Glow
-   ===================================== */
-
-.nav-item {
-  @apply 
-    hover:text-white 
-    transition 
-    hover:drop-shadow-[0_0_6px_rgba(150,100,255,0.9)];
+.bg-ask {
+  background: rgba(234,57,67,0.18);
 }
-
-/* =====================================
-   Fade-in Animation for Pages
-   ===================================== */
-
-.page-enter {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-.page-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.25s ease, transform 0.25s ease;
+.bg-bid {
+  background: rgba(22,199,132,0.18);
 }

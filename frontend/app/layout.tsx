@@ -1,8 +1,7 @@
-// app/layout.tsx
 import "./globals.css";
 import { ReactNode } from "react";
 import Providers from "@/src/components/Providers";
-import Header from "@/src/components/Header";  // ← Header をインポート
+import Header from "@/src/components/Header";
 
 export const metadata = {
   title: "PerpX Exchange",
@@ -12,18 +11,18 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-gradient-to-b from-[#070709] to-[#000000] text-white min-h-screen">
+      <body className="min-h-screen">
+        <div className="app-root">
+          <Providers>
+            {/* Header */}
+            <Header />
 
-        <Providers>
-          {/* HEADER（常に上部固定） */}
-          <Header />
-
-          {/* PAGE WRAPPER */}
-          <div className="pt-24 px-4 md:px-8 pb-10">
-            <main>{children}</main>
-          </div>
-        </Providers>
-
+            {/* Page Content */}
+            <div className="pt-24 px-4 md:px-8 pb-10">
+              <main>{children}</main>
+            </div>
+          </Providers>
+        </div>
       </body>
     </html>
   );

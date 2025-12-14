@@ -2,53 +2,54 @@
 
 export default function Home() {
   return (
-    <div className="w-full space-y-10">
+    <div className="app-root space-y-16">
 
-      {/* HERO SECTION */}
-      <section
-        className="
-          bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl
-          p-8 md:p-12 shadow-xl flex flex-col items-center text-center
-        "
-      >
-        <h1
-          className="
-            text-4xl md:text-5xl font-extrabold 
-            bg-gradient-to-r from-purple-400 to-blue-400 
-            bg-clip-text text-transparent
-          "
-        >
-          Welcome to PerpX Exchange
+      {/* HERO */}
+      <section className="panel p-10 text-center">
+        <h1 className="text-5xl font-bold">
+          PerpX Exchange
         </h1>
 
-        <p className="text-gray-300 max-w-xl mt-4 text-lg">
-          Trade perpetual futures with institutional-grade UI, powered by our decentralized engine.
+        <p className="text-muted mt-4 text-lg max-w-2xl mx-auto">
+          Trade perpetual futures with institutional-grade UX,
+          powered by decentralized infrastructure.
         </p>
       </section>
 
-      {/* QUICK ACTIONS */}
+      {/* STATS */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <QuickCard title="Start Trading" href="/trade" />
-        <QuickCard title="View Dashboard" href="/dashboard" />
-        <QuickCard title="Stake Tokens" href="/stake" />
+        <Stat label="24h Volume" value="$3.37B" />
+        <Stat label="Total Volume" value="$139.2B" />
+        <Stat label="Active Traders" value="147,278" />
+      </section>
+
+      {/* ACTIONS */}
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <ActionCard title="Start Trading" href="/trade" />
+        <ActionCard title="View Dashboard" href="/dashboard" />
+        <ActionCard title="Stake Assets" href="/stake" />
       </section>
 
     </div>
   );
 }
 
-function QuickCard({ title, href }: { title: string; href: string }) {
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="card p-6 text-center">
+      <div className="text-muted text-sm mb-1">{label}</div>
+      <div className="text-2xl font-bold">{value}</div>
+    </div>
+  );
+}
+
+function ActionCard({ title, href }: { title: string; href: string }) {
   return (
     <a
       href={href}
-      className="
-        bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl
-        p-6 shadow-lg hover:shadow-purple-500/20 
-        transition hover:scale-[1.02] active:scale-[0.98]
-        flex items-center justify-center text-lg font-semibold
-      "
+      className="card p-8 text-center hover:opacity-90 transition"
     >
-      {title}
+      <div className="text-lg font-semibold">{title}</div>
     </a>
   );
 }
