@@ -71,6 +71,16 @@ contract PerpetualTrading is IPerp {
         positions[user].margin -= amount;
     }
 
+    function traderWithdraw(address user, uint256 amount)
+    external
+    onlyRouter
+{
+    require(positions[user].margin >= amount, "INSUFFICIENT_MARGIN");
+    positions[user].margin -= amount;
+    liquidityPool.withdraw(user, amount);
+}
+
+
     /* ========== position ========== */
 
     function openPosition(address user, int256 size)

@@ -2,7 +2,6 @@
 pragma solidity ^0.8.20;
 
 import "../interfaces/IPerp.sol";
-import "../interfaces/ILiquidityPool.sol";
 
 /**
  * @title Router
@@ -10,23 +9,19 @@ import "../interfaces/ILiquidityPool.sol";
  */
 contract Router {
     IPerp public perp;
-    ILiquidityPool public liquidityPool;
 
-    constructor(address _perp, address _liquidityPool) {
+    constructor(address _perp) {
         perp = IPerp(_perp);
-        liquidityPool = ILiquidityPool(_liquidityPool);
     }
 
     /* ========== margin ========== */
 
     function deposit(uint256 amount) external {
-        liquidityPool.deposit(msg.sender, amount);
         perp.onTraderDeposit(msg.sender, amount);
     }
 
     function withdraw(uint256 amount) external {
-        perp.onTraderWithdraw(msg.sender, amount);
-        liquidityPool.withdraw(msg.sender, amount);
+        perp.traderWithdraw(msg.sender, amount);
     }
 
     /* ========== position ========== */

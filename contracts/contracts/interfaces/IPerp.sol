@@ -2,16 +2,22 @@
 pragma solidity ^0.8.20;
 
 interface IPerp {
-    // ===== margin (Router only) =====
+    /* ===== margin hooks ===== */
     function onTraderDeposit(address user, uint256 amount) external;
     function onTraderWithdraw(address user, uint256 amount) external;
 
-    // ===== position =====
+    /* ===== NEW: withdraw via perp ===== */
+    function traderWithdraw(address user, uint256 amount) external;
+
+    /* ===== position ===== */
     function openPosition(address user, int256 size) external;
     function closePosition(address user) external;
     function liquidate(address user) external;
 
-    // ===== view =====
+    /* ===== pnl ===== */
+    function claimPnL(address user) external;
+
+    /* ===== views ===== */
     function getPosition(address user)
         external
         view
@@ -21,4 +27,9 @@ interface IPerp {
         external
         view
         returns (uint256);
+
+    function getClaimablePnL(address user)
+        external
+        view
+        returns (int256);
 }
