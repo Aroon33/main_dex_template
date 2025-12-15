@@ -34,10 +34,20 @@ contract PerpetualTrading is IPerp {
     // ------------------------------
 
     function deposit(bytes32 asset) external payable override {
+        require(msg.value > 0, "No ETH sent");
+
+        // LPに入金
         liquidityPool.deposit{value: msg.value}(msg.sender, asset);
+
+        // ★ 証拠金として反映
+        positions[msg.sender][asset].margin += msg.value;
     }
 
     function withdraw(bytes32 asset, uint256 amount) external override {
+        Position storage pos = positions[msg.sender][asset];
+        require(pos.margin >= amount, "Insufficient margin");
+
+        pos.margin -= amount;
         liquidityPool.withdraw(msg.sender, asset, amount);
     }
 
@@ -53,9 +63,12 @@ contract PerpetualTrading is IPerp {
         require(size != 0, "Invalid size");
 
         Position storage pos = positions[msg.sender][asset];
+
+        // ★ 証拠金チェック（最低限）
+        require(pos.margin > 0, "No margin deposited");
+
         pos.size += size;
         pos.entryPrice = price;
-        pos.margin += uint256(size > 0 ? size : -size);
     }
 
     function closePosition(bytes32 asset) external override {

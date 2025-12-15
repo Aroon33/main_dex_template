@@ -1,35 +1,44 @@
 "use client";
 
-import { asks, bids } from "./mock";
+import { Order } from "./mock";
 
-export default function OrderBookDepth() {
-  const max = Math.max(
+type Props = {
+  asks: Order[];
+  bids: Order[];
+};
+
+export default function OrderBookDepth({ asks, bids }: Props) {
+  const maxSize = Math.max(
     ...asks.map(a => a.size),
     ...bids.map(b => b.size)
   );
 
   return (
-    <div className="space-y-1">
+    <div className="flex flex-col text-sm space-y-1">
       {asks.map((a, i) => (
-        <div key={i} className="relative h-6">
+        <div key={i} className="relative text-ask">
           <div
-            className="absolute right-0 top-0 h-full bg-red-500/20"
-            style={{ width: `${(a.size / max) * 100}%` }}
+            className="absolute inset-y-0 right-0 bg-ask"
+            style={{ width: `${(a.size / maxSize) * 100}%` }}
           />
-          <div className="relative z-10 flex justify-between px-2 text-red-400">
+          <div className="relative flex justify-between px-1">
             <span>{a.price}</span>
             <span>{a.size}</span>
           </div>
         </div>
       ))}
 
+      <div className="text-center text-mid my-2">
+        {asks[0]?.price}
+      </div>
+
       {bids.map((b, i) => (
-        <div key={i} className="relative h-6">
+        <div key={i} className="relative text-bid">
           <div
-            className="absolute left-0 top-0 h-full bg-green-500/20"
-            style={{ width: `${(b.size / max) * 100}%` }}
+            className="absolute inset-y-0 left-0 bg-bid"
+            style={{ width: `${(b.size / maxSize) * 100}%` }}
           />
-          <div className="relative z-10 flex justify-between px-2 text-green-400">
+          <div className="relative flex justify-between px-1">
             <span>{b.price}</span>
             <span>{b.size}</span>
           </div>

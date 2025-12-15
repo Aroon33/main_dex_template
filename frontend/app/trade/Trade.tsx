@@ -3,57 +3,53 @@
 import { useTrade } from "@/src/hooks/useTrade";
 
 export default function Trade() {
-  const trade = useTrade("BTCUSDT");
+  const trade = useTrade();
 
   return (
-    <div className="grid grid-cols-3 gap-4">
-      {/* Chart */}
-      <div className="col-span-2 border border-gray-800 rounded-xl h-[600px]" />
+    <div className="space-y-4">
 
-      {/* Order Panel */}
-      <div className="border border-gray-800 rounded-xl p-4 space-y-4">
-        <h2 className="text-lg font-bold">Order</h2>
+      {/* Price */}
+      <input
+        type="number"
+        placeholder="Price"
+        value={trade.price}
+        onChange={(e) => trade.setPrice(Number(e.target.value))}
+        className="w-full p-2 bg-black border border-gray-700 rounded"
+      />
 
-        <input
-          type="number"
-          placeholder="Price"
-          value={trade.price}
-          onChange={(e) => trade.setPrice(Number(e.target.value))}
-          className="w-full p-2 bg-black border border-gray-700 rounded"
-        />
+      {/* Size */}
+      <input
+        type="number"
+        placeholder="Size"
+        value={trade.size}
+        onChange={(e) => trade.setSize(Number(e.target.value))}
+        className="w-full p-2 bg-black border border-gray-700 rounded"
+      />
 
-        <input
-          type="number"
-          placeholder="Size"
-          value={trade.size}
-          onChange={(e) => trade.setSize(Number(e.target.value))}
-          className="w-full p-2 bg-black border border-gray-700 rounded"
-        />
+      {/* BUY */}
+      <button
+        onClick={() => {
+          trade.setSide("buy");
+          trade.submitOrder();
+        }}
+        disabled={trade.loading}
+        className="w-full py-2 bg-green-600 rounded text-white disabled:opacity-50"
+      >
+        Buy
+      </button>
 
-        <div className="flex gap-2">
-          <button
-            onClick={() => {
-              trade.setSide("long");
-              trade.submitOrder();
-            }}
-            disabled={trade.loading}
-            className="flex-1 bg-green-600 py-2 rounded"
-          >
-            Long
-          </button>
+      {/* SELL */}
+      <button
+        onClick={() => {
+          trade.setSide("sell");
+          trade.submitOrder();
+        }}
+        disabled={trade.loading}
+        className="w-full py-2 bg-red-600 rounded text-white disabled:opacity-50"
+      >
+        Sell
+      </button>
 
-          <button
-            onClick={() => {
-              trade.setSide("short");
-              trade.submitOrder();
-            }}
-            disabled={trade.loading}
-            className="flex-1 bg-red-600 py-2 rounded"
-          >
-            Short
-          </button>
-        </div>
-      </div>
     </div>
   );
 }

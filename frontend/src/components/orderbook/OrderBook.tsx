@@ -1,41 +1,42 @@
 "use client";
 
-import { useState } from "react";
-import { asks, bids } from "./mock";
 import OrderBookTable from "./OrderBookTable";
 import OrderBookDepth from "./OrderBookDepth";
+import { asks, bids } from "./mock";
+import { useState } from "react";
 
-export default function OrderBook() {
+type Props = {
+  symbol?: string; // ← 将来API用、今は未使用でOK
+};
+
+export default function OrderBook({ symbol }: Props) {
   const [view, setView] = useState<"table" | "depth">("table");
 
   return (
-    <div className="h-full flex flex-col bg-black text-white">
-      {/* Header */}
-      <div className="px-4 py-2 border-b border-white/10">
-        <div className="text-sm font-semibold mb-2">BTCUSDT</div>
+    <div className="h-full flex flex-col bg-[#0B0E11] text-white">
 
-        <div className="flex gap-2">
-          <button
-            onClick={() => setView("table")}
-            className={`px-3 py-1 rounded text-xs ${
-              view === "table"
-                ? "bg-purple-600 text-white"
-                : "bg-white/10 text-gray-400"
-            }`}
-          >
-            数字
-          </button>
-          <button
-            onClick={() => setView("depth")}
-            className={`px-3 py-1 rounded text-xs ${
-              view === "depth"
-                ? "bg-purple-600 text-white"
-                : "bg-white/10 text-gray-400"
-            }`}
-          >
-            チャート
-          </button>
-        </div>
+      {/* Tabs */}
+      <div className="flex border-b border-white/10 text-sm">
+        <button
+          onClick={() => setView("table")}
+          className={`flex-1 py-2 ${
+            view === "table"
+              ? "text-white border-b-2 border-purple-500"
+              : "text-gray-500"
+          }`}
+        >
+          Book
+        </button>
+        <button
+          onClick={() => setView("depth")}
+          className={`flex-1 py-2 ${
+            view === "depth"
+              ? "text-white border-b-2 border-purple-500"
+              : "text-gray-500"
+          }`}
+        >
+          Depth
+        </button>
       </div>
 
       {/* Content */}

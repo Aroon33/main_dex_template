@@ -5,50 +5,47 @@ import { useState } from "react";
 import TradeHeader from "@/src/components/trade/TradeHeader";
 import TradeChart from "@/src/components/trade/TradeChart";
 import TradeOrderPanel from "@/src/components/trade/TradeOrderPanel";
-import OrderBook from "@/src/components/orderbook/OrderBook";
+import TradeBook from "@/src/components/trade/TradeBook";
 
 type Tab = "chart" | "orders" | "trades" | "book";
 
+const DEFAULT_SYMBOL = "BTCUSD";
+
 export default function TradeMobile() {
   const [tab, setTab] = useState<Tab>("chart");
+  const [symbol] = useState(DEFAULT_SYMBOL);
 
   return (
-    <div className="h-[100dvh] flex flex-col bg-bg-base text-text-main">
+    <div className="h-[100dvh] flex flex-col bg-black text-white">
 
-      {/* ===== Header (高さ固定) ===== */}
-      <div className="shrink-0">
-        <TradeHeader />
-      </div>
+      {/* Header */}
+      <TradeHeader symbol={symbol} />
 
-      {/* ===== Main Content ===== */}
-      <div className="flex-1 overflow-hidden bg-bg-panel">
+      {/* Main Content */}
+      <div className="flex-1 overflow-hidden">
         {tab === "chart" && (
-          <div className="h-full">
-            <TradeChart />
-          </div>
+          <TradeChart symbol={symbol} />
         )}
 
         {tab === "orders" && (
           <div className="h-full overflow-auto p-2">
-            <TradeOrderPanel />
+            <TradeOrderPanel symbol={symbol} />
           </div>
         )}
 
         {tab === "trades" && (
-          <div className="h-full flex items-center justify-center text-text-mute">
+          <div className="h-full flex items-center justify-center text-gray-500">
             Trades (coming soon)
           </div>
         )}
 
         {tab === "book" && (
-          <div className="h-full overflow-hidden">
-            <OrderBook />
-          </div>
+          <TradeBook symbol={symbol} />
         )}
       </div>
 
-      {/* ===== Bottom Tabs (固定) ===== */}
-      <div className="shrink-0 border-t border-white/10 bg-bg-panel grid grid-cols-4 text-sm">
+      {/* Bottom Tabs */}
+      <div className="border-t border-white/10 grid grid-cols-4 text-sm">
         <TabButton label="Chart" active={tab === "chart"} onClick={() => setTab("chart")} />
         <TabButton label="Orders" active={tab === "orders"} onClick={() => setTab("orders")} />
         <TabButton label="Trades" active={tab === "trades"} onClick={() => setTab("trades")} />
@@ -70,10 +67,10 @@ function TabButton({
   return (
     <button
       onClick={onClick}
-      className={`py-3 transition-colors ${
+      className={`py-3 ${
         active
-          ? "text-text-main border-t-2 border-ui-active bg-bg-box"
-          : "text-text-mute"
+          ? "text-white border-t-2 border-purple-500"
+          : "text-gray-500"
       }`}
     >
       {label}

@@ -2,15 +2,19 @@
 
 import dynamic from "next/dynamic";
 
-const TVChart = dynamic(
+const TradingViewChart = dynamic(
   () => import("@/src/components/TradingViewChart"),
   { ssr: false }
 );
 
-export default function TradeChart() {
+type Props = {
+  symbol: string;
+};
+
+export default function TradeChart({ symbol }: Props) {
   return (
-    <div className="h-full">
-      <TVChart symbol="BTCUSD" />
+    <div className="h-full w-full">
+      <TradingViewChart symbol={symbol} />
     </div>
   );
 }

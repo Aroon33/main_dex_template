@@ -1,36 +1,38 @@
 "use client";
 
 import { useState } from "react";
-import { TradeSide } from "@/src/types/trade";
 
-export function useTrade(symbol: string) {
-  const [price, setPrice] = useState<number | "">("");
-  const [size, setSize] = useState<number | "">("");
-  const [leverage, setLeverage] = useState(20);
-  const [side, setSide] = useState<TradeSide | null>(null);
+type Side = "buy" | "sell";
+
+export function useTrade(symbol?: string) {
+  const [side, setSide] = useState<Side>("buy");
+  const [price, setPrice] = useState<number>(0);
+  const [size, setSize] = useState<number>(0);
   const [loading, setLoading] = useState(false);
 
-  const submitOrder = async () => {
-    if (!side || !price || !size) {
-      alert("Order parameters missing");
-      return;
-    }
-
-    setLoading(true);
+  const submitOrder = async (
+    sideArg?: Side,
+    priceArg?: number,
+    sizeArg?: number
+  ) => {
+    const s = sideArg ?? side;
+    const p = priceArg ?? price;
+    const sz = sizeArg ?? size;
 
     try {
-      // 将来：API / Contract 接続
-      console.log("PLACE ORDER", {
+      setLoading(true);
+
+      console.log("Submitting order", {
         symbol,
-        side,
-        price,
-        size,
-        leverage,
+        side: s,
+        price: p,
+        size: sz,
       });
 
+      // mock delay（後でコントラクト接続に差し替え）
       await new Promise((r) => setTimeout(r, 800));
 
-      alert(side.toUpperCase() + " order submitted");
+      alert(`${s.toUpperCase()} order submitted`);
     } catch (e) {
       console.error(e);
       alert("Order failed");
@@ -40,15 +42,13 @@ export function useTrade(symbol: string) {
   };
 
   return {
-    price,
-    size,
-    leverage,
     side,
-    loading,
-    setPrice,
-    setSize,
-    setLeverage,
     setSide,
+    price,
+    setPrice,
+    size,
+    setSize,
     submitOrder,
+    loading,
   };
 }
