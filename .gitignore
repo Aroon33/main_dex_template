@@ -14,6 +14,9 @@ contracts/cache/
 
 # Env files (絶対に公開しない)
 *.env
+.env
+.env.*
+
 
 # Misc
 .DS_Store
