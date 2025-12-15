@@ -2,27 +2,25 @@
 pragma solidity ^0.8.20;
 
 import "../interfaces/IPerp.sol";
+import "../interfaces/ILiquidityPool.sol";
 import "../interfaces/IOracle.sol";
 
-/**
- * @title PerpetualTrading
- * @notice ERC20担保版 Perp（PoC）
- * @dev Pool操作は行わず、Router経由で資金移動する
- */
 contract PerpetualTrading is IPerp {
     struct Position {
-        int256 size;          // +long / -short
-        uint256 entryPrice;   // USD価格（18dec）
-        uint256 margin;       // tUSD
+        int256 size;
+        uint256 entryPrice;
+        uint256 margin;
         bool isOpen;
     }
 
     mapping(address => Position) public positions;
+    mapping(address => int256) public claimablePnL;
 
     address public owner;
     address public router;
     address public liquidationEngine;
 
+    ILiquidityPool public liquidityPool;
     IOracle public oracle;
 
     modifier onlyOwner() {
@@ -40,12 +38,13 @@ contract PerpetualTrading is IPerp {
         _;
     }
 
-    constructor(address _oracle) {
+    constructor(address _oracle, address _liquidityPool) {
         owner = msg.sender;
         oracle = IOracle(_oracle);
+        liquidityPool = ILiquidityPool(_liquidityPool);
     }
 
-    // ===== admin =====
+    /* ========== admin ========== */
 
     function setRouter(address _router) external onlyOwner {
         router = _router;
@@ -55,7 +54,7 @@ contract PerpetualTrading is IPerp {
         liquidationEngine = _liq;
     }
 
-    // ===== margin (Router only) =====
+    /* ========== interface hooks (IMPORTANT) ========== */
 
     function onTraderDeposit(address user, uint256 amount)
         external
@@ -72,7 +71,7 @@ contract PerpetualTrading is IPerp {
         positions[user].margin -= amount;
     }
 
-    // ===== position =====
+    /* ========== position ========== */
 
     function openPosition(address user, int256 size)
         external
@@ -108,10 +107,34 @@ contract PerpetualTrading is IPerp {
         Position storage pos = positions[user];
         require(pos.isOpen, "NO_POSITION");
 
-        delete positions[user];
+        uint256 exitPrice = oracle.getPrice(bytes32("tUSD"));
+        int256 pnl = calculatePnL(user, exitPrice);
+
+        liquidityPool.settlePnL(user, pnl);
+        claimablePnL[user] += pnl;
+
+        pos.isOpen = false;
+        pos.size = 0;
+        pos.entryPrice = 0;
     }
 
-    // ===== view =====
+    /* ========== PnL claim ========== */
+
+    function claimPnL(address user)
+        external
+        onlyRouter
+    {
+        int256 pnl = claimablePnL[user];
+        require(pnl != 0, "NO_PNL");
+
+        claimablePnL[user] = 0;
+
+        if (pnl > 0) {
+            liquidityPool.withdraw(user, uint256(pnl));
+        }
+    }
+
+    /* ========== views ========== */
 
     function calculatePnL(address user, uint256 price)
         public
@@ -139,5 +162,13 @@ contract PerpetualTrading is IPerp {
         returns (uint256)
     {
         return positions[user].margin;
+    }
+
+    function getClaimablePnL(address user)
+        external
+        view
+        returns (int256)
+    {
+        return claimablePnL[user];
     }
 }

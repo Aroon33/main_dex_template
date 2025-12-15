@@ -6,7 +6,7 @@ import "../interfaces/ILiquidityPool.sol";
 
 /**
  * @title Router
- * @notice Central entry point for traders
+ * @notice User-facing Router (spec-compliant)
  */
 contract Router {
     IPerp public perp;
@@ -17,33 +17,39 @@ contract Router {
         liquidityPool = ILiquidityPool(_liquidityPool);
     }
 
-    // ===== margin =====
+    /* ========== margin ========== */
 
-    function deposit(address user, uint256 amount) external {
-        liquidityPool.deposit(user, amount);
-        perp.onTraderDeposit(user, amount);
+    function deposit(uint256 amount) external {
+        liquidityPool.deposit(msg.sender, amount);
+        perp.onTraderDeposit(msg.sender, amount);
     }
 
-    function withdraw(address user, uint256 amount) external {
-        perp.onTraderWithdraw(user, amount);
-        liquidityPool.withdraw(user, amount);
+    function withdraw(uint256 amount) external {
+        perp.onTraderWithdraw(msg.sender, amount);
+        liquidityPool.withdraw(msg.sender, amount);
     }
 
-    // ===== position =====
+    /* ========== position ========== */
 
-    function openPosition(address user, int256 size) external {
-        perp.openPosition(user, size);
+    function openPosition(int256 size) external {
+        perp.openPosition(msg.sender, size);
     }
 
-    function closePosition(address user) external {
-        perp.closePosition(user);
+    function closePosition() external {
+        perp.closePosition(msg.sender);
     }
 
     function liquidate(address user) external {
         perp.liquidate(user);
     }
 
-    // ===== views =====
+    /* ========== PnL ========== */
+
+    function claimPnL() external {
+        perp.claimPnL(msg.sender);
+    }
+
+    /* ========== views ========== */
 
     function getPosition(address user)
         external
@@ -59,5 +65,13 @@ contract Router {
         returns (uint256)
     {
         return perp.getMargin(user);
+    }
+
+    function getClaimablePnL(address user)
+        external
+        view
+        returns (int256)
+    {
+        return perp.getClaimablePnL(user);
     }
 }
