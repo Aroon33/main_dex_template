@@ -44,7 +44,7 @@ contract PerpetualTrading is IPerp {
         liquidityPool = ILiquidityPool(_liquidityPool);
     }
 
-    /* ========== admin ========== */
+    /* ===== admin ===== */
 
     function setRouter(address _router) external onlyOwner {
         router = _router;
@@ -54,7 +54,7 @@ contract PerpetualTrading is IPerp {
         liquidationEngine = _liq;
     }
 
-    /* ========== interface hooks (IMPORTANT) ========== */
+    /* ===== margin hooks ===== */
 
     function onTraderDeposit(address user, uint256 amount)
         external
@@ -67,21 +67,14 @@ contract PerpetualTrading is IPerp {
         external
         onlyRouter
     {
-        require(positions[user].margin >= amount, "INSUFFICIENT_MARGIN");
-        positions[user].margin -= amount;
+        Position storage pos = positions[user];
+        require(pos.margin >= amount, "INSUFFICIENT_MARGIN");
+
+        pos.margin -= amount;
+        liquidityPool.withdraw(user, amount);
     }
 
-    function traderWithdraw(address user, uint256 amount)
-    external
-    onlyRouter
-{
-    require(positions[user].margin >= amount, "INSUFFICIENT_MARGIN");
-    positions[user].margin -= amount;
-    liquidityPool.withdraw(user, amount);
-}
-
-
-    /* ========== position ========== */
+    /* ===== position ===== */
 
     function openPosition(address user, int256 size)
         external
@@ -128,23 +121,20 @@ contract PerpetualTrading is IPerp {
         pos.entryPrice = 0;
     }
 
-    /* ========== PnL claim ========== */
+    /* ===== pnl ===== */
 
     function claimPnL(address user)
         external
         onlyRouter
     {
         int256 pnl = claimablePnL[user];
-        require(pnl != 0, "NO_PNL");
+        require(pnl > 0, "NO_PNL");
 
         claimablePnL[user] = 0;
-
-        if (pnl > 0) {
-            liquidityPool.withdraw(user, uint256(pnl));
-        }
+        liquidityPool.withdraw(user, uint256(pnl));
     }
 
-    /* ========== views ========== */
+    /* ===== views ===== */
 
     function calculatePnL(address user, uint256 price)
         public

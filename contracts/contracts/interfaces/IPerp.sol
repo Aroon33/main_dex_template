@@ -6,9 +6,6 @@ interface IPerp {
     function onTraderDeposit(address user, uint256 amount) external;
     function onTraderWithdraw(address user, uint256 amount) external;
 
-    /* ===== NEW: withdraw via perp ===== */
-    function traderWithdraw(address user, uint256 amount) external;
-
     /* ===== position ===== */
     function openPosition(address user, int256 size) external;
     function closePosition(address user) external;

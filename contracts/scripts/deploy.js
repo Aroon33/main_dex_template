@@ -12,6 +12,7 @@ async function main() {
 
   /* =========================
      1. Mock Collateral Token
+     constructor(string name, string symbol)
   ========================= */
   const MockERC20 = await hre.ethers.getContractFactory("MockERC20");
   const collateral = await MockERC20.deploy("Test USD", "tUSD");
@@ -21,6 +22,7 @@ async function main() {
 
   /* =========================
      2. PLP
+     constructor(string name, string symbol)
   ========================= */
   const PLP = await hre.ethers.getContractFactory("PLP");
   const plp = await PLP.deploy("Perp LP Token", "PLP");
@@ -33,16 +35,17 @@ async function main() {
      constructor(address collateralToken, address plp)
   ========================= */
   const LiquidityPool = await hre.ethers.getContractFactory("LiquidityPool");
-  const pool = await LiquidityPool.deploy(
+  const liquidityPool = await LiquidityPool.deploy(
     collateralAddress,
     plpAddress
   );
-  await pool.waitForDeployment();
-  const poolAddress = await pool.getAddress();
-  console.log("LiquidityPool:", poolAddress);
+  await liquidityPool.waitForDeployment();
+  const liquidityPoolAddress = await liquidityPool.getAddress();
+  console.log("LiquidityPool:", liquidityPoolAddress);
 
   /* =========================
      4. PriceOracle
+     constructor()
   ========================= */
   const PriceOracle = await hre.ethers.getContractFactory("PriceOracle");
   const oracle = await PriceOracle.deploy();
@@ -57,7 +60,7 @@ async function main() {
   const PerpetualTrading = await hre.ethers.getContractFactory("PerpetualTrading");
   const perp = await PerpetualTrading.deploy(
     oracleAddress,
-    poolAddress
+    liquidityPoolAddress
   );
   await perp.waitForDeployment();
   const perpAddress = await perp.getAddress();
@@ -75,10 +78,13 @@ async function main() {
 
   /* =========================
      7. Router
-     constructor(address perp)
+     constructor(address perp, address liquidityPool)
   ========================= */
   const Router = await hre.ethers.getContractFactory("Router");
-  const router = await Router.deploy(perpAddress);
+  const router = await Router.deploy(
+    perpAddress,
+    liquidityPoolAddress
+  );
   await router.waitForDeployment();
   const routerAddress = await router.getAddress();
   console.log("Router:", routerAddress);
@@ -86,8 +92,8 @@ async function main() {
   /* =========================
      8. Wiring
   ========================= */
-  await (await pool.setPerp(perpAddress)).wait();
-  await (await pool.setRouter(routerAddress)).wait();
+  await (await liquidityPool.setRouter(routerAddress)).wait();
+  await (await liquidityPool.setPerp(perpAddress)).wait();
   await (await perp.setRouter(routerAddress)).wait();
   await (await perp.setLiquidationEngine(liquidationAddress)).wait();
 
@@ -96,17 +102,14 @@ async function main() {
   /* =========================
      9. Frontend env
   ========================= */
-  const envPath = path.resolve(
-    __dirname,
-    "../../frontend/.env.local"
-  );
+  const envPath = path.resolve(__dirname, "../../frontend/.env.local");
 
   const envContent = `
 NEXT_PUBLIC_CHAIN_ID=11155111
 NEXT_PUBLIC_CHAIN_NAME=sepolia
 NEXT_PUBLIC_ROUTER_ADDRESS=${routerAddress}
 NEXT_PUBLIC_PERPETUAL_ADDRESS=${perpAddress}
-NEXT_PUBLIC_LIQUIDITY_POOL_ADDRESS=${poolAddress}
+NEXT_PUBLIC_LIQUIDITY_POOL_ADDRESS=${liquidityPoolAddress}
 NEXT_PUBLIC_LIQUIDATION_ENGINE_ADDRESS=${liquidationAddress}
 NEXT_PUBLIC_ORACLE_ADDRESS=${oracleAddress}
 NEXT_PUBLIC_COLLATERAL_TOKEN_ADDRESS=${collateralAddress}
