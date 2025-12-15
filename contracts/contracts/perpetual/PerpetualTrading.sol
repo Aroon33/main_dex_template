@@ -3,117 +3,141 @@ pragma solidity ^0.8.20;
 
 import "../interfaces/IPerp.sol";
 import "../interfaces/IOracle.sol";
-import "../interfaces/ILiquidityPool.sol";
-import "../interfaces/IFundingRate.sol";
 
+/**
+ * @title PerpetualTrading
+ * @notice ERC20担保版 Perp（PoC）
+ * @dev Pool操作は行わず、Router経由で資金移動する
+ */
 contract PerpetualTrading is IPerp {
     struct Position {
-        int256 size;
-        uint256 entryPrice;
-        uint256 margin;
+        int256 size;          // +long / -short
+        uint256 entryPrice;   // USD価格（18dec）
+        uint256 margin;       // tUSD
+        bool isOpen;
     }
 
-    mapping(address => mapping(bytes32 => Position)) public positions;
+    mapping(address => Position) public positions;
+
+    address public owner;
+    address public router;
+    address public liquidationEngine;
 
     IOracle public oracle;
-    ILiquidityPool public liquidityPool;
-    IFundingRate public fundingRate;
 
-    constructor(
-        address _oracle,
-        address _liquidityPool,
-        address _fundingRate
-    ) {
+    modifier onlyOwner() {
+        require(msg.sender == owner, "NOT_OWNER");
+        _;
+    }
+
+    modifier onlyRouter() {
+        require(msg.sender == router, "NOT_ROUTER");
+        _;
+    }
+
+    modifier onlyLiquidation() {
+        require(msg.sender == liquidationEngine, "NOT_LIQUIDATION");
+        _;
+    }
+
+    constructor(address _oracle) {
+        owner = msg.sender;
         oracle = IOracle(_oracle);
-        liquidityPool = ILiquidityPool(_liquidityPool);
-        fundingRate = IFundingRate(_fundingRate);
     }
 
-    // ------------------------------
-    // Deposit / Withdraw
-    // ------------------------------
+    // ===== admin =====
 
-    function deposit(bytes32 asset) external payable override {
-        require(msg.value > 0, "No ETH sent");
-
-        // LPに入金
-        liquidityPool.deposit{value: msg.value}(msg.sender, asset);
-
-        // ★ 証拠金として反映
-        positions[msg.sender][asset].margin += msg.value;
+    function setRouter(address _router) external onlyOwner {
+        router = _router;
     }
 
-    function withdraw(bytes32 asset, uint256 amount) external override {
-        Position storage pos = positions[msg.sender][asset];
-        require(pos.margin >= amount, "Insufficient margin");
-
-        pos.margin -= amount;
-        liquidityPool.withdraw(msg.sender, asset, amount);
+    function setLiquidationEngine(address _liq) external onlyOwner {
+        liquidationEngine = _liq;
     }
 
-    // ------------------------------
-    // Positions
-    // ------------------------------
+    // ===== margin (Router only) =====
 
-    function openPosition(
-        bytes32 asset,
-        int256 size,
-        uint256 price
-    ) external override {
-        require(size != 0, "Invalid size");
+    function onTraderDeposit(address user, uint256 amount)
+        external
+        onlyRouter
+    {
+        positions[user].margin += amount;
+    }
 
-        Position storage pos = positions[msg.sender][asset];
+    function onTraderWithdraw(address user, uint256 amount)
+        external
+        onlyRouter
+    {
+        require(positions[user].margin >= amount, "INSUFFICIENT_MARGIN");
+        positions[user].margin -= amount;
+    }
 
-        // ★ 証拠金チェック（最低限）
-        require(pos.margin > 0, "No margin deposited");
+    // ===== position =====
 
-        pos.size += size;
+    function openPosition(address user, int256 size)
+        external
+        onlyRouter
+    {
+        Position storage pos = positions[user];
+        require(!pos.isOpen, "POSITION_EXISTS");
+        require(pos.margin > 0, "NO_MARGIN");
+        require(size != 0, "INVALID_SIZE");
+
+        uint256 price = oracle.getPrice(bytes32("tUSD"));
+
+        pos.size = size;
         pos.entryPrice = price;
+        pos.isOpen = true;
     }
 
-    function closePosition(bytes32 asset) external override {
-        Position storage pos = positions[msg.sender][asset];
-        require(pos.size != 0, "No position");
-
-        uint256 price = oracle.getPrice(asset);
-        int256 pnl = calculatePnL(asset, msg.sender, price);
-
-        liquidityPool.settlePnL(msg.sender, pnl);
-
-        delete positions[msg.sender][asset];
+    function closePosition(address user)
+        external
+        onlyRouter
+    {
+        _closePosition(user);
     }
 
-    // ------------------------------
-    // Read functions
-    // ------------------------------
+    function liquidate(address user)
+        external
+        onlyLiquidation
+    {
+        _closePosition(user);
+    }
 
-    function calculatePnL(
-        bytes32 asset,
-        address user,
-        uint256 price
-    ) public view override returns (int256) {
-        Position memory pos = positions[user][asset];
-        if (pos.size == 0) return 0;
+    function _closePosition(address user) internal {
+        Position storage pos = positions[user];
+        require(pos.isOpen, "NO_POSITION");
+
+        delete positions[user];
+    }
+
+    // ===== view =====
+
+    function calculatePnL(address user, uint256 price)
+        public
+        view
+        returns (int256)
+    {
+        Position memory pos = positions[user];
+        if (!pos.isOpen) return 0;
 
         return (int256(price) - int256(pos.entryPrice)) * pos.size;
     }
 
-    function getPosition(address user, bytes32 asset)
+    function getPosition(address user)
         external
         view
-        override
         returns (int256 size, uint256 entryPrice)
     {
-        Position memory pos = positions[user][asset];
+        Position memory pos = positions[user];
         return (pos.size, pos.entryPrice);
     }
 
-    function getMargin(address user, bytes32 asset)
+    function getMargin(address user)
         external
         view
-        override
         returns (uint256)
     {
-        return positions[user][asset].margin;
+        return positions[user].margin;
     }
 }
