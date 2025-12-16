@@ -7,9 +7,10 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /**
  * @title LiquidityPool
- * @notice ERC20担保 + PLP対応 Liquidity Pool（PoC）
+ * @notice ERC20 collateral + PLP Liquidity Pool (PoC)
  */
 contract LiquidityPool is ILiquidityPool {
+
     IERC20 public collateralToken;
     PLP public plp;
 
@@ -17,8 +18,12 @@ contract LiquidityPool is ILiquidityPool {
     address public perp;
     address public router;
 
-    // Trader margin
+    /// @notice Trader collateral balances
     mapping(address => uint256) public traderBalances;
+
+    /* ===================================================== */
+    /* ====================== MODIFIERS ==================== */
+    /* ===================================================== */
 
     modifier onlyOwner() {
         require(msg.sender == owner, "NOT_OWNER");
@@ -41,20 +46,26 @@ contract LiquidityPool is ILiquidityPool {
         plp = PLP(_plp);
     }
 
-    // ===== admin =====
+    /* ===================================================== */
+    /* ====================== ADMIN ======================== */
+    /* ===================================================== */
 
+    /// @notice Set PerpetualTrading contract
     function setPerp(address _perp) external onlyOwner {
         perp = _perp;
     }
 
+    /// @notice Set Router contract
     function setRouter(address _router) external onlyOwner {
         router = _router;
     }
 
-    // ===== LP functions =====
+    /* ===================================================== */
+    /* ====================== LP =========================== */
+    /* ===================================================== */
 
     /**
-     * @notice LP が流動性を供給 → PLP mint
+     * @notice LP deposits collateral and receives PLP
      * @dev PoC: 1 tUSD = 1 PLP
      */
     function lpDeposit(uint256 amount) external {
@@ -70,8 +81,8 @@ contract LiquidityPool is ILiquidityPool {
     }
 
     /**
-     * @notice LP が流動性を引き出す → PLP burn
-     * @dev PoC: NAV を考慮して引き出し
+     * @notice LP withdraws collateral by burning PLP
+     * @dev PoC: NAV-based withdrawal
      */
     function lpWithdraw(uint256 plpAmount) external {
         require(plpAmount > 0, "ZERO_AMOUNT");
@@ -83,8 +94,22 @@ contract LiquidityPool is ILiquidityPool {
         collateralToken.transfer(msg.sender, withdrawAmount);
     }
 
-    // ===== Trader functions =====
+/* ===================================================== */
+/* ====================== TRADER ======================= */
+/* ===================================================== */
 
+/// @notice Pay realized profit to trader
+function payProfit(address user, uint256 amount)
+    external
+    onlyPerp
+{
+    require(amount > 0, "ZERO_AMOUNT");
+
+    collateralToken.transfer(user, amount);
+}
+
+
+    /// @notice Trader deposits collateral (called by Router)
     function deposit(address user, uint256 amount)
         external
         override
@@ -101,6 +126,7 @@ contract LiquidityPool is ILiquidityPool {
         traderBalances[user] += amount;
     }
 
+    /// @notice Trader withdraws collateral (called by Perp)
     function withdraw(address user, uint256 amount)
         external
         override
@@ -112,6 +138,7 @@ contract LiquidityPool is ILiquidityPool {
         collateralToken.transfer(user, amount);
     }
 
+    /// @notice Settle trader PnL (loss only for now)
     function settlePnL(address user, int256 pnl)
         external
         override
@@ -124,11 +151,11 @@ contract LiquidityPool is ILiquidityPool {
         }
     }
 
-    // ===== NAV / views =====
+    /* ===================================================== */
+    /* ======================= VIEWS ======================= */
+    /* ===================================================== */
 
-    /**
-     * @notice Pool の総資産（tUSD）
-     */
+    /// @notice Total pool value (collateral balance)
     function getPoolValue()
         external
         view
@@ -139,8 +166,7 @@ contract LiquidityPool is ILiquidityPool {
     }
 
     /**
-     * @notice 1 PLP あたりの価値（NAV）
-     * @dev 18 decimals
+     * @notice PLP Net Asset Value (18 decimals)
      */
     function getPLPNAV() public view returns (uint256) {
         uint256 supply = plp.totalSupply();

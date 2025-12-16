@@ -1,13 +1,24 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "../interfaces/IOracle.sol";
+/**
+ * @title PriceOracle
+ * @notice Multi-pair price oracle (PoC)
+ * @dev bytes32 pair => price (18 decimals)
+ */
+contract PriceOracle {
 
-contract PriceOracle is IOracle {
     address public owner;
+
+    /// @notice pair => price (18 decimals)
+    mapping(bytes32 => uint256) public prices;
+
+    /// @notice authorized price updaters
     mapping(address => bool) public updaters;
 
-    mapping(bytes32 => uint256) public prices;
+    /* ===================================================== */
+    /* ====================== MODIFIERS ==================== */
+    /* ===================================================== */
 
     modifier onlyOwner() {
         require(msg.sender == owner, "NOT_OWNER");
@@ -21,39 +32,49 @@ contract PriceOracle is IOracle {
 
     constructor() {
         owner = msg.sender;
+        updaters[msg.sender] = true;
     }
 
-    // =========================
-    // Admin
-    // =========================
-    function addUpdater(address updater) external onlyOwner {
-        updaters[updater] = true;
+    /* ===================================================== */
+    /* ====================== ADMIN ======================== */
+    /* ===================================================== */
+
+    /// @notice Add authorized price updater
+    function addUpdater(address user) external onlyOwner {
+        updaters[user] = true;
     }
 
-    function removeUpdater(address updater) external onlyOwner {
-        updaters[updater] = false;
+    /// @notice Remove authorized price updater
+    function removeUpdater(address user) external onlyOwner {
+        updaters[user] = false;
     }
 
-    // =========================
-    // Price feed
-    // =========================
-    function setPrice(bytes32 asset, uint256 price)
+    /* ===================================================== */
+    /* ===================== PRICE ========================= */
+    /* ===================================================== */
+
+    /// @notice Set price for a trading pair
+    /// @dev Price must be 18 decimals
+    function setPrice(bytes32 pair, uint256 price)
         external
-        override
         onlyUpdater
     {
         require(price > 0, "INVALID_PRICE");
-        prices[asset] = price;
+        prices[pair] = price;
     }
 
-    function getPrice(bytes32 asset)
+    /* ===================================================== */
+    /* ======================= VIEWS ======================= */
+    /* ===================================================== */
+
+    /// @notice Get latest price for a trading pair
+    function getPrice(bytes32 pair)
         external
         view
-        override
         returns (uint256)
     {
-        uint256 p = prices[asset];
-        require(p > 0, "PRICE_NOT_SET");
-        return p;
+        uint256 price = prices[pair];
+        require(price > 0, "PRICE_NOT_SET");
+        return price;
     }
 }

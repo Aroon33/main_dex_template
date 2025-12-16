@@ -5,6 +5,7 @@ import "../interfaces/IPerp.sol";
 import "../interfaces/ILiquidityPool.sol";
 
 contract Router {
+
     IPerp public perp;
     ILiquidityPool public liquidityPool;
 
@@ -13,46 +14,83 @@ contract Router {
         liquidityPool = ILiquidityPool(_liquidityPool);
     }
 
-    /* ===== margin ===== */
+    /* ===================================================== */
+    /* ====================== MARGIN ======================= */
+    /* ===================================================== */
 
+    /// @notice Deposit collateral and increase margin
     function deposit(uint256 amount) external {
         liquidityPool.deposit(msg.sender, amount);
         perp.onTraderDeposit(msg.sender, amount);
     }
 
+    /// @notice Withdraw collateral and decrease margin
     function withdraw(uint256 amount) external {
         perp.onTraderWithdraw(msg.sender, amount);
+        liquidityPool.withdraw(msg.sender, amount);
     }
 
-    /* ===== position ===== */
+    /* ===================================================== */
+    /* ===================== POSITION ====================== */
+    /* ===================================================== */
 
-    function openPosition(int256 size) external {
-        perp.openPosition(msg.sender, size);
+    /// @notice Open new position
+    function openPosition(bytes32 pair, int256 size)
+        external
+        returns (uint256)
+    {
+        return perp.openPosition(msg.sender, pair, size);
     }
 
-    function closePosition() external {
-        perp.closePosition(msg.sender);
+    /// @notice Fully close position
+    function closePosition(uint256 positionId) external {
+        perp.closePosition(msg.sender, positionId);
     }
 
-    function liquidate(address user) external {
-        perp.liquidate(user);
-    }
+/* ===================================================== */
+/* ====================== PNL ========================== */
+/* ===================================================== */
 
-    /* ===== pnl ===== */
+/// @notice Claim realized PnL
+function claimPnL() external {
+    perp.claimPnL(msg.sender);
+}
 
-    function claimPnL() external {
-        perp.claimPnL(msg.sender);
-    }
+/// @notice Get realized (claimable) PnL
+function getClaimablePnL(address user)
+    external
+    view
+    returns (int256)
+{
+    return perp.getClaimablePnL(user);
+}
 
-    /* ===== views ===== */
 
-    function getPosition(address user)
+    /* ===================================================== */
+    /* ======================= VIEWS ======================= */
+    /* ===================================================== */
+
+    function getPosition(address user, uint256 positionId)
         external
         view
-        returns (int256 size, uint256 entryPrice)
+        returns (
+            bytes32 pair,
+            int256 size,
+            uint256 entryPrice,
+            uint256 margin,
+            bool isOpen
+        )
     {
-        return perp.getPosition(user);
+        return perp.getPosition(user, positionId);
     }
+
+    function closePositionPartial(
+    uint256 positionId,
+    int256 closeSize
+) external {
+    perp.closePositionPartial(msg.sender, positionId, closeSize);
+}
+
 
     function getMargin(address user)
         external
@@ -62,11 +100,11 @@ contract Router {
         return perp.getMargin(user);
     }
 
-    function getClaimablePnL(address user)
+    function getUserPositionIds(address user)
         external
         view
-        returns (int256)
+        returns (uint256[] memory)
     {
-        return perp.getClaimablePnL(user);
+        return perp.getUserPositionIds(user);
     }
 }

@@ -8,8 +8,13 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
  * @notice Pool Liquidity Provider Token
  */
 contract PLP is ERC20 {
-    address public pool;
+
     address public owner;
+    address public pool;
+
+    /* ===================================================== */
+    /* ====================== MODIFIERS ==================== */
+    /* ===================================================== */
 
     modifier onlyPool() {
         require(msg.sender == pool, "ONLY_POOL");
@@ -28,14 +33,21 @@ contract PLP is ERC20 {
         owner = msg.sender;
     }
 
-    /**
-     * @notice Pool アドレスを設定（1回だけ想定）
-     */
+    /* ===================================================== */
+    /* ====================== ADMIN ======================== */
+    /* ===================================================== */
+
+    /// @notice Set LiquidityPool contract (one-time)
     function setPool(address _pool) external onlyOwner {
         require(pool == address(0), "POOL_ALREADY_SET");
         pool = _pool;
     }
 
+    /* ===================================================== */
+    /* ===================== POOL ========================== */
+    /* ===================================================== */
+
+    /// @notice Mint PLP tokens (called by LiquidityPool)
     function mint(address to, uint256 amount)
         external
         onlyPool
@@ -43,6 +55,7 @@ contract PLP is ERC20 {
         _mint(to, amount);
     }
 
+    /// @notice Burn PLP tokens (called by LiquidityPool)
     function burn(address from, uint256 amount)
         external
         onlyPool
