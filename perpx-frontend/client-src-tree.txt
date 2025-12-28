@@ -1,0 +1,127 @@
+client/src
+├── App.tsx
+├── components
+│   ├── ConnectWalletScreen.tsx
+│   ├── DepositPanel.tsx
+│   ├── dev
+│   │   └── DevTradingPanel.tsx
+│   ├── ErrorBoundary.tsx
+│   ├── Header.tsx
+│   ├── ManusDialog.tsx
+│   ├── TradingViewChart.tsx
+│   └── ui
+│       ├── accordion.tsx
+│       ├── alert-dialog.tsx
+│       ├── alert.tsx
+│       ├── aspect-ratio.tsx
+│       ├── avatar.tsx
+│       ├── badge.tsx
+│       ├── breadcrumb.tsx
+│       ├── button-group.tsx
+│       ├── button.tsx
+│       ├── calendar.tsx
+│       ├── card.tsx
+│       ├── carousel.tsx
+│       ├── chart.tsx
+│       ├── checkbox.tsx
+│       ├── collapsible.tsx
+│       ├── command.tsx
+│       ├── context-menu.tsx
+│       ├── dialog.tsx
+│       ├── drawer.tsx
+│       ├── dropdown-menu.tsx
+│       ├── empty.tsx
+│       ├── field.tsx
+│       ├── form.tsx
+│       ├── hover-card.tsx
+│       ├── input-group.tsx
+│       ├── input-otp.tsx
+│       ├── input.tsx
+│       ├── item.tsx
+│       ├── kbd.tsx
+│       ├── label.tsx
+│       ├── menubar.tsx
+│       ├── navigation-menu.tsx
+│       ├── pagination.tsx
+│       ├── popover.tsx
+│       ├── progress.tsx
+│       ├── radio-group.tsx
+│       ├── resizable.tsx
+│       ├── scroll-area.tsx
+│       ├── select.tsx
+│       ├── separator.tsx
+│       ├── sheet.tsx
+│       ├── sidebar.tsx
+│       ├── skeleton.tsx
+│       ├── slider.tsx
+│       ├── sonner.tsx
+│       ├── spinner.tsx
+│       ├── switch.tsx
+│       ├── table.tsx
+│       ├── tabs.tsx
+│       ├── textarea.tsx
+│       ├── toggle-group.tsx
+│       ├── toggle.tsx
+│       └── tooltip.tsx
+├── const.ts
+├── contexts
+│   ├── DemoTradingContext.tsx
+│   ├── LanguageContext.tsx
+│   ├── ThemeContext.tsx
+│   └── WalletContext.tsx
+├── hooks
+│   ├── useComposition.ts
+│   ├── useMobile.tsx
+│   ├── usePersistFn.ts
+│   ├── useScrollAnimation.ts
+│   └── useTradeHistory.ts
+├── index.css
+├── layouts
+│   └── AppLayout.tsx
+├── lib
+│   ├── eth
+│   │   ├── abi
+│   │   │   ├── ERC20.ts
+│   │   │   ├── Oracle.ts
+│   │   │   ├── PerpetualTrading.ts
+│   │   │   └── Router.ts
+│   │   ├── addresses.ts
+│   │   ├── closePosition.ts
+│   │   ├── debug
+│   │   │   └── debugConsole.ts
+│   │   ├── debugPositionClosed.ts
+│   │   ├── deposit.ts
+│   │   ├── getPositions.ts
+│   │   ├── getRouter.ts
+│   │   ├── getTradeHistory.ts
+│   │   ├── positions.ts
+│   │   └── routerActions.ts
+│   ├── number.ts
+│   └── utils.ts
+├── main.tsx
+└── pages
+    ├── Airdrop.tsx
+    ├── API.tsx
+    ├── BACK.tsx
+    ├── Blog.tsx
+    ├── Dashboard.tsx
+    ├── Docs.tsx
+    ├── Earn.tsx
+    ├── Feedback.tsx
+    ├── Home.tsx
+    ├── NotFound.tsx
+    ├── Points.tsx
+    ├── PrivacyPolicy.tsx
+    ├── Referral.tsx
+    ├── Rewards.tsx
+    ├── Stake.tsx
+    ├── Stats.tsx
+    ├── TermsOfService.tsx
+    ├── TradeMobile.tsx
+    ├── Tradepanel.tsx
+    ├── Tradetab.tsx
+    ├── Trade.tsx
+    ├── Trade.tsx.backup
+    └── VIP.tsx
+
+11 directories, 113 files
