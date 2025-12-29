@@ -1,22 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "../components/ui/button";
+import { Card } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 import { useState } from "react";
-import {
-  Star,
-  ChevronDown,
-} from "lucide-react";
-import Header from "@/components/Header";
-import TradingViewChart from "@/components/TradingViewChart";
+import { Star, ChevronDown } from "lucide-react";
+import TradingViewChart from "../components/TradingViewChart";
 
-
-
-// ===== Event-driven states =====
-const [positions, setPositions] = useState<any[]>([]);
-const [tradeHistory, setTradeHistory] = useState<any[]>([]);
-const [transactions, setTransactions] = useState<any[]>([]);
-const [orders, setOrders] = useState<any[]>([]);
 
 
 const markets = [
@@ -49,143 +38,15 @@ export default function Trade() {
   const [marginType, setMarginType] = useState("Cross");
   const [leverage, setLeverage] = useState("25x");
 
-  useEffect(() => {
-  if (!provider || !address) return;
+  // ===== Event-driven states =====
+const [positions, setPositions] = useState<any[]>([]);
+const [tradeHistory, setTradeHistory] = useState<any[]>([]);
+const [transactions, setTransactions] = useState<any[]>([]);
+const [orders, setOrders] = useState<any[]>([]);
 
-  const perp = new ethers.Contract(
-    CONTRACTS.PERPETUAL_TRADING,
-    PERPETUAL_TRADING_ABI,
-    provider
-  );
-
-  // 決済完了（Trade History）
-  const onPositionClosed = (
-  user,
-  positionId,
-  pair,
-  closedSize,
-  entryPrice,
-  exitPrice,
-  realizedPnL,
-  timestamp
-) => {
-  console.log("[EVENT] PositionClosed", {
-    user,
-    positionId: positionId.toString(),
-    pair,
-    closedSize: closedSize.toString(),
-    realizedPnL: realizedPnL.toString(),
-    timestamp: timestamp.toString(),
-  });
-
-  if (user.toLowerCase() !== address.toLowerCase()) return;
-
-  // setTradeHistory ...
-};
-
-
-    setTradeHistory(prev => [
-      {
-        id: `close-${positionId}-${timestamp}`,
-        symbol: ethers.decodeBytes32String(pair),
-        side: closedSize > 0n ? "SELL" : "BUY",
-        size: Math.abs(Number(ethers.formatEther(closedSize))),
-        pnl: Number(ethers.formatEther(realizedPnL)),
-        timestamp: Number(timestamp) * 1000,
-      },
-      ...prev,
-    ]);
-  };
-
-  perp.on("PositionClosed", onPositionClosed);
-  return () => {
-    perp.off("PositionClosed", onPositionClosed);
-  };
-}, [provider, address]);
-
-useEffect(() => {
-  console.log("positions:", positions);
-}, [positions]);
-
-useEffect(() => {
-  console.log("tradeHistory:", tradeHistory);
-}, [tradeHistory]);
-
-useEffect(() => {
-  console.log("transactions:", transactions);
-}, [transactions]);
-
-useEffect(() => {
-  console.log("orders:", orders);
-}, [orders]);
-
-
-useEffect(() => {
-  if (!provider || !address) return;
-
-  const router = new ethers.Contract(
-    CONTRACTS.ROUTER,
-    ROUTER_ABI,
-    provider
-  );
-
-  // 建玉（Positions）
-  router.on("PositionOpened", (user, positionId, pair, size, timestamp) => {
-    if (user.toLowerCase() !== address.toLowerCase()) return;
-
-    setPositions(prev => [
-      {
-        id: positionId.toString(),
-        symbol: ethers.decodeBytes32String(pair),
-        size,
-        openedAt: Number(timestamp) * 1000,
-      },
-      ...prev,
-    ]);
-  });
-
-  // Close 要求（Orders）
-  router.on("PositionCloseRequested", (user, positionId, timestamp) => {
-    if (user.toLowerCase() !== address.toLowerCase()) return;
-
-    setOrders(prev => [
-      {
-        id: `close-req-${positionId}-${timestamp}`,
-        positionId: positionId.toString(),
-        type: "CLOSE_REQUEST",
-        timestamp: Number(timestamp) * 1000,
-      },
-      ...prev,
-    ]);
-  });
-
-  // 入金（Transaction History）
-  router.on("MarginDeposited", (user, amount, timestamp) => {
-    if (user.toLowerCase() !== address.toLowerCase()) return;
-
-    setTransactions(prev => [
-      {
-        id: `deposit-${timestamp}`,
-        type: "DEPOSIT",
-        amount: Number(ethers.formatEther(amount)),
-        timestamp: Number(timestamp) * 1000,
-      },
-      ...prev,
-    ]);
-  });
-
-  return () => {
-    router.removeAllListeners();
-  };
-}, [provider, address]);
-
-
-
-
-
+ 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Header />
 
       {/* Trade Mode Tabs */}
       <div className="border-b border-white/10 bg-card">
@@ -259,7 +120,7 @@ useEffect(() => {
           </div>
 
           {/* Main Trading Interface - Perpetual */}
-          <div className="flex-1 flex overflow-hidden flex-col lg:flex-row">
+          <div className="flex-1 flex flex-col lg:flex-row">
             {/* Left Sidebar - Markets */}
             <div className="hidden lg:block w-64 border-r border-white/10 bg-card overflow-y-auto">
               <div className="p-3">
@@ -287,9 +148,11 @@ useEffect(() => {
             </div>
 
             {/* Center - Chart Area */}
-            <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+            <div className="flex-1 flex flex-col min-w-0">
+
               <div className="flex-1 bg-card border-b border-white/10 min-h-[300px] lg:min-h-[500px]">
                 <TradingViewChart symbol="BINANCE:BTCUSDT" />
+
               </div>
 
         {/* ================================
@@ -367,6 +230,7 @@ useEffect(() => {
             {/* Right Sidebar - Order Book & Order Panel */}
             <div className="hidden xl:flex flex-col w-80 border-l border-white/10">
               {/* Order Book */}
+
               <div className="flex-1 bg-card overflow-y-auto">
                 <Tabs defaultValue="order-book" className="h-full">
                   <TabsList className="w-full justify-start bg-transparent border-b border-white/10 rounded-none h-auto p-0">
@@ -380,6 +244,7 @@ useEffect(() => {
                         <div className="text-right">Size (USDT)</div>
                         <div className="text-right">Sum (USDT)</div>
                       </div>
+                      
                       {orderBookAsks.map((ask, i) => (
                         <div key={i} className="grid grid-cols-3 gap-2 text-xs">
                           <div className="text-red-500">{ask.price}</div>
@@ -496,10 +361,7 @@ useEffect(() => {
                     </div>
                   </div>
 
-                  {/* Connect Wallet Button */}
-                  <Button className="w-full bg-primary hover:bg-primary/90 text-white">
-                    Connect wallet
-                  </Button>
+                 
 
                   {/* Account Section */}
                   <div className="pt-4 border-t border-white/10">
@@ -658,9 +520,10 @@ useEffect(() => {
             </div>
 
             {/* Center - Chart Area */}
-            <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+            <div className="flex-1 flex flex-col min-w-0">
+
               <div className="flex-1 bg-card border-b border-white/10 min-h-[300px] lg:min-h-[500px]">
-                <TradingViewChart symbol="BINANCE:BTCUSDT" />
+                {/* <TradingViewChart symbol="BINANCE:BTCUSDT" /> */}
               </div>
 
               {/* Bottom Tabs - Open Orders, Order History, etc. */}
@@ -912,4 +775,3 @@ useEffect(() => {
     </div>
   );
 }
-

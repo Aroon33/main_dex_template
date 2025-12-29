@@ -7,8 +7,14 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { DemoTradingProvider } from "./contexts/DemoTradingContext";
 import { WalletProvider } from "./contexts/WalletContext";
+import { AccountProvider } from "./contexts/AccountContext";
+
+import AppLayout from "./layouts/AppLayout";
+
+// Pages
 import Home from "./pages/Home";
-import Trade from "./pages/Trade";
+import Trade from "@/pages/Trade";
+import TradeTab from "./pages/Tradetab"; // ← 履歴ページ
 import Dashboard from "./pages/Dashboard";
 import Points from "./pages/Points";
 import Referral from "./pages/Referral";
@@ -24,9 +30,7 @@ import Docs from "./pages/Docs";
 import Blog from "./pages/Blog";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
-
-import AppLayout from "./layouts/AppLayout";
-
+import DevToolPanel from "./pages/DevToolPanel";
 
 
 function Router() {
@@ -38,9 +42,24 @@ function Router() {
         </AppLayout>
       </Route>
 
+      {/* ===== Trade ===== */}
       <Route path="/trade">
         <AppLayout>
           <Trade />
+        </AppLayout>
+      </Route>
+
+      {/* ===== Trade History ===== */}
+      <Route path="/history">
+        <AppLayout>
+          <TradeTab />
+        </AppLayout>
+      </Route>
+
+      {/* ===== Dev Tool ===== */}
+      <Route path="/dev">
+        <AppLayout>
+          <DevToolPanel />
         </AppLayout>
       </Route>
 
@@ -134,34 +153,29 @@ function Router() {
         </AppLayout>
       </Route>
 
+      {/* ===== 404 ===== */}
       <Route path="/404">
-        <NotFound />
-      </Route>
+  <NotFound />
+</Route>
 
-      {/* Final fallback route */}
-      <Route>
-        <NotFound />
-      </Route>
     </Switch>
   );
 }
 
-
 function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="dark"
-        // switchable
-      >
+      <ThemeProvider defaultTheme="dark">
         <LanguageProvider>
           <WalletProvider>
-            <DemoTradingProvider>
-              <TooltipProvider>
-                <Toaster />
-                <Router />
-              </TooltipProvider>
-            </DemoTradingProvider>
+            <AccountProvider>
+              <DemoTradingProvider>
+                <TooltipProvider>
+                  <Toaster />
+                  <Router />
+                </TooltipProvider>
+              </DemoTradingProvider>
+            </AccountProvider>
           </WalletProvider>
         </LanguageProvider>
       </ThemeProvider>

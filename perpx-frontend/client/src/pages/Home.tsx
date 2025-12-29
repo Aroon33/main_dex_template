@@ -41,7 +41,7 @@ export default function Home() {
   const heroScale = Math.max(1 - scrollY / 2000, 0.95);
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen bg-background relative">
       {/* Gradient Motion Background */}
       <div className="fixed inset-0 gradient-motion-fast opacity-20 pointer-events-none"></div>
       

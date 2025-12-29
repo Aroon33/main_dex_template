@@ -1,12 +1,9 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { BrowserProvider, Contract, ethers } from "ethers";
 import { CONTRACTS } from "@/lib/eth/addresses";
 import { toast } from "sonner";
 
 const PAIR = ethers.encodeBytes32String("tUSD");
-const DEV_UPDATER_ADDRESS = "0xf79Aa1eF9b96ad162fcD4b2C6401DE1ccc649641";
 
 type Props = {
   provider: BrowserProvider;
@@ -14,13 +11,6 @@ type Props = {
 };
 
 export default function DevTradingPanel({ provider, account }: Props) {
-  /* ======================
-     Guard (Dev only)
-  ====================== */
-  if (!account || account.toLowerCase() !== DEV_UPDATER_ADDRESS.toLowerCase()) {
-    return null;
-  }
-
   /* ======================
      State
   ====================== */
@@ -84,7 +74,7 @@ export default function DevTradingPanel({ provider, account }: Props) {
   );
 
   /* ======================
-     Refresh state
+     Refresh
   ====================== */
   const refresh = async () => {
     const signer = await provider.getSigner();
@@ -106,7 +96,7 @@ export default function DevTradingPanel({ provider, account }: Props) {
 
       setPositionSize(sizeUsd);
       setEntryPrice(entry);
-      setUnrealizedPnL(sizeUsd * (p - entry) / entry);
+      setUnrealizedPnL((sizeUsd * (p - entry)) / entry);
     } else {
       setPositionSize(0);
       setEntryPrice(null);
@@ -117,108 +107,6 @@ export default function DevTradingPanel({ provider, account }: Props) {
   useEffect(() => {
     refresh().catch(() => {});
   }, []);
-
-/* ======================
-   Actions (FIXED for TS)
-====================== */
-
-const withSigner = async () => provider.getSigner();
-
-const approve = async () => {
-  const signer = await withSigner();
-  const t = token.connect(signer) as any;
-
-  await (await t.approve(
-    CONTRACTS.ROUTER,
-    ethers.parseEther("1000000")
-  )).wait();
-
-  toast.success("Approve OK");
-  refresh();
-};
-
-const deposit = async () => {
-  const signer = await withSigner();
-  const r = router.connect(signer) as any;
-
-  await (await r.deposit(
-    ethers.parseEther(inputAmount)
-  )).wait();
-
-  toast.success("Deposit OK");
-  refresh();
-};
-
-const withdraw = async () => {
-  const signer = await withSigner();
-  const r = router.connect(signer) as any;
-
-  await (await r.withdraw(
-    ethers.parseEther(inputAmount)
-  )).wait();
-
-  toast.success("Withdraw OK");
-  refresh();
-};
-
-const openPosition = async () => {
-  const signer = await withSigner();
-  const r = router.connect(signer) as any;
-
-  await (await r.openPosition(
-    PAIR,
-    BigInt(inputAmount)
-  )).wait();
-
-  toast.success("Open Position OK");
-  refresh();
-};
-
-const closePosition = async () => {
-  const signer = await withSigner();
-  const r = router.connect(signer) as any;
-
-  await (await r.closePosition(0)).wait();
-
-  toast.success("Close Position OK");
-  refresh();
-};
-
-const partialClose = async () => {
-  const signer = await withSigner();
-  const r = router.connect(signer) as any;
-
-  await (await r.closePositionPartial(
-    0,
-    BigInt(inputAmount)
-  )).wait();
-
-  toast.success("Partial Close OK");
-  refresh();
-};
-
-const claim = async () => {
-  const signer = await withSigner();
-  const p = perp.connect(signer) as any;
-
-  await (await p.claimPnL(account)).wait();
-
-  toast.success("Claim OK");
-  refresh();
-};
-
-const updatePrice = async () => {
-  const signer = await withSigner();
-  const o = oracle.connect(signer) as any;
-
-  const price = BigInt(Math.floor(Number(newPrice) * 1e8));
-
-  await (await o.setPrice(PAIR, price)).wait();
-
-  toast.success("Price Updated");
-  refresh();
-};
-
 
   /* ======================
      UI
@@ -251,19 +139,6 @@ UnrealizedPnL: {unrealizedPnL.toFixed(2)}
         onChange={(e) => setNewPrice(e.target.value)}
         style={{ width: "100%", marginBottom: 12 }}
       />
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
-        <button onClick={approve}>Approve</button>
-        <button onClick={deposit}>Deposit</button>
-        <button onClick={withdraw}>Withdraw</button>
-        <button onClick={openPosition}>Open</button>
-        <button onClick={closePosition}>Close</button>
-        <button onClick={partialClose}>Partial Close</button>
-        <button onClick={claim}>Claim</button>
-        <button onClick={updatePrice} style={{ background: "#f59e0b" }}>
-          Set Price
-        </button>
-      </div>
     </div>
   );
 }

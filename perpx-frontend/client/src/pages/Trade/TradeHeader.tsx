@@ -7,6 +7,10 @@
  * - Global Header
  * - Perpetual / Spot mode switch
  *
+ * Rule:
+ * - JSX / className / order MUST match Trade1.tsx
+ * - Design changes are NOT allowed here
+ *
  * ============================================================
  */
 
@@ -22,21 +26,30 @@ export default function TradeHeader() {
     <>
       <Header />
 
+      {/* Perpetual/Spot Tabs */}
       <div className="bg-card/50 border-b border-white/5">
         <div className="flex">
-          {["perpetual", "spot"].map((mode) => (
-            <button
-              key={mode}
-              onClick={() => setTradeMode(mode as any)}
-              className={`flex-1 py-3 text-sm font-medium border-b-2 ${
-                tradeMode === mode
-                  ? "border-primary text-white"
-                  : "border-transparent text-white/60"
-              }`}
-            >
-              {t(`trade.${mode}`)}
-            </button>
-          ))}
+          <button
+            onClick={() => setTradeMode("perpetual")}
+            className={`flex-1 py-3 text-sm font-medium transition-colors border-b-2 ${
+              tradeMode === "perpetual"
+                ? "border-primary text-white"
+                : "border-transparent text-white/60"
+            }`}
+          >
+            {t("trade.perpetual")}
+          </button>
+
+          <button
+            onClick={() => setTradeMode("spot")}
+            className={`flex-1 py-3 text-sm font-medium transition-colors border-b-2 ${
+              tradeMode === "spot"
+                ? "border-primary text-white"
+                : "border-transparent text-white/60"
+            }`}
+          >
+            {t("trade.spot")}
+          </button>
         </div>
       </div>
     </>

@@ -1,27 +1,39 @@
 /**
- * ===============================
- * Trade Module Rule (IMPORTANT)
- * ===============================
+ * ============================================================
+ * usePositions
+ * ============================================================
  *
- * - provider / account は必ず AccountContext から取得する
- * - BrowserProvider を新規生成しない
- * - window.ethereum を直接参照しない
- * - このファイルは UI / Logic のみを担当する
+ * Role:
+ * - Provide open positions for UI
  *
- * Data Flow:
- * Wallet -> AccountContext -> Trade Page / Hooks
+ * Rule:
+ * - Accept account address ONLY
+ * - NO provider / AccountContext access
+ * - Must always export a module
  *
- * ===============================
+ * ============================================================
  */
 
-import { useAccount } from "@/contexts/AccountContext";
+export type Position = {
+  id: string;
+  pair: string;
+  side: "long" | "short";
+  size: number;
+  entryPrice: number;
+};
 
-export function usePositions() {
-  const { provider, account } = useAccount();
-
-  if (!provider || !account) {
-    return {};
+export function usePositions(account?: string) {
+  // account 未接続時も安全
+  if (!account) {
+    return {
+      positions: [] as Position[],
+      loading: false,
+    };
   }
 
-  return {};
+  // ※ 実データ実装は後でOK
+  return {
+    positions: [] as Position[],
+    loading: false,
+  };
 }

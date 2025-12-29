@@ -15,8 +15,7 @@ export default function TradeMobile() {
   const [size, setSize] = useState("");
 
   return (
-    <div className="h-screen flex flex-col bg-background overflow-hidden">
-      {/* Fixed Header */}
+    <div className="h-screen flex flex-col bg-background">      {/* Fixed Header */}
       <Header />
 
       {/* Fixed Trade Mode Tabs */}

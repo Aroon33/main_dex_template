@@ -1,38 +1,38 @@
 /**
  * ============================================================
- * useOrderHistory
+ * useTradeHistorySimple
  * ============================================================
  *
  * Role:
- * - Provide open / historical orders for UI
+ * - Provide trade history for UI
  *
  * Rule:
  * - Accept account address ONLY
- * - NO provider / AccountContext access
+ * - NO BrowserProvider
+ * - NO AccountContext
  *
  * ============================================================
  */
 
-export type Order = {
+export type Trade = {
   id: string;
   symbol: string;
-  side: "buy" | "sell";
-  type: string;
-  size: number;
-  status: string;
+  price: number;
+  pnl: number;
+  timestamp: number;
 };
 
-export function useOrderHistory(account?: string) {
+export function useTradeHistorySimple(account?: string) {
   if (!account) {
     return {
-      orders: [] as Order[],
+      trades: [] as Trade[],
       loading: false,
     };
   }
 
   // TODO: 実 on-chain / API 実装
   return {
-    orders: [] as Order[],
+    trades: [] as Trade[],
     loading: false,
   };
 }
