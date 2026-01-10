@@ -14,7 +14,6 @@ import AppLayout from "./layouts/AppLayout";
 // Pages
 import Home from "./pages/Home";
 import Trade from "@/pages/Trade";
-import TradeTab from "./pages/Tradetab"; // ← 履歴ページ
 import Dashboard from "./pages/Dashboard";
 import Points from "./pages/Points";
 import Referral from "./pages/Referral";
@@ -32,135 +31,43 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import DevToolPanel from "./pages/DevToolPanel";
 
+import TradeAdmin from "@/pages/TradeAdmin";
+
+
 
 function Router() {
   return (
-    <Switch>
-      <Route path="/">
-        <AppLayout>
-          <Home />
-        </AppLayout>
-      </Route>
+    <AppLayout>
+      <Switch>
+        <Route path="/" component={Home} />
+        <Route path="/trade" component={Trade} />
+        <Route path="/trade/admin" component={TradeAdmin} />
+        <Route path="/dev" component={DevToolPanel} />
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/points" component={Points} />
+        <Route path="/referral" component={Referral} />
+        <Route path="/stats" component={Stats} />
+        <Route path="/rewards" component={Rewards} />
+        <Route path="/stake" component={Stake} />
+        <Route path="/earn" component={Earn} />
+        <Route path="/airdrop" component={Airdrop} />
+        <Route path="/feedback" component={Feedback} />
+        <Route path="/vip" component={VIP} />
+        <Route path="/api" component={API} />
+        <Route path="/docs" component={Docs} />
+        <Route path="/blog" component={Blog} />
+        <Route path="/privacy-policy" component={PrivacyPolicy} />
+        <Route path="/terms-of-service" component={TermsOfService} />
 
-      {/* ===== Trade ===== */}
-      <Route path="/trade">
-        <AppLayout>
-          <Trade />
-        </AppLayout>
-      </Route>
-
-      {/* ===== Trade History ===== */}
-      <Route path="/history">
-        <AppLayout>
-          <TradeTab />
-        </AppLayout>
-      </Route>
-
-      {/* ===== Dev Tool ===== */}
-      <Route path="/dev">
-        <AppLayout>
-          <DevToolPanel />
-        </AppLayout>
-      </Route>
-
-      <Route path="/dashboard">
-        <AppLayout>
-          <Dashboard />
-        </AppLayout>
-      </Route>
-
-      <Route path="/points">
-        <AppLayout>
-          <Points />
-        </AppLayout>
-      </Route>
-
-      <Route path="/referral">
-        <AppLayout>
-          <Referral />
-        </AppLayout>
-      </Route>
-
-      <Route path="/stats">
-        <AppLayout>
-          <Stats />
-        </AppLayout>
-      </Route>
-
-      <Route path="/rewards">
-        <AppLayout>
-          <Rewards />
-        </AppLayout>
-      </Route>
-
-      <Route path="/stake">
-        <AppLayout>
-          <Stake />
-        </AppLayout>
-      </Route>
-
-      <Route path="/earn">
-        <AppLayout>
-          <Earn />
-        </AppLayout>
-      </Route>
-
-      <Route path="/airdrop">
-        <AppLayout>
-          <Airdrop />
-        </AppLayout>
-      </Route>
-
-      <Route path="/feedback">
-        <AppLayout>
-          <Feedback />
-        </AppLayout>
-      </Route>
-
-      <Route path="/vip">
-        <AppLayout>
-          <VIP />
-        </AppLayout>
-      </Route>
-
-      <Route path="/api">
-        <AppLayout>
-          <API />
-        </AppLayout>
-      </Route>
-
-      <Route path="/docs">
-        <AppLayout>
-          <Docs />
-        </AppLayout>
-      </Route>
-
-      <Route path="/blog">
-        <AppLayout>
-          <Blog />
-        </AppLayout>
-      </Route>
-
-      <Route path="/privacy-policy">
-        <AppLayout>
-          <PrivacyPolicy />
-        </AppLayout>
-      </Route>
-
-      <Route path="/terms-of-service">
-        <AppLayout>
-          <TermsOfService />
-        </AppLayout>
-      </Route>
-
-      {/* ===== 404 ===== */}
-      <Route path="/404">
-  <NotFound />
-</Route>
-
-    </Switch>
+        {/* 404 */}
+        <Route>
+          <NotFound />
+        </Route>
+      </Switch>
+    </AppLayout>
   );
 }
+
 
 function App() {
   return (

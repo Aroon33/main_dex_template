@@ -1,23 +1,20 @@
+"use client";
+
 /**
  * ============================================================
- * Trade Page – Final Entry (Single Source of Truth)
+ * Trade Page – AccountContext Only Version
  * ============================================================
  *
- * ■ 接続ルール（最重要）
- * ------------------------------------------------------------
- * - provider / account は必ず AccountContext から取得
- * - BrowserProvider を新規生成しない
- * - window.ethereum を直接参照しない
- *
- * ■ このファイルの役割
- * ------------------------------------------------------------
- * - Tradeページ全体の組み立てのみを担当
- * - state / handler は子コンポーネントへ委譲
- * - デザインは Trade1.tsx と完全一致
+ * Rules:
+ * - AccountContext を唯一のアカウントソースとして使用
+ * - TradeReadContext / trade READ hooks は使用しない
+ * - wallet 未接続でも UI は必ず描画
+ * - UI 構造・デザインは変更しない
  *
  * ============================================================
  */
 
+import { useState } from "react";
 import { useAccount } from "@/contexts/AccountContext";
 
 // Trade components
@@ -27,71 +24,93 @@ import TradeChart from "./TradeChart";
 import TradeOrder from "./TradeOrder";
 import TradeBottomTabs from "./TradeBottomTabs";
 
+// OrderBook（UI 用・読み取り専用）
 import { useOrderBook } from "@/hooks/trade/useOrderBook";
-
-
-// React
-import { useState } from "react";
 
 export default function Trade() {
   /* =========================
-   * Account Context (唯一)
+   * Account Context
    * ========================= */
-  const accountCtx = useAccount();
-
-// 必要なら「接続済みかどうか」だけ見る
-if (!accountCtx) {
-  return null;
-}
-
+  const account = useAccount();
 
   /* =========================
-   * Shared State (Trade1 同等)
+   * Local UI State
    * ========================= */
-  const [tradeMode, setTradeMode] = useState<"perpetual" | "spot">("perpetual");
+  const [tradeMode] =
+    useState<"perpetual" | "spot">("perpetual");
 
-  // Mock / placeholder data (Trade1 と同じ扱い)
-  const balance = 10000;
-  const positions: any[] = [];
-  const orders: any[] = [];
-  const trades: any[] = [];
-
-  const { orderBookAsks, orderBookBids } = useOrderBook("BTCUSDT");
-
-  const [selectedPair, setSelectedPair] = useState("BTCUSDT");
-
-
-
+  const [selectedPair, setSelectedPair] =
+    useState("BTCUSDT");
 
   /* =========================
+   * Balance (SSOT)
+   * ========================= */
+  const balance = account.collateralBalance;
+
+  /* =========================
+   * OrderBook (UI only)
+   * ========================= */
+  const { orderBookAsks, orderBookBids } =
+    useOrderBook(selectedPair);
+
+  /* ============================================================
    * Render
-   * ========================= */
+   * ============================================================
+   */
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Header + Perpetual/Spot */}
-      <TradeHeader />
 
-      {/* Pair selector + price */}
-      <TradePair
-  symbol={selectedPair}
-  onChange={setSelectedPair}
-/>
+      {/* ================= PC Layout ================= */}
+      <div className="hidden md:flex flex-col flex-1 min-h-0">
+        <TradeHeader />
 
+        <TradePair
+          symbol={selectedPair}
+          onChange={setSelectedPair}
+        />
 
-      {/* Chart */}
-      <TradeChart symbol="BTCUSDT" mode={tradeMode} />
+        <TradeChart
+          symbol={selectedPair}
+          mode={tradeMode}
+        />
 
-      {/* Order panel */}
-      <TradeOrder tradeMode={tradeMode} balance={balance} />
+        <TradeOrder
+          tradeMode={tradeMode}
+          balance={balance}
+        />
 
-      {/* Bottom tabs */}
-      <TradeBottomTabs
-  positions={positions}
-  tradeHistory={trades}
-  orders={orders}
-  orderBookAsks={orderBookAsks}
-  orderBookBids={orderBookBids}
-/>
+        <TradeBottomTabs />
+      </div>
+
+      {/* ================= Mobile Layout ================= */}
+      <div className="md:hidden h-[100dvh] flex flex-col">
+
+        <div className="shrink-0">
+          <TradeHeader />
+          <TradePair
+            symbol={selectedPair}
+            onChange={setSelectedPair}
+          />
+        </div>
+
+        {/* 👇 Chart だけ scroll */}
+        <div className="flex-1 overflow-y-auto">
+          <TradeChart
+            symbol={selectedPair}
+            mode={tradeMode}
+          />
+        </div>
+
+        {/* 👇 Order + Tabs は固定 */}
+        <div className="shrink-0">
+          <TradeOrder
+            tradeMode={tradeMode}
+            balance={balance}
+          />
+          <TradeBottomTabs />
+        </div>
+
+      </div>
 
     </div>
   );

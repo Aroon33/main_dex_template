@@ -1,4 +1,3 @@
-import Header from "@/components/Header";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useWallet } from "@/contexts/WalletContext";
@@ -16,7 +15,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      {/* */}
 
       {/* Connect Wallet Screen when wallet is not connected */}
       {!isConnected && (

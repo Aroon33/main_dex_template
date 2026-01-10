@@ -43,6 +43,12 @@ function getClaimablePnL(address user)
     view
     returns (int256);
 
+    /// 🔑 追加（これが今回の修正点）
+    function addClaimablePnL(
+        address user,
+        int256 pnl
+    ) external;
+
 
 
     /* ===================================================== */

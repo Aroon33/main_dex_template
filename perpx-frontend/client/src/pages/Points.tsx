@@ -1,4 +1,3 @@
-import Header from "@/components/Header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Award,
@@ -16,7 +15,7 @@ const activities = [
 export default function Points() {
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      {/* */}
 
       {/* Main Content */}
       <main className="container mx-auto px-3 sm:px-4 lg:px-6 py-6 sm:py-8 lg:py-12">

@@ -91,6 +91,8 @@ mapping(address => int256) public claimablePnL;
         traderMargin[user] -= amount;
     }
 
+
+
     /* ===================================================== */
     /* ===================== POSITION ====================== */
     /* ===================================================== */
@@ -154,6 +156,15 @@ function claimPnL(address user)
 
     liquidityPool.payProfit(user, uint256(pnl));
 }
+
+function addClaimablePnL(address user, int256 pnl)
+    external
+    onlyRouter
+{
+    require(pnl > 0, "INVALID_PNL");
+    claimablePnL[user] += pnl;
+}
+
 
 
     /* ===================================================== */

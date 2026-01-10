@@ -1,4 +1,3 @@
-import Header from "@/components/Header";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Gift, Check, X, Wallet } from "lucide-react";
@@ -80,7 +79,7 @@ export default function Airdrop() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      
       
       <div className="container mx-auto px-4 py-8 lg:py-12">
         {/* Hero Section */}

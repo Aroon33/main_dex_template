@@ -1,5 +1,7 @@
 import React from "react";
-import { Trade } from "@/hooks/trade/useTradeHistorySimple";
+
+
+import { Trade } from "@/types"; 
 
 type Props = {
   trades: Trade[];

@@ -83,14 +83,19 @@ async function main() {
   const liquidationAddress = await liquidation.getAddress();
   console.log("LiquidationEngine:", liquidationAddress);
 
-  /* =========================
-     7. Router
-  ========================= */
-  const Router = await hre.ethers.getContractFactory("Router");
-  const router = await Router.deploy(perpAddress, poolAddress);
-  await router.waitForDeployment();
-  const routerAddress = await router.getAddress();
-  console.log("Router:", routerAddress);
+/* =========================
+   7. Router
+========================= */
+const Router = await hre.ethers.getContractFactory("Router");
+const router = await Router.deploy(
+  perpAddress,
+  poolAddress,
+  oracleAddress
+);
+await router.waitForDeployment();
+const routerAddress = await router.getAddress();
+console.log("Router:", routerAddress);
+
 
   /* =========================
      8. Wiring

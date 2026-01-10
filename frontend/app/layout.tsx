@@ -14,8 +14,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="min-h-screen">
         <div className="app-root">
           <Providers>
-            {/* Header */}
-            <Header />
+            
+            {/* */}
 
             {/* Page Content */}
             <div className="pt-24 px-4 md:px-8 pb-10">

@@ -1,4 +1,3 @@
-import Header from "@/components/Header";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useEffect } from "react";
 
@@ -405,7 +404,7 @@ export default function TermsOfService() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      
       
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <h1 className="text-4xl font-bold text-white mb-8">{content.title}</h1>

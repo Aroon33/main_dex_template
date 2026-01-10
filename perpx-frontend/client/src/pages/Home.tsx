@@ -1,4 +1,3 @@
-import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { TrendingUp, Zap, Shield, BarChart3, Coins, Network } from "lucide-react";
@@ -45,7 +44,7 @@ export default function Home() {
       {/* Gradient Motion Background */}
       <div className="fixed inset-0 gradient-motion-fast opacity-20 pointer-events-none"></div>
       
-      <Header />
+      
 
       {/* Hero Section with Apple-style Parallax */}
       <section 

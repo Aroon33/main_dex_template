@@ -53,7 +53,7 @@ contract PriceOracle {
     /* ===================== PRICE ========================= */
     /* ===================================================== */
 
-    /// @notice Set price for a trading pair
+    /// @notice Set absolute price for a trading pair
     /// @dev Price must be 18 decimals
     function setPrice(bytes32 pair, uint256 price)
         external
@@ -61,6 +61,32 @@ contract PriceOracle {
     {
         require(price > 0, "INVALID_PRICE");
         prices[pair] = price;
+    }
+
+    /// @notice Increase price by delta (18 decimals)
+    function increasePrice(bytes32 pair, uint256 delta)
+        external
+        onlyUpdater
+    {
+        require(delta > 0, "INVALID_DELTA");
+
+        uint256 current = prices[pair];
+        require(current > 0, "PRICE_NOT_SET");
+
+        prices[pair] = current + delta;
+    }
+
+    /// @notice Decrease price by delta (18 decimals)
+    function decreasePrice(bytes32 pair, uint256 delta)
+        external
+        onlyUpdater
+    {
+        require(delta > 0, "INVALID_DELTA");
+
+        uint256 current = prices[pair];
+        require(current > delta, "PRICE_TOO_LOW");
+
+        prices[pair] = current - delta;
     }
 
     /* ===================================================== */

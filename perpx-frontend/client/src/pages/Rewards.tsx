@@ -1,4 +1,3 @@
-import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useState } from "react";
@@ -202,7 +201,7 @@ export default function Rewards() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      {/* */}
 
       {/* Connect Wallet Screen when wallet is not connected */}
       {!isConnected && (

@@ -537,14 +537,14 @@
   transform: translateY(0);
 }
 
-/* Smooth scroll behavior */
-html {
-  scroll-behavior: smooth;
-}
-
 /* Enhanced parallax */
 .parallax-section {
   will-change: transform;
   transition: transform 0.1s ease-out;
+}
+html,
+body {
+  overscroll-behavior: none;
+  height: 100%;
 }
 

@@ -1,4 +1,3 @@
-import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Code, Key, Book, Terminal } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -7,7 +6,7 @@ export default function API() {
   const { t } = useLanguage();
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">

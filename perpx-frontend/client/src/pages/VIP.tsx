@@ -1,4 +1,3 @@
-import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -73,7 +72,7 @@ export default function VIP() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      {/* */}
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8 text-center">

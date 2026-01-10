@@ -1,22 +1,18 @@
 /**
  * ============================================================
- * TradePair
+ * TradePair (SSOT: pairs.json)
  * ============================================================
  *
- * Role:
  * - Trading pair selector
  * - Real-time price display (Binance WebSocket)
- *
- * Rule:
- * - selectedPair は親が管理する
- * - このコンポーネントは symbol を受け取って表示するだけ
- * - ペア変更時は onChange(symbol) を呼ぶだけ
+ * - Pair list from /api/pairs.json (enabled only)
  *
  * ============================================================
  */
 
 import { useState, useEffect, useRef } from "react";
 import { ChevronDown, Star } from "lucide-react";
+import { usePairs } from "@/hooks/usePairs";
 
 /* =========================
  * Types
@@ -28,19 +24,11 @@ type Props = {
 };
 
 /* =========================
- * Constants
- * ========================= */
-
-const TRADING_PAIRS = [
-  { symbol: "BTCUSDT", name: "Bitcoin", price: 111062.6, change: 3.17 },
-  { symbol: "ETHUSDT", name: "Ethereum", price: 3842.5, change: 2.45 },
-];
-
-/* =========================
  * Component
  * ========================= */
 
 export default function TradePair({ symbol, onChange }: Props) {
+  const { pairs, loading } = usePairs();
   const [showPairSelector, setShowPairSelector] = useState(false);
 
   const [currentPrice, setCurrentPrice] = useState(0);
@@ -54,7 +42,8 @@ export default function TradePair({ symbol, onChange }: Props) {
   useEffect(() => {
     if (!symbol) return;
 
-    const wsSymbol = symbol.toLowerCase();
+    // Binance uses e.g. BTCUSDT
+    const wsSymbol = `${symbol.toLowerCase()}usdt`;
     const wsUrl = `wss://stream.binance.com:9443/ws/${wsSymbol}@ticker`;
 
     if (wsRef.current) {
@@ -80,6 +69,17 @@ export default function TradePair({ symbol, onChange }: Props) {
   }, [symbol]);
 
   /* =========================
+   * Auto-select first pair
+   * ========================= */
+  useEffect(() => {
+    if (!loading && pairs.length > 0 && !pairs.find(p => p.symbol === symbol)) {
+      onChange(pairs[0].symbol);
+    }
+  }, [loading, pairs, symbol, onChange]);
+
+  const currentPair = pairs.find(p => p.symbol === symbol);
+
+  /* =========================
    * Render
    * ========================= */
 
@@ -93,7 +93,9 @@ export default function TradePair({ symbol, onChange }: Props) {
             className="flex items-center gap-2 hover:bg-white/5 rounded-lg p-2 transition-colors"
           >
             <Star className="h-4 w-4 text-yellow-500" />
-            <span className="text-white font-bold">{symbol}</span>
+            <span className="text-white font-bold">
+              {currentPair?.display ?? symbol}
+            </span>
             <ChevronDown className="h-4 w-4 text-white/60" />
           </button>
 
@@ -121,11 +123,11 @@ export default function TradePair({ symbol, onChange }: Props) {
       {/* ===== Pair Selector Dropdown ===== */}
       {showPairSelector && (
         <div className="bg-card border-b border-white/5 max-h-60 overflow-y-auto">
-          {TRADING_PAIRS.map((pair) => (
+          {pairs.map((pair) => (
             <button
               key={pair.symbol}
               onClick={() => {
-                onChange(pair.symbol);     // ← 親に通知するだけ
+                onChange(pair.symbol);
                 setShowPairSelector(false);
               }}
               className="w-full flex items-center justify-between p-3 hover:bg-white/5 transition-colors border-b border-white/5"
@@ -140,27 +142,11 @@ export default function TradePair({ symbol, onChange }: Props) {
                 />
                 <div className="text-left">
                   <div className="text-white font-medium">
-                    {pair.symbol}
+                    {pair.display}
                   </div>
                   <div className="text-xs text-white/60">
-                    {pair.name}
+                    {pair.symbol}
                   </div>
-                </div>
-              </div>
-
-              <div className="text-right">
-                <div className="text-white">
-                  {pair.price.toLocaleString()}
-                </div>
-                <div
-                  className={`text-xs ${
-                    pair.change >= 0
-                      ? "text-green-500"
-                      : "text-red-500"
-                  }`}
-                >
-                  {pair.change >= 0 ? "+" : ""}
-                  {pair.change}%
                 </div>
               </div>
             </button>

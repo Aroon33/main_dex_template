@@ -14,7 +14,6 @@
  * ============================================================
  */
 
-import Header from "@/components/Header";
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -24,7 +23,7 @@ export default function TradeHeader() {
 
   return (
     <>
-      <Header />
+    
 
       {/* Perpetual/Spot Tabs */}
       <div className="bg-card/50 border-b border-white/5">

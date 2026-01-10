@@ -1,4 +1,3 @@
-import Header from "@/components/Header";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useWallet } from "@/contexts/WalletContext";
 import { Button } from "@/components/ui/button";
@@ -78,7 +77,7 @@ export default function Stake() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      
 
       {/* Connect Wallet Screen when wallet is not connected */}
       {!isConnected && (
