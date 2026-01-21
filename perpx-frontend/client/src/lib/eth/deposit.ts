@@ -1,13 +1,16 @@
-import { BrowserProvider, Contract } from "ethers";
+import { Contract, Signer } from "ethers";
 import { CONTRACTS } from "./addresses";
 import { ERC20_ABI } from "./abi/ERC20";
 import { getRouter } from "./getRouter";
 
-export async function deposit(amount: bigint) {
-  if (!window.ethereum) throw new Error("Wallet not found");
-
-  const provider = new BrowserProvider(window.ethereum);
-  const signer = await provider.getSigner();
+/**
+ * Deposit collateral
+ * - signer MUST be injected (DO NOT create here)
+ */
+export async function deposit(
+  signer: Signer,
+  amount: bigint
+) {
   const user = await signer.getAddress();
 
   // ERC20
@@ -17,7 +20,7 @@ export async function deposit(amount: bigint) {
     signer
   );
 
-  // ✅ approve to LiquidityPool
+  // approve to LiquidityPool
   const allowance: bigint = await token.allowance(
     user,
     CONTRACTS.LIQUIDITY_POOL
@@ -36,3 +39,4 @@ export async function deposit(amount: bigint) {
   const tx = await router.deposit(amount);
   return await tx.wait();
 }
+

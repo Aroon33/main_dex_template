@@ -1,0 +1,7 @@
+1:import { useEffect } from "react";
+5:import { useWallet } from "@/contexts/WalletContext";
+6:import { useAccount } from "@/contexts/AccountContext";
+14:export default function Trade1() {
+18:  const { provider } = useWallet();
+19:  const { address } = useAccount();
+37:  useEffect(() => {

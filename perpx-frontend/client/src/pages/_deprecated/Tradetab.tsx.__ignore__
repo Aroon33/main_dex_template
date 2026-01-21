@@ -1,0 +1,200 @@
+/**
+ * ============================================================
+ * TRADE MODULE RULES (DO NOT REMOVE)
+ * ============================================================
+ *
+ * TradeTab is a UI-only component.
+ * - Uses WalletContext for address ONLY
+ * - Passes account?: string to hooks
+ *
+ * ============================================================
+ */
+
+
+"use client";
+
+import { useState } from "react";
+import { useWallet } from "@/contexts/WalletContext";
+
+// Components
+import HeaderHistory from "@/components/HeaderHistory";
+
+// Hooks（index.ts 経由 ONLY）
+import {
+  usePositions,
+  useTradeHistorySimple,
+  useOrderHistory,
+  useClaimPnL,
+} from "@/hooks/trade";
+
+// Types（hooks からは import しない）
+import { Position, Trade, Order } from "@/types";
+
+// UI
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+
+type TabKey = "positions" | "trades" | "orders";
+
+export default function Tradetab() {
+  const { address, isConnected, connect } = useWallet();
+  const account = address ?? undefined; // ← ★ここが重要
+
+  const [activeTab, setActiveTab] = useState<TabKey>("positions");
+
+  const [claiming, setClaiming] = useState(false);
+
+  /* =========================
+   * Hooks (PURE)
+   * ========================= */
+
+  const { positions } = usePositions(account);
+  const { trades } = useTradeHistorySimple(account);
+  const { orders } = useOrderHistory(account);
+
+  const { claimPnL } = useClaimPnL();
+
+  /* =========================
+   * Guard
+   * ========================= */
+
+  if (!isConnected) {
+    return (
+      <div className="p-6">
+        <Button onClick={connect}>Connect Wallet</Button>
+      </div>
+    );
+  }
+
+  /* =========================
+   * Render
+   * ========================= */
+
+  return (
+    <div className="p-4 space-y-4">
+      <HeaderHistory trades={trades} />
+
+
+
+<Button
+  disabled={claiming}
+  className={`
+    w-full
+    ${claiming
+      ? "bg-emerald-400 cursor-not-allowed"
+      : "bg-emerald-600 hover:bg-emerald-700"}
+    text-white
+  `}
+  onClick={async () => {
+    try {
+      setClaiming(true);
+      const hash = await claimPnL(account!);
+      console.log("Claim tx:", hash);
+    } finally {
+      setClaiming(false);
+    }
+  }}
+>
+  {claiming ? "Claiming..." : "Claim PnL (Test)"}
+</Button>
+
+
+
+      <div className="flex gap-2">
+        <Button
+          variant={activeTab === "positions" ? "default" : "outline"}
+          onClick={() => setActiveTab("positions")}
+        >
+          Positions
+        </Button>
+        <Button
+          variant={activeTab === "trades" ? "default" : "outline"}
+          onClick={() => setActiveTab("trades")}
+        >
+          Trades
+        </Button>
+        <Button
+          variant={activeTab === "orders" ? "default" : "outline"}
+          onClick={() => setActiveTab("orders")}
+        >
+          Orders
+        </Button>
+      </div>
+
+      {activeTab === "positions" && (
+        <Card className="p-4 space-y-2">
+          {positions.length === 0 ? (
+            <div className="text-muted-foreground">No open positions</div>
+          ) : (
+            positions.map((p: Position) => (
+              <div key={p.id} className="flex justify-between text-sm">
+                <div>
+                  <div className="font-medium">{p.pair}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {p.side.toUpperCase()}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div>Size: {p.size}</div>
+                  <div>Entry: {p.entryPrice}</div>
+                </div>
+              </div>
+            ))
+          )}
+        </Card>
+      )}
+
+      {activeTab === "trades" && (
+        <Card className="p-4 space-y-2">
+          {trades.length === 0 ? (
+            <div className="text-muted-foreground">No trade history</div>
+          ) : (
+            trades.map((t: Trade) => (
+              <div key={t.id} className="flex justify-between text-sm">
+                <div>
+                  <div className="font-medium">{t.symbol}</div>
+                  <div className="text-xs text-muted-foreground">CLOSE</div>
+                </div>
+                <div className="text-right">
+                  <div>Price: {t.price}</div>
+                  <div
+                    className={
+                      t.pnl >= 0 ? "text-green-500" : "text-red-500"
+                    }
+                  >
+                    {t.pnl >= 0 ? "+" : ""}
+                    {t.pnl}
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </Card>
+      )}
+
+      {activeTab === "orders" && (
+        <Card className="p-4 space-y-2">
+          {orders.length === 0 ? (
+            <div className="text-muted-foreground">No orders</div>
+          ) : (
+            orders.map((o: Order) => (
+              <div key={o.id} className="flex justify-between text-sm">
+                <div>
+                  <div className="font-medium">{o.symbol}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {o.side.toUpperCase()} {o.type.toUpperCase()}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div>Size: {o.size}</div>
+                  <div>Status: {o.status}</div>
+                </div>
+              </div>
+            ))
+          )}
+        </Card>
+      )}
+    </div>
+  );
+}

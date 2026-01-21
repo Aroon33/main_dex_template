@@ -1,0 +1,47 @@
+contracts
+├── contracts
+│   ├── core
+│   │   ├── Router.sol
+│   │   └── あ
+│   ├── interfaces
+│   │   ├── IFundingRate.sol
+│   │   ├── ILiquidationEngine.sol
+│   │   ├── ILiquidityPool.sol
+│   │   ├── IOracle.sol
+│   │   ├── IOrderBook.sol
+│   │   └── IPerp.sol
+│   ├── libraries
+│   │   ├── FundingLib.sol
+│   │   ├── MathLib.sol
+│   │   ├── PositionLib.sol
+│   │   └── PriceLib.sol
+│   ├── liquidation
+│   │   └── LiquidationEngine.sol
+│   ├── liquidity
+│   │   └── LiquidityPool.sol
+│   ├── mocks
+│   │   └── MockERC20.sol
+│   ├── oracle
+│   │   ├── ChainlinkOracle.sol
+│   │   └── PriceOracle.sol
+│   ├── perpetual
+│   │   ├── FundingRate.sol
+│   │   ├── OrderBook.sol
+│   │   ├── PerpetualTrading.sol
+│   │   └── PerpetualTrading.sol.save
+│   ├── tokens
+│   │   └── PLP.sol
+│   └── utils
+├── deployments
+│   └── sepolia.json
+├── .env
+├── hardhat.config.js
+├── package.json
+├── package-lock.json
+└── scripts
+    ├── console.js
+    ├── deploy.js
+    ├── deployMockToken.js
+    └── generateAddresses.js
+
+13 directories, 31 files

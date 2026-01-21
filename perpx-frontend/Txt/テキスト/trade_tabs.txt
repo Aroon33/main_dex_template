@@ -1,0 +1,61 @@
+165:                <Tabs defaultValue="positions" className="h-full">
+166:                  <TabsList className="w-full justify-start bg-transparent border-b border-white/10 rounded-none h-auto p-0">
+167:                    <TabsTrigger value="positions" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary">Positions</TabsTrigger>
+168:                    <TabsTrigger value="open-orders" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary">Open orders</TabsTrigger>
+169:                    <TabsTrigger value="order-history" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary">Order history</TabsTrigger>
+170:                    <TabsTrigger value="trade-history" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary">Trade history</TabsTrigger>
+171:                    <TabsTrigger value="transaction-history" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary">Transaction history</TabsTrigger>
+172:                    <TabsTrigger value="deposits" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary">Deposits & withdrawals</TabsTrigger>
+173:                    <TabsTrigger value="assets" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary">Assets</TabsTrigger>
+176:                  <TabsContent value="transaction-history" className="p-4">
+190:                  <TabsContent value="positions" className="p-4 space-y-2">
+210:                  <TabsContent value="trade-history" className="p-4 space-y-2">
+234:                <Tabs defaultValue="order-book" className="h-full">
+235:                  <TabsList className="w-full justify-start bg-transparent border-b border-white/10 rounded-none h-auto p-0">
+236:                    <TabsTrigger value="order-book" className="rounded-none">Order book</TabsTrigger>
+237:                    <TabsTrigger value="trades" className="rounded-none">Trades</TabsTrigger>
+239:                  <TabsContent value="order-book" className="p-3">
+263:                  <TabsContent value="trades" className="p-3">
+282:                  <Tabs defaultValue="market" className="w-full">
+283:                    <TabsList className="w-full bg-transparent border border-white/10 p-0">
+284:                      <TabsTrigger value="market" className="flex-1 text-xs">Market</TabsTrigger>
+285:                      <TabsTrigger value="limit" className="flex-1 text-xs">Limit</TabsTrigger>
+286:                      <TabsTrigger value="stop-limit" className="flex-1 text-xs">Stop Limit</TabsTrigger>
+390:              <Tabs defaultValue="market" className="w-full">
+391:                <TabsList className="w-full bg-transparent border border-white/10 p-0">
+392:                  <TabsTrigger value="market" className="flex-1 text-xs">Market</TabsTrigger>
+393:                  <TabsTrigger value="limit" className="flex-1 text-xs">Limit</TabsTrigger>
+394:                  <TabsTrigger value="stop-limit" className="flex-1 text-xs">Stop Limit</TabsTrigger>
+529:                <Tabs defaultValue="open-orders" className="h-full">
+530:                  <TabsList className="w-full justify-start bg-transparent border-b border-white/10 rounded-none h-auto p-0">
+531:                    <TabsTrigger value="open-orders" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary">Open Orders</TabsTrigger>
+532:                    <TabsTrigger value="order-history" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary">Order History</TabsTrigger>
+533:                    <TabsTrigger value="trade-history" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary">Trade History</TabsTrigger>
+534:                    <TabsTrigger value="funds" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary">Funds</TabsTrigger>
+536:                  <TabsContent value="open-orders" className="p-4 space-y-2">
+547:                  <TabsContent value="order-history" className="p-4">
+550:                  <TabsContent value="trade-history" className="p-4">
+553:                  <TabsContent value="funds" className="p-4">
+564:                <Tabs defaultValue="order-book" className="h-full">
+565:                  <TabsList className="w-full justify-start bg-transparent border-b border-white/10 rounded-none h-auto p-0">
+566:                    <TabsTrigger value="order-book" className="rounded-none">Order book</TabsTrigger>
+567:                    <TabsTrigger value="trades" className="rounded-none">Trades</TabsTrigger>
+569:                  <TabsContent value="order-book" className="p-3">
+593:                  <TabsContent value="trades" className="p-3">
+603:                  <Tabs defaultValue="buy" className="w-full">
+604:                    <TabsList className="w-full bg-transparent border border-white/10 p-0">
+605:                      <TabsTrigger value="buy" className="flex-1 text-xs data-[state=active]:bg-green-500/20">Buy</TabsTrigger>
+606:                      <TabsTrigger value="sell" className="flex-1 text-xs data-[state=active]:bg-red-500/20">Sell</TabsTrigger>
+611:                  <Tabs defaultValue="limit" className="w-full">
+612:                    <TabsList className="w-full bg-transparent border border-white/10 p-0">
+613:                      <TabsTrigger value="limit" className="flex-1 text-xs">Limit</TabsTrigger>
+614:                      <TabsTrigger value="market" className="flex-1 text-xs">Market</TabsTrigger>
+615:                      <TabsTrigger value="stop-limit" className="flex-1 text-xs">Stop-Limit</TabsTrigger>
+701:              <Tabs defaultValue="buy" className="w-full">
+702:                <TabsList className="w-full bg-transparent border border-white/10 p-0">
+703:                  <TabsTrigger value="buy" className="flex-1 text-xs data-[state=active]:bg-green-500/20">Buy</TabsTrigger>
+704:                  <TabsTrigger value="sell" className="flex-1 text-xs data-[state=active]:bg-red-500/20">Sell</TabsTrigger>
+709:              <Tabs defaultValue="limit" className="w-full">
+710:                <TabsList className="w-full bg-transparent border border-white/10 p-0">
+711:                  <TabsTrigger value="limit" className="flex-1 text-xs">Limit</TabsTrigger>
+712:                  <TabsTrigger value="market" className="flex-1 text-xs">Market</TabsTrigger>

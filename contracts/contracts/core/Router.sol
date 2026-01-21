@@ -22,7 +22,7 @@ contract Router {
         int256 size,
         uint256 entryPrice,
         uint256 exitPrice,
-        int256 pnl,
+        int256 pnl,          // UI / history 用（Routerでは計算しない）
         uint256 timestamp
     );
 
@@ -47,7 +47,6 @@ contract Router {
 
     function withdraw(uint256 amount) external {
         perp.onTraderWithdraw(msg.sender, amount);
-        liquidityPool.withdraw(msg.sender, amount);
     }
 
     /* ===================================================== */
@@ -61,65 +60,51 @@ contract Router {
         return perp.openPosition(msg.sender, pair, size);
     }
 
-    /// @notice Fully close position and emit realized PnL
+    /**
+     * @notice Fully close position
+     * @dev Router は「入口のみ」
+     *      - PnL 計算
+     *      - margin 減算
+     *      - claimablePnL 加算
+     *      - Pool 精算
+     *      すべて PerpetualTrading に委譲
+     */
     function closePosition(uint256 positionId) external {
-    // ===== 1. read position BEFORE close =====
-    (
-        bytes32 pair,
-        int256 size,
-        uint256 entryPrice,
-        ,
-        bool isOpen
-    ) = perp.getPosition(msg.sender, positionId);
+        // ===== 1. read position BEFORE close (event 用) =====
+        (
+            bytes32 pair,
+            int256 size,
+            uint256 entryPrice,
+            ,
+            bool isOpen
+        ) = perp.getPosition(msg.sender, positionId);
 
-    require(isOpen, "POSITION_NOT_OPEN");
+        require(isOpen, "POSITION_NOT_OPEN");
 
-    // ===== 2. get exit price =====
-    uint256 exitPrice = oracle.getPrice(pair);
+        // ===== 2. exit price（event 用）=====
+        uint256 exitPrice = oracle.getPrice(pair);
 
-    // ===== 3. calculate PnL (USD notional) =====
-    int256 pnl =
-        (size * int256(exitPrice - entryPrice))
-        / int256(entryPrice);
+        // ===== 3. close (SSOT: PerpetualTrading) =====
+        perp.closePosition(msg.sender, positionId);
 
-    // ===== 4. on-chain settlement =====
-    if (pnl < 0) {
-    // loss → pool (ABS value)
-    liquidityPool.settlePnL(
-    msg.sender,
-    pnl
-);
-
-
-} else if (pnl > 0) {
-    // profit → claimable
-    perp.addClaimablePnL(msg.sender, pnl);
-}
-
-
-    // ===== 5. close position =====
-    perp.closePosition(msg.sender, positionId);
-
-    // ===== 6. emit event (history SSOT) =====
-    emit PositionClosed(
-        msg.sender,
-        positionId,
-        pair,
-        size,
-        entryPrice,
-        exitPrice,
-        pnl,
-        block.timestamp
-    );
-}
-
+        // ===== 4. emit event (履歴用途のみ) =====
+        emit PositionClosed(
+            msg.sender,
+            positionId,
+            pair,
+            size,
+            entryPrice,
+            exitPrice,
+            0, // Router では pnl を確定しない
+            block.timestamp
+        );
+    }
 
     function closePositionPartial(
         uint256 positionId,
         int256 closeSize
     ) external {
-        // NOTE:
-        // 部分クローズの PnL event は次ステップで対応
+        // 部分クローズのロジック・精算は Perpetual 側
         perp.closePositionPartial(msg.sender, positionId, closeSize);
     }
 
@@ -130,6 +115,11 @@ contract Router {
     function claimPnL() external {
         perp.claimPnL(msg.sender);
     }
+
+    function claimPnLToMargin() external {
+    perp.claimPnLToMargin(msg.sender);
+}
+
 
     function getClaimablePnL(address user)
         external

@@ -1,0 +1,15 @@
+===== MOBILE CLASSES =====
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-white/60">
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-white/60">
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-white/60">
+
+===== MOBILE HTML =====
+
+===== MOBILE TABS =====
+
+===== MOBILE CATEGORIES =====
+      {/* Mobile Trading Interface */}
+        {/* Trading Panel */}
+        {/* Bottom Tabs */}
+
+===== PC ONLY =====

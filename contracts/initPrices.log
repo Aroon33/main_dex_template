@@ -1,0 +1,80 @@
+[dotenv@17.2.3] injecting env (3) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+Set BTC: 89191.24000000
+Set ETH: 2965.63000000
+Set SOL: 127.50000000
+Set ARB: 0.18640000
+Set OP: 0.31120000
+Set AVAX: 12.23000000
+Set MATIC: 0.37940000
+Set ADA: 0.35920000
+Set XRP: 1.90630000
+Set DOGE: 0.12485000
+Set DOT: 1.94500000
+Set LINK: 12.32000000
+Set UNI: 4.88400000
+Set AAVE: 157.18000000
+Set ATOM: 2.39900000
+Set NEAR: 1.53000000
+Set SUI: 1.50340000
+Set APT: 1.58400000
+[dotenv@17.2.3] injecting env (3) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+Set BTC: 89268.31000000
+Set ETH: 2968.36000000
+Set SOL: 127.43000000
+Set ARB: 0.18620000
+Set OP: 0.30980000
+Set AVAX: 12.24000000
+Set MATIC: 0.37940000
+Set ADA: 0.35910000
+Set XRP: 1.90860000
+Set DOGE: 0.12456000
+Set DOT: 1.94000000
+Set LINK: 12.30000000
+Set UNI: 4.88000000
+Set AAVE: 156.97000000
+Set ATOM: 2.39400000
+Set NEAR: 1.52300000
+Set SUI: 1.50370000
+Set APT: 1.58100000
+[dotenv@17.2.3] injecting env (3) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+Set BTC: 89035.36000000
+Set ETH: 2959.33000000
+Set SOL: 127.11000000
+Set ARB: 0.18470000
+Set OP: 0.30730000
+Set AVAX: 12.16000000
+Set MATIC: 0.37940000
+Set ADA: 0.35720000
+Set XRP: 1.89890000
+Set DOGE: 0.12410000
+Set DOT: 1.92900000
+Set LINK: 12.25000000
+Set UNI: 4.85600000
+Set AAVE: 155.99000000
+Set ATOM: 2.38200000
+Set NEAR: 1.51200000
+Set SUI: 1.49270000
+Set APT: 1.57300000
+[dotenv@17.2.3] injecting env (3) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+Set BTC: 89191.96000000
+Set ETH: 2965.28000000
+Set SOL: 127.17000000
+Set ARB: 0.18570000
+Set OP: 0.31020000
+Set AVAX: 12.22000000
+Set MATIC: 0.37940000
+Set ADA: 0.35840000
+Set XRP: 1.90280000
+Set DOGE: 0.12438000
+Set DOT: 1.94100000
+Set LINK: 12.31000000
+Set UNI: 4.87200000
+Set AAVE: 156.58000000
+Set ATOM: 2.39000000
+Set NEAR: 1.52300000
+Set SUI: 1.49760000
+Set APT: 1.58600000

@@ -1,6 +1,10 @@
+require("dotenv").config();
+
 const hre = require("hardhat");
 const fs = require("fs");
 const path = require("path");
+
+const { execSync } = require("child_process");
 
 async function main() {
   const [deployer] = await hre.ethers.getSigners();
@@ -11,20 +15,32 @@ async function main() {
   console.log("Network:", hre.network.name);
   console.log("====================================");
 
-  /* =========================
-     1. Mock Collateral Token
-  ========================= */
-  const MockERC20 = await hre.ethers.getContractFactory("MockERC20");
-  const token = await MockERC20.deploy("Test USD", "tUSD");
-  await token.waitForDeployment();
-  const tokenAddress = await token.getAddress();
-  console.log("CollateralToken:", tokenAddress);
+/* =========================
+   1. Collateral Token (FIXED)
+========================= */
+let tokenAddress = process.env.COLLATERAL_TOKEN;
+let token;
 
-  // 初期 USER 残高（テスト用）
-  await (await token.mint(
-    deployer.address,
-    hre.ethers.parseEther("50000")
-  )).wait();
+if (tokenAddress) {
+  console.log("Using existing CollateralToken:", tokenAddress);
+  token = await hre.ethers.getContractAt("MockERC20", tokenAddress);
+} else {
+  console.log("Deploying new CollateralToken...");
+  const MockERC20 = await hre.ethers.getContractFactory("MockERC20");
+  token = await MockERC20.deploy("Test USD", "tUSD");
+  await token.waitForDeployment();
+  tokenAddress = await token.getAddress();
+
+  console.log("New CollateralToken:", tokenAddress);
+  console.log("⚠️  Set this address to COLLATERAL_TOKEN in .env");
+}
+
+// 初期 USER 残高（テスト用・dev only）
+await (await token.mint(
+  deployer.address,
+  hre.ethers.parseEther("50000")
+)).wait();
+
   console.log("Initial token mint completed");
 
   /* =========================
@@ -57,11 +73,11 @@ async function main() {
   const oracleAddress = await oracle.getAddress();
   console.log("PriceOracle:", oracleAddress);
 
-  // 初期価格（tUSD = 3000）
+  // 初期価格（tUSD = 1）
   await (await oracle.addUpdater(deployer.address)).wait();
   await (await oracle.setPrice(
     hre.ethers.encodeBytes32String("tUSD"),
-    hre.ethers.parseEther("3000")
+    hre.ethers.parseEther("1")
   )).wait();
   console.log("Oracle initialized");
 
@@ -96,6 +112,16 @@ await router.waitForDeployment();
 const routerAddress = await router.getAddress();
 console.log("Router:", routerAddress);
 
+/* =========================
+   X. ChainlinkOracle
+========================= */
+const ChainlinkOracle = await hre.ethers.getContractFactory("ChainlinkOracle");
+const chainlinkOracle = await ChainlinkOracle.deploy();
+await chainlinkOracle.waitForDeployment();
+const chainlinkOracleAddress = await chainlinkOracle.getAddress();
+console.log("ChainlinkOracle:", chainlinkOracleAddress);
+
+
 
   /* =========================
      8. Wiring
@@ -122,38 +148,50 @@ console.log("Router:", routerAddress);
   }
 
   const deploymentData = {
-    CollateralToken: tokenAddress,
-    PLP: plpAddress,
-    LiquidityPool: poolAddress,
-    PriceOracle: oracleAddress,
-    PerpetualTrading: perpAddress,
-    LiquidationEngine: liquidationAddress,
-    Router: routerAddress
-  };
+  CollateralToken: tokenAddress,
+  PLP: plpAddress,
+  LiquidityPool: poolAddress,
+  PriceOracle: oracleAddress,
+  ChainlinkOracle: chainlinkOracleAddress, // ← ★ここ
+  PerpetualTrading: perpAddress,
+  LiquidationEngine: liquidationAddress,
+  Router: routerAddress
+};
+
 
   fs.writeFileSync(
     path.join(deploymentsDir, `${hre.network.name}.json`),
     JSON.stringify(deploymentData, null, 2)
   );
 
-  /* =========================
-     11. Frontend env
-  ========================= */
-  const envPath = path.resolve(__dirname, "../../frontend/.env.local");
-  const envContent = `
-NEXT_PUBLIC_CHAIN_ID=11155111
-NEXT_PUBLIC_CHAIN_NAME=sepolia
-NEXT_PUBLIC_ROUTER_ADDRESS=${routerAddress}
-NEXT_PUBLIC_PERPETUAL_ADDRESS=${perpAddress}
-NEXT_PUBLIC_LIQUIDITY_POOL_ADDRESS=${poolAddress}
-NEXT_PUBLIC_LIQUIDATION_ENGINE_ADDRESS=${liquidationAddress}
-NEXT_PUBLIC_ORACLE_ADDRESS=${oracleAddress}
-NEXT_PUBLIC_COLLATERAL_TOKEN_ADDRESS=${tokenAddress}
-NEXT_PUBLIC_PLP_ADDRESS=${plpAddress}
-`;
+/* =========================
+   11. Post-deploy scripts
+========================= */
 
-  fs.writeFileSync(envPath, envContent.trim());
-  console.log("frontend/.env.local updated");
+console.log("Running generateAddresses.js...");
+execSync("node scripts/generateAddresses.js", {
+  stdio: "inherit",
+});
+
+console.log("Running initPricesFromBinance.js...");
+execSync(
+  "npx hardhat run scripts/initPricesFromBinance.js --network " +
+    hre.network.name,
+  {
+    stdio: "inherit",
+  }
+);
+
+console.log("Running mintUsers.js...");
+execSync(
+  "npx hardhat run scripts/mintUsers.js --network " +
+    hre.network.name,
+  {
+    stdio: "inherit",
+  }
+);
+
+
 
   console.log("====================================");
   console.log("DEPLOY FINISHED (FROZEN)");
@@ -164,3 +202,4 @@ main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
+

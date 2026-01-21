@@ -2,12 +2,16 @@
 
 /**
  * ============================================================
- * AccountContext (SINGLE SOURCE OF TRUTH)
+ * AccountContext (SINGLE SOURCE OF TRUTH – FINAL / PoC)
  * ============================================================
  *
- * - wallet address / provider
- * - balances / positions / trades
- * - Router event を元に履歴を生成
+ * Available Balance (PoC definition):
+ *   Available = traderMargin - Σ(|position.size| / leverage)
+ *
+ * IMPORTANT:
+ *
+ * - Wallet ERC20 balance is shown ONLY for Deposit UI
+ * - Wallet ERC20 balance is NOT used for Withdraw
  *
  * ============================================================
  */
@@ -24,9 +28,18 @@ import { BrowserProvider, Contract, ethers } from "ethers";
 import { useWallet } from "@/contexts/WalletContext";
 import { CONTRACTS } from "@/lib/eth/addresses";
 import { ERC20_ABI } from "@/lib/eth/abi/ERC20";
-import { ORACLE_ABI } from "@/lib/eth/abi/Oracle";
-import { deposit as depositTx } from "@/lib/eth/deposit";
 import { getPositionCloseEvents } from "@/lib/eth/events/positionClose";
+import { deposit as depositTx } from "@/lib/eth/deposit";
+
+
+import { withdrawTx } from "@/lib/eth/withdraw";
+
+
+/* ======================
+   Constants (PoC)
+====================== */
+
+const LEVERAGE = 10;
 
 /* ======================
    Types
@@ -35,45 +48,44 @@ import { getPositionCloseEvents } from "@/lib/eth/events/positionClose";
 export type Position = {
   id: number;
   pair: string;
-  size: number;          // signed, raw (1e18)
-  entryPrice: number;    // USD
+  size: number;        // signed USD notional
+  entryPrice: number;  // USD
   isOpen: boolean;
 };
 
 export type Trade = {
-  id: number;            // positionId
+  id: number;
   symbol: string;
   side: "buy" | "sell";
-
-  sizeUsd: number;       // 決済サイズ（USD）
-  entryPrice: number;    // Entry price
-  exitPrice: number;     // Exit price
-
-  pnl: number;           // Realized PnL (USD)
+  sizeUsd: number;
+  entryPrice: number;
+  exitPrice: number;
+  pnl: number;
   timestamp: number;
-};
-
-export type Order = {
-  id: number;
-  positionId: number;
 };
 
 export type AccountContextType = {
   address?: string;
   provider?: BrowserProvider;
 
-  collateralBalance: number;
+  /** trader margin (deposit total) */
   marginBalance: number;
+
+  /** marginBalance - usedMargin */
+  availableBalance: number;
+  walletTokenBalance: number;
+
 
   positions: Position[];
   trades: Trade[];
-  orders: Order[];
 
   isLoading: boolean;
   isDepositing: boolean;
+  isWithdrawing: boolean;
 
   refreshAll: () => Promise<void>;
   deposit: (amount: string) => Promise<void>;
+  withdraw: (amount: string) => Promise<void>;
 };
 
 /* ======================
@@ -88,20 +100,24 @@ const AccountContext = createContext<AccountContextType | null>(null);
 
 export function AccountProvider({ children }: { children: React.ReactNode }) {
   const wallet = useWallet();
-  const address: string | undefined = wallet.address ?? undefined;
+  const address = wallet.address ?? undefined;
   const isConnected = wallet.isConnected;
 
   const [provider, setProvider] = useState<BrowserProvider | undefined>();
 
-  const [collateralBalance, setCollateralBalance] = useState(0);
-  const [marginBalance, setMarginBalance] = useState(0);
+  const [walletTokenBalance, setWalletTokenBalance] = useState(0);
 
+
+  const [marginBalance, setMarginBalance] = useState(0);
+  const [availableBalance, setAvailableBalance] = useState(0);
   const [positions, setPositions] = useState<Position[]>([]);
   const [trades, setTrades] = useState<Trade[]>([]);
-  const [orders, setOrders] = useState<Order[]>([]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isDepositing, setIsDepositing] = useState(false);
+
+  const [isWithdrawing, setIsWithdrawing] = useState(false);
+
 
   /* ======================
      Provider init
@@ -115,34 +131,33 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   /* ======================
-     Refresh balances & OPEN positions
+     Refresh ALL
   ====================== */
   const refreshAll = useCallback(async () => {
     if (!address || !provider) {
-      setCollateralBalance(0);
       setMarginBalance(0);
+      setAvailableBalance(0);
       setPositions([]);
-      setOrders([]);
       return;
     }
 
     try {
       setIsLoading(true);
 
-      /* ===== Collateral ===== */
-      const token = new Contract(
-        CONTRACTS.COLLATERAL_TOKEN,
-        ERC20_ABI,
-        provider
-      );
+     /* ===== ERC20 wallet balance ===== */
+const token = new Contract(
+  CONTRACTS.COLLATERAL_TOKEN,
+  ERC20_ABI,
+  provider
+);
 
-      const decimals = await token.decimals();
-      const rawToken = await token.balanceOf(address);
-      setCollateralBalance(
-        Number(ethers.formatUnits(rawToken, decimals))
-      );
+const decimals = await token.decimals();
+const rawBalance = await token.balanceOf(address);
+const balance = Number(ethers.formatUnits(rawBalance, decimals));
 
-      /* ===== Perpetual ===== */
+setWalletTokenBalance(balance);
+ 
+
       const perp = new Contract(
         CONTRACTS.PERPETUAL_TRADING,
         [
@@ -153,28 +168,39 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
         provider
       );
 
+      /* ===== trader margin ===== */
       const rawMargin = await perp.getMargin(address);
-      setMarginBalance(Number(rawMargin) / 1e18);
+      const margin = Number(rawMargin) / 1e18;
+      setMarginBalance(margin);
 
+      /* ===== positions & used margin (size based) ===== */
       const ids: bigint[] = await perp.getUserPositionIds(address);
 
-      const openPositions: Position[] = [];
+      const open: Position[] = [];
+      let usedMargin = 0;
+
       for (const id of ids) {
         const [pair, size, entryPrice, , isOpen] =
           await perp.getPosition(address, id);
 
         if (!isOpen) continue;
 
-        openPositions.push({
+        const sizeUsd = Math.abs(Number(size)) / 1e18;
+        usedMargin += sizeUsd / LEVERAGE;
+
+        open.push({
           id: Number(id),
           pair: ethers.decodeBytes32String(pair),
           size: Number(size),
           entryPrice: Number(entryPrice) / 1e18,
-          isOpen,
+          isOpen: true,
         });
       }
 
-      setPositions(openPositions);
+      setPositions(open);
+
+      /* ===== Available (clamped) ===== */
+      setAvailableBalance(Math.max(margin - usedMargin, 0));
     } catch (e) {
       console.error("[AccountContext] refreshAll failed:", e);
     } finally {
@@ -183,81 +209,97 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
   }, [address, provider]);
 
   /* ======================
-   Trade history (Router PositionClosed event)
-====================== */
-useEffect(() => {
-  if (!address) {
-    setTrades([]);
-    return;
-  }
-
-  let cancelled = false;
-
-  (async () => {
-    try {
-      const events = await getPositionCloseEvents(address);
-      if (cancelled) return;
-
-      const result: Trade[] = events.map((e) => ({
-        id: Number(e.positionId),
-        symbol: ethers.decodeBytes32String(e.pair),
-
-        // LONG を閉じたら SELL
-        side: e.size > 0n ? "sell" : "buy",
-
-        sizeUsd: Number(
-          e.size > 0n ? e.size : -e.size
-        ) / 1e18,
-
-        entryPrice: Number(e.entryPrice) / 1e18,
-        exitPrice: Number(e.exitPrice) / 1e18,
-
-        pnl: Number(e.pnl) / 1e18,
-        timestamp: Number(e.timestamp) * 1000,
-      }));
-
-      if (!cancelled) {
-        setTrades(result);
-      }
-    } catch (e) {
-      console.error(
-        "[AccountContext] load trade history failed:",
-        e
-      );
+     Trade history
+  ====================== */
+  useEffect(() => {
+    if (!address || !provider) {
+      setTrades([]);
+      return;
     }
-  })();
 
-  return () => {
-    cancelled = true;
-  };
-}, [address]);
+    let cancelled = false;
 
+    (async () => {
+      try {
+        const events = await getPositionCloseEvents(address, provider);
+        if (cancelled) return;
+
+        const result: Trade[] = events.map((e) => ({
+          id: Number(e.positionId),
+          symbol: ethers.decodeBytes32String(e.pair),
+          side: e.size > 0n ? "sell" : "buy",
+          sizeUsd: Number(e.size > 0n ? e.size : -e.size) / 1e18,
+          entryPrice: Number(e.entryPrice) / 1e18,
+          exitPrice: Number(e.exitPrice) / 1e18,
+          pnl: Number(e.pnl) / 1e18,
+          timestamp: Number(e.timestamp) * 1000,
+        }));
+
+        setTrades(result);
+      } catch (e) {
+        console.error("[AccountContext] trade history failed:", e);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [address, provider]);
 
   /* ======================
      Deposit
   ====================== */
   const deposit = async (amount: string) => {
     if (!amount || Number(amount) <= 0) return;
-    if (!provider) throw new Error("Provider not ready");
+    if (!window.ethereum) throw new Error("Wallet not found");
 
     try {
       setIsDepositing(true);
 
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+
       const token = new Contract(
         CONTRACTS.COLLATERAL_TOKEN,
         ERC20_ABI,
-        provider
+        signer
       );
 
       const decimals = await token.decimals();
       const parsed = ethers.parseUnits(amount, decimals);
 
-      await depositTx(parsed);
+      await depositTx(signer, parsed);
       await refreshAll();
     } finally {
       setIsDepositing(false);
     }
   };
+
+  /* ======================
+     withdraw
+  ====================== */
+
+const withdraw = async (amount: string) => {
+  if (!amount || Number(amount) <= 0) return;
+  if (!window.ethereum) throw new Error("Wallet not found");
+  if (!address) return;
+
+  try {
+    setIsWithdrawing(true);
+
+    const provider = new BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+
+    // collateral is 18 decimals
+    const parsed = ethers.parseUnits(amount, 18);
+
+    await withdrawTx(signer, parsed);
+    await refreshAll();
+  } finally {
+    setIsWithdrawing(false);
+  }
+};
+
 
   /* ======================
      Auto refresh
@@ -266,11 +308,10 @@ useEffect(() => {
     if (isConnected) {
       refreshAll();
     } else {
-      setCollateralBalance(0);
       setMarginBalance(0);
+      setAvailableBalance(0);
       setPositions([]);
       setTrades([]);
-      setOrders([]);
     }
   }, [isConnected, refreshAll]);
 
@@ -279,13 +320,15 @@ useEffect(() => {
       value={{
         address,
         provider,
-        collateralBalance,
         marginBalance,
+        availableBalance,
+        walletTokenBalance,
         positions,
         trades,
-        orders,
         isLoading,
         isDepositing,
+        isWithdrawing,
+        withdraw,
         refreshAll,
         deposit,
       }}

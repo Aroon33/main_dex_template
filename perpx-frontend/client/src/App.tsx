@@ -9,6 +9,9 @@ import { DemoTradingProvider } from "./contexts/DemoTradingContext";
 import { WalletProvider } from "./contexts/WalletContext";
 import { AccountProvider } from "./contexts/AccountContext";
 
+import { LimitOrderProvider } from "@/contexts/LimitOrderContext";
+
+
 import AppLayout from "./layouts/AppLayout";
 
 // Pages
@@ -31,18 +34,24 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import DevToolPanel from "./pages/DevToolPanel";
 
+
+
+// Admin
+import AdminLayout from "./pages/Admin/AdminLayout";
+import AdminPairs from "./pages/Admin/AdminPairs";
+import AdminPricing from "./pages/Admin/AdminPricing";
+import AdminFeeds from "./pages/Admin/AdminFeeds";
+
+// 旧 Admin（互換用）
 import TradeAdmin from "@/pages/TradeAdmin";
-
-
 
 function Router() {
   return (
     <AppLayout>
       <Switch>
+        {/* Public */}
         <Route path="/" component={Home} />
         <Route path="/trade" component={Trade} />
-        <Route path="/trade/admin" component={TradeAdmin} />
-        <Route path="/dev" component={DevToolPanel} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/points" component={Points} />
         <Route path="/referral" component={Referral} />
@@ -58,6 +67,35 @@ function Router() {
         <Route path="/blog" component={Blog} />
         <Route path="/privacy-policy" component={PrivacyPolicy} />
         <Route path="/terms-of-service" component={TermsOfService} />
+        <Route path="/dev" component={DevToolPanel} />
+    
+
+
+        {/* =========================
+         * Admin (NEW STRUCTURE)
+         * ========================= */}
+        <Route path="/admin/pairs">
+          <AdminLayout>
+            <AdminPairs />
+          </AdminLayout>
+        </Route>
+
+        <Route path="/admin/pricing">
+          <AdminLayout>
+            <AdminPricing />
+          </AdminLayout>
+        </Route>
+
+        <Route path="/admin/feeds">
+          <AdminLayout>
+            <AdminFeeds />
+          </AdminLayout>
+        </Route>
+
+        {/* =========================
+         * Legacy Admin (temporary)
+         * ========================= */}
+        <Route path="/trade/admin" component={TradeAdmin} />
 
         {/* 404 */}
         <Route>
@@ -68,7 +106,6 @@ function Router() {
   );
 }
 
-
 function App() {
   return (
     <ErrorBoundary>
@@ -76,12 +113,14 @@ function App() {
         <LanguageProvider>
           <WalletProvider>
             <AccountProvider>
-              <DemoTradingProvider>
-                <TooltipProvider>
-                  <Toaster />
-                  <Router />
-                </TooltipProvider>
-              </DemoTradingProvider>
+              <LimitOrderProvider>
+                <DemoTradingProvider>
+                  <TooltipProvider>
+                    <Toaster />
+                    <Router />
+                  </TooltipProvider>
+                </DemoTradingProvider>
+              </LimitOrderProvider>
             </AccountProvider>
           </WalletProvider>
         </LanguageProvider>
@@ -89,5 +128,6 @@ function App() {
     </ErrorBoundary>
   );
 }
+
 
 export default App;

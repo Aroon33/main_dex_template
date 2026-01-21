@@ -1,0 +1,256 @@
+client
+├── index.html
+├── public
+│   ├── api
+│   │   └── pairs.json
+│   ├── argr.jpg
+│   ├── assets
+│   │   ├── index-BZ8YXOhS.js
+│   │   ├── index-DpgVDKld.css
+│   │   ├── js
+│   │   ├── radix-ui-Bd3Z0o_T.js
+│   │   ├── react-Csfw9abt.js
+│   │   ├── react-dom-BJnLYdg8.js
+│   │   ├── router-CyTx1TcF.js
+│   │   ├── utils-B-dksMZM.js
+│   │   ├── vendor-a-DvXkyWUv.js
+│   │   ├── vendor-c-DNuN868N.js
+│   │   ├── vendor-@-D9sduGpt.js
+│   │   ├── vendor-d-l0sNRNKZ.js
+│   │   ├── vendor-e-DjNQQ5r1.js
+│   │   ├── vendor-g-C-Z93AgS.js
+│   │   ├── vendor-n-BPSnzYFm.js
+│   │   ├── vendor-r-C3wvULIb.js
+│   │   ├── vendor-s-B4j5KGom.js
+│   │   ├── vendor-t-46smTYR4.js
+│   │   └── vendor-u-BdebpYPG.js
+│   ├── docs
+│   │   └── config.json
+│   ├── favicon.png
+│   ├── index.html
+│   ├── logo-dark.png
+│   ├── logo-horizontal.png
+│   ├── logo-icon.png
+│   ├── logo-monogram.png
+│   ├── logo-vertical.png
+│   ├── perpx-animation.mp4
+│   ├── perpx-icon.png
+│   └── perpx-logo.jpg
+├── scripts
+│   ├── extract_used_only.sh
+│   └── init_trade_write_hooks.sh
+└── src
+    ├── app
+    │   └── dev
+    ├── App.tsx
+    ├── components
+    │   ├── ConnectWalletScreen.tsx
+    │   ├── DepositPanel.tsx
+    │   ├── dev
+    │   │   ├── DevTradingPanel.tsx
+    │   │   ├── eth
+    │   │   │   ├── calc.ts
+    │   │   │   ├── contracts.ts
+    │   │   │   ├── reader.ts
+    │   │   │   └── writer.ts
+    │   │   ├── hooks
+    │   │   │   ├── useDevTradingState.ts
+    │   │   │   └── useDevTradingWrite.ts
+    │   │   ├── panel
+    │   │   │   └── DevTradingPanel.tsx
+    │   │   ├── README.md
+    │   │   └── types
+    │   │       └── dev.ts
+    │   ├── ErrorBoundary.tsx
+    │   ├── HeaderHistory.tsx
+    │   ├── Header.tsx
+    │   ├── ManusDialog.tsx
+    │   ├── trade
+    │   │   ├── OrderBookPanel.tsx
+    │   │   ├── OrderHistoryList.tsx
+    │   │   ├── PositionRow.tsx
+    │   │   ├── TradeForm.tsx
+    │   │   └── TradeHistoryList.tsx
+    │   ├── TradingViewChart.tsx
+    │   └── ui
+    │       ├── accordion.tsx
+    │       ├── alert-dialog.tsx
+    │       ├── alert.tsx
+    │       ├── aspect-ratio.tsx
+    │       ├── avatar.tsx
+    │       ├── badge.tsx
+    │       ├── breadcrumb.tsx
+    │       ├── button-group.tsx
+    │       ├── button.tsx
+    │       ├── calendar.tsx
+    │       ├── card.tsx
+    │       ├── carousel.tsx
+    │       ├── chart.tsx
+    │       ├── checkbox.tsx
+    │       ├── collapsible.tsx
+    │       ├── command.tsx
+    │       ├── context-menu.tsx
+    │       ├── dialog.tsx
+    │       ├── drawer.tsx
+    │       ├── dropdown-menu.tsx
+    │       ├── empty.tsx
+    │       ├── field.tsx
+    │       ├── form.tsx
+    │       ├── hover-card.tsx
+    │       ├── input-group.tsx
+    │       ├── input-otp.tsx
+    │       ├── input.tsx
+    │       ├── item.tsx
+    │       ├── kbd.tsx
+    │       ├── label.tsx
+    │       ├── menubar.tsx
+    │       ├── navigation-menu.tsx
+    │       ├── pagination.tsx
+    │       ├── popover.tsx
+    │       ├── progress.tsx
+    │       ├── radio-group.tsx
+    │       ├── resizable.tsx
+    │       ├── scroll-area.tsx
+    │       ├── select.tsx
+    │       ├── separator.tsx
+    │       ├── sheet.tsx
+    │       ├── sidebar.tsx
+    │       ├── skeleton.tsx
+    │       ├── slider.tsx
+    │       ├── sonner.tsx
+    │       ├── spinner.tsx
+    │       ├── switch.tsx
+    │       ├── table.tsx
+    │       ├── tabs.tsx
+    │       ├── textarea.tsx
+    │       ├── toggle-group.tsx
+    │       ├── toggle.tsx
+    │       └── tooltip.tsx
+    ├── const.ts
+    ├── contexts
+    │   ├── AccountContext.tsx
+    │   ├── DemoTradingContext.tsx
+    │   ├── LanguageContext.tsx
+    │   ├── ThemeContext.tsx
+    │   ├── TradeReadContext.tsx
+    │   └── WalletContext.tsx
+    ├── hooks
+    │   ├── trade
+    │   │   ├── index.ts
+    │   │   ├── read
+    │   │   │   ├── index.ts
+    │   │   │   ├── useMarginBalance.ts
+    │   │   │   ├── useMarkPrice.ts
+    │   │   │   ├── useOrderBook.ts
+    │   │   │   ├── useOrderHistory.ts
+    │   │   │   ├── usePositions.ts
+    │   │   │   ├── useTradeHistorySimple.ts
+    │   │   │   └── useTradeHistory.ts
+    │   │   ├── useOrderBook.ts
+    │   │   ├── useOrderHistory.ts
+    │   │   ├── useOrders.ts
+    │   │   ├── usePositions.ts
+    │   │   ├── useTradeForm.ts
+    │   │   ├── useTradeHistorySimple.ts
+    │   │   ├── useTradeHistory.ts
+    │   │   ├── useTradePrice.ts
+    │   │   └── write
+    │   │       ├── useClaimPnL.ts
+    │   │       ├── useClosePosition.ts
+    │   │       ├── useOpenPosition.ts
+    │   │       └── usePartialClose.ts
+    │   ├── useComposition.ts
+    │   ├── useMobile.tsx
+    │   ├── usePairs.ts
+    │   ├── usePersistFn.ts
+    │   ├── useRuntimeConfig.ts
+    │   └── useScrollAnimation.ts
+    ├── index.css
+    ├── layouts
+    │   └── AppLayout.tsx
+    ├── lib
+    │   ├── env.ts
+    │   ├── eth
+    │   │   ├── abi
+    │   │   │   ├── ChainlinkOracle.ts
+    │   │   │   ├── ERC20.ts
+    │   │   │   ├── Oracle.ts
+    │   │   │   ├── PerpetualTrading.ts
+    │   │   │   └── Router.ts
+    │   │   ├── addresses.ts
+    │   │   ├── closePosition.ts
+    │   │   ├── debug
+    │   │   │   └── debugConsole.ts
+    │   │   ├── debugPositionClosed.ts
+    │   │   ├── deposit.ts
+    │   │   ├── events
+    │   │   │   └── positionClose.ts
+    │   │   ├── getPositions.ts
+    │   │   ├── getRouter.ts
+    │   │   ├── getTradeHistory.ts
+    │   │   ├── positions.ts
+    │   │   └── routerActions.ts
+    │   ├── format.ts
+    │   ├── mockGrowth.ts
+    │   ├── number.ts
+    │   ├── pairsStore.ts
+    │   ├── pnl.ts
+    │   └── utils.ts
+    ├── main.tsx
+    ├── pages
+    │   ├── Admin
+    │   │   ├── AdminFeeds.tsx
+    │   │   ├── AdminLayout.tsx
+    │   │   ├── AdminPairs.tsx
+    │   │   └── AdminPricing.tsx
+    │   ├── Airdrop.tsx
+    │   ├── API.tsx
+    │   ├── BACK.tsx
+    │   ├── Blog.tsx
+    │   ├── Dashboard.tsx
+    │   ├── _deprecated
+    │   │   ├── TradeTab.tsx
+    │   │   └── Tradetab.tsx.__ignore__
+    │   ├── DevToolPanel.tsx
+    │   ├── Docs.tsx
+    │   ├── Earn.tsx
+    │   ├── Feedback.tsx
+    │   ├── Home.tsx
+    │   ├── NotFound.tsx
+    │   ├── Points.tsx
+    │   ├── PrivacyPolicy.tsx
+    │   ├── Referral.tsx
+    │   ├── Rewards.tsx
+    │   ├── Stake.tsx
+    │   ├── Stats.tsx
+    │   ├── TermsOfService.tsx
+    │   ├── Trade
+    │   │   ├── index.tsx
+    │   │   ├── tabs
+    │   │   │   ├── _deprecated
+    │   │   │   │   ├── OrderHistoryTab.tsx
+    │   │   │   │   └── OrdersTab.tsx
+    │   │   │   ├── OpenOrdersTab.tsx
+    │   │   │   ├── OrderBookTab.tsx
+    │   │   │   ├── PositionsTab.tsx
+    │   │   │   └── TradeHistoryTab.tsx
+    │   │   ├── TradeActions.tsx
+    │   │   ├── TradeBottomTabs.tsx
+    │   │   ├── TradeChart.tsx
+    │   │   ├── TradeHeader.tsx
+    │   │   ├── TradeOrder.tsx
+    │   │   └── TradePair.tsx
+    │   ├── TradeAdmin.tsx
+    │   ├── Tradepanel.tsx
+    │   ├── Trade.tsx.backup
+    │   └── VIP.tsx
+    ├── types
+    │   ├── index.ts
+    │   ├── orderBook.ts
+    │   ├── order.ts
+    │   ├── position.ts
+    │   └── trade.ts
+    └── utils
+        └── number.ts
+
+36 directories, 217 files

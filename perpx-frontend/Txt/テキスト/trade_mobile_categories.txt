@@ -1,0 +1,8 @@
+              {/* Bottom Tabs - Positions, Orders, etc. */}
+            {/* Right Sidebar - Order Book & Order Panel */}
+              {/* Order Panel */}
+          {/* Mobile Order Panel - Only visible on small screens */}
+              {/* Bottom Tabs - Open Orders, Order History, etc. */}
+            {/* Right Sidebar - Order Book & Spot Order Panel */}
+              {/* Spot Order Panel */}
+          {/* Mobile Order Panel for Spot - Only visible on small screens */}

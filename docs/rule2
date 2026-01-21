@@ -1,0 +1,339 @@
+🔁 プロジェクト引き継ぎサマリー（Perp DEX Frontend × Backend）
+1️⃣ プロジェクト概要
+
+目的
+Perpetual DEX のフロントエンドとバックエンド（スマートコントラクト）を接続し、
+UIを変更せずに以下の機能を順番に実装している。
+
+① deposit（証拠金入金） ✅ 完了
+② openPosition（新規建玉） ✅ 完了
+③ close / partial close（決済） ← 次ここ
+④ claimPnL
+⑤ withdraw
+
+
+重要方針
+
+❌ フロントUIの構造・表示は変更しない
+
+✅ バックエンドとの「繋ぎ込みのみ」を行う
+
+✅ 不足情報はバックエンド仕様を確認してから実装
+
+2️⃣ 使用言語・技術
+フロントエンド
+
+React + TypeScript
+
+ethers v6
+
+Tailwind / shadcn-ui
+
+Vite
+
+MetaMask
+
+Binance WebSocket（価格表示用）
+
+バックエンド
+
+Solidity ^0.8.20
+
+Perpetual DEX 独自実装
+
+Chainlink互換 Oracle（USD × 1e8）
+
+MockERC20（Collateral）
+
+3️⃣ フロントエンドのディレクトリ構成（重要）
+/home/deploy/ui_work/perpx-frontend/client
+├─ src/
+│  ├─ pages/
+│  │  └─ Trade.tsx                # メインの取引画面（UI完成済み）
+│  │
+│  ├─ components/
+│  │  └─ DepositPanel.tsx          # 証拠金入金UI（UI追加済み）
+│  │
+│  ├─ lib/
+│  │  └─ eth/
+│  │     ├─ addresses.ts           # 全コントラクトアドレス定義（確定）
+│  │     ├─ getRouter.ts            # Router contract wrapper
+│  │     ├─ deposit.ts              # approve + Router.deposit
+│  │     ├─ getPositions.ts         # on-chain position 取得ロジック
+│  │     └─ abi/
+│  │        ├─ Router.ts
+│  │        ├─ ERC20.ts
+│  │        └─ Oracle.ts
+
+4️⃣ フロント側で「すでに完了していること」
+✅ Deposit
+
+CollateralToken（MockERC20）に approve
+
+Router.deposit(uint256)
+
+UI：Trade画面最上部に DepositPanel を追加（UI構造変更なし）
+
+✅ openPosition
+
+pair：bytes32（例 "tUSD" → ethers.encodeBytes32String("tUSD"))
+
+size：int256（符号付き、USD notional）
+
+openPosition が on-chain で成功
+
+MetaMask で tx 確認済み
+
+✅ Position 一覧表示（UI変更なし）
+
+getUserPositionIds(user)
+
+getPosition(user, positionId)
+
+oracle.getPrice(pair)
+
+フロントで以下を計算：
+
+side
+
+pnl
+
+pnlPercentage
+
+leverage
+
+既存 UI の Positions タブに表示されることを確認済み
+
+5️⃣ バックエンド（スマートコントラクト）確定情報
+🔹 IPerp インターフェース（正本）
+interface IPerp {
+
+    /* ===== Margin ===== */
+    function onTraderDeposit(address user, uint256 amount) external;
+    function onTraderWithdraw(address user, uint256 amount) external;
+
+    /* ===== Position ===== */
+    function openPosition(address user, bytes32 pair, int256 size)
+        external
+        returns (uint256 positionId);
+
+    function closePosition(address user, uint256 positionId) external;
+    function closePositionPartial(address user, uint256 positionId, int256 closeSize) external;
+
+    function liquidate(address user, uint256 positionId) external;
+
+    /* ===== PnL ===== */
+    function claimPnL(address user) external;
+    function getClaimablePnL(address user) external view returns (int256);
+
+    /* ===== Views ===== */
+    function getPosition(address user, uint256 positionId)
+        external
+        view
+        returns (
+            bytes32 pair,
+            int256 size,
+            uint256 entryPrice,
+            uint256 margin,
+            bool isOpen
+        );
+
+    function getMargin(address user) external view returns (uint256);
+    function getUserPositionIds(address user) external view returns (uint256[]);
+}
+
+6️⃣ Oracle の仕様（確定）
+oracle.getPrice(bytes32 pair)
+
+
+戻り値：uint256
+
+単位：USD × 1e8
+
+符号：正のみ（size 側で long / short 管理）
+
+フロントでの扱い
+priceUsd = Number(price) / 1e8;
+
+7️⃣ フロントでの Position データ構造（UI期待形）
+position = {
+  id,             // uint256 → string
+  symbol,         // decodeBytes32String(pair)
+  side,           // 'long' | 'short'
+  leverage,       // フロント計算（cross margin）
+  size,           // abs(size)
+  entryPrice,     // USD
+  currentPrice,   // USD（oracle）
+  pnl,            // フロント計算
+  pnlPercentage,  // フロント計算
+}
+
+計算ルール（確定）
+side = size > 0 ? "long" : "short";
+
+pnl =
+  side === "long"
+    ? (currentPrice - entryPrice) * abs(size)
+    : (entryPrice - currentPrice) * abs(size);
+
+leverage = (abs(size) * currentPrice) / traderMargin;
+pnlPercentage = (pnl / traderMargin) * 100;
+
+8️⃣ デプロイ済みコントラクトアドレス（Sepolia）
+{
+  "CollateralToken": "0x11cB4dFC26ba6F0e62410193A9Ccd786Ab1e04cf",
+  "PLP": "0x5dcd62b7ea6E485A998D34cA7798FF3D691f2FCa",
+  "LiquidityPool": "0x7C61e3020a98f9185eCB21032808E922e8A4A425",
+  "PriceOracle": "0x315DA136160FF129A9d2966a2569Fd968755d959",
+  "PerpetualTrading": "0x009D3705e5B79EF5147565AA85ED893A293Af9B2",
+  "LiquidationEngine": "0xbf2489F041587586fb4F3f3BbB623cC9DC3eacB1",
+  "Router": "0xF881590b3C85D50c85B0c7991aD07ef913b28046"
+}
+
+フロント側 addresses.ts（確定版）
+export const CONTRACTS = {
+  COLLATERAL_TOKEN: "0x11cB4dFC26ba6F0e62410193A9Ccd786Ab1e04cf",
+  PLP: "0x5dcd62b7ea6E485A998D34cA7798FF3D691f2FCa",
+  LIQUIDITY_POOL: "0x7C61e3020a98f9185eCB21032808E922e8A4A425",
+  ROUTER: "0xF881590b3C85D50c85B0c7991aD07ef913b28046",
+  PERPETUAL_TRADING: "0x009D3705e5B79EF5147565AA85ED893A293Af9B2",
+  ORACLE: "0x315DA136160FF129A9d2966a2569Fd968755d959",
+  LIQUIDATION_ENGINE: "0xbf2489F041587586fb4F3f3BbB623cC9DC3eacB1",
+} as const;
+
+9️⃣ 次にやること（次チャットの開始地点）
+🔜 STEP ③：close / partial close
+
+UI：すでに Close ボタンあり（変更不要）
+
+実装対象：
+
+handleClosePosition(positionId)
+
+Router / IPerp の closePosition or closePositionPartial
+
+UIは触らず、バックエンド呼び出しのみ
+
+確認が必要な点（次チャット冒頭で聞くこと）
+
+Router 側の close のシグネチャ
+（router.closePosition(positionId) か
+router.closePosition(address user, uint256 positionId) か）
+
+
+ <TabsContent value="positions" className="p-4 space-y-2">
+  {positions.length === 0 && (
+    <div className="text-sm text-white/60">No open positions</div>
+  )}
+
+  {positions.map(p => (
+    <Card key={p.id} className="p-3">
+      <div className="font-medium">{p.symbol}</div>
+      <div className="text-xs text-white/60">
+        Opened: {new Date(p.openedAt).toLocaleString()}
+      </div>
+    </Card>
+  ))}
+</TabsContent>
+
+
+
+ <TabsContent value="positions" className="p-4 space-y-2">
+  {positions.length === 0 && (
+    <div className="text-sm text-white/60">No open positions</div>
+  )}
+
+  {positions.map(p => (
+    <Card key={p.id} className="p-3">
+      <div className="font-medium">{p.symbol}</div>
+      <div className="text-xs text-white/60">
+        Opened: {new Date(p.openedAt).toLocaleString()}
+      </div>
+    </Card>
+  ))}
+</TabsContent>
+
+
+
+<TabsContent value="trade-history" className="p-4 space-y-2">
+  {tradeHistory.map(t => (
+    <Card key={t.id} className="p-3">
+      <div className="flex justify-between">
+        <div>{t.symbol} · {t.side}</div>
+        <div className={t.pnl >= 0 ? "text-green-500" : "text-red-500"}>
+          {t.pnl.toFixed(2)}
+        </div>
+      </div>
+      <div className="text-xs text-white/60">
+        {new Date(t.timestamp).toLocaleString()}
+      </div>
+    </Card>
+  ))}
+</TabsContent>
+
+<TabsContent value="order-book" className="p-3">
+                    <div className="space-y-1">
+                      <div className="grid grid-cols-3 gap-2 text-xs text-white/60 mb-2">
+                        <div>Price (USDT)</div>
+                        <div className="text-right">Size (USDT)</div>
+                        <div className="text-right">Sum (USDT)</div>
+                      </div>
+                      
+                      {orderBookAsks.map((ask, i) => (
+                        <div key={i} className="grid grid-cols-3 gap-2 text-xs">
+                          <div className="text-red-500">{ask.price}</div>
+                          <div className="text-white/60 text-right">{ask.size}</div>
+                          <div className="text-white/60 text-right">{ask.sum}</div>
+                        </div>
+                      ))}
+                      <div className="text-lg font-bold text-white my-2">111,062.6 ↓</div>
+                      {orderBookBids.map((bid, i) => (
+                        <div key={i} className="grid grid-cols-3 gap-2 text-xs">
+                          <div className="text-green-500">{bid.price}</div>
+                          <div className="text-white/60 text-right">{bid.size}</div>
+                          <div className="text-white/60 text-right">{bid.sum}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </TabsContent>
+
+                  <Input
+                  placeholder="Search"
+                  className="mb-3 bg-background border-white/10 text-sm"
+                />
+                <div className="space-y-1">
+                  {markets.map((market) => (
+                    <button
+                      key={market.symbol}
+                      className="w-full p-2 hover:bg-white/5 rounded transition-colors text-left"
+                    >
+
+                     <TabsContent value="open-orders" className="p-4 space-y-2">
+  {orders.map(o => (
+    <Card key={o.id} className="p-3">
+      <div>Close Requested</div>
+      <div className="text-xs">
+        Position #{o.positionId}
+      </div>
+    </Card>
+  ))}
+</TabsContent>
+
+<TabsContent value="order-book" className="p-3">
+                    <div className="space-y-1">
+                      <div className="grid grid-cols-3 gap-2 text-xs text-white/60 mb-2">
+                        <div>Price (USDT)</div>
+                        <div className="text-right">Amount (BTC)</div>
+                        <div className="text-right">Total (USDT)</div>
+                      </div>
+                      {orderBookAsks.map((ask, i) => (
+                        <div key={i} className="grid grid-cols-3 gap-2 text-xs">
+                          <div className="text-red-500">{ask.price}</div>
+                          <div className="text-white/60 text-right">{(parseFloat(ask.size.replace(/,/g, '')) / 111073).toFixed(4)}</div>
+                          <div className="text-white/60 text-right">{ask.sum}</div>
+                        </div>
+
+                        <div className="text-lg font-bold text-white my-2">111,062.6 ↓</div>
+                      {orderBookBids.map((bid, i) => (
+                        <div key={i} className="grid grid-cols-3 gap-2 text-xs">
+                          <div className="text-green-500">{bid.price}</div>

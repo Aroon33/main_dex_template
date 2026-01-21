@@ -1,0 +1,6 @@
+28:      <div className="flex items-center justify-center h-full text-white/60">
+49:    <div className="min-h-screen bg-background flex flex-col">
+52:      <div className="p-4 border-b border-white/10">
+60:      <div className="flex flex-1 overflow-hidden">
+63:        <div className="hidden lg:block w-64 border-r border-white/10">
+68:        <div className="flex-1 overflow-y-auto">

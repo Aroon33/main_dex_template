@@ -1,11 +1,12 @@
 /**
  * ============================================================
- * TradePair (SSOT: pairs.json)
+ * TradePair (SSOT: pairsStore + Oracle)
  * ============================================================
  *
  * - Trading pair selector
- * - Real-time price display (Binance WebSocket)
- * - Pair list from /api/pairs.json (enabled only)
+ * - Price display:
+ *   - chainlink → Binance WebSocket
+ *   - manual    → Oracle price (Admin controlled)
  *
  * ============================================================
  */
@@ -13,6 +14,10 @@
 import { useState, useEffect, useRef } from "react";
 import { ChevronDown, Star } from "lucide-react";
 import { usePairs } from "@/hooks/usePairs";
+
+import { BrowserProvider, Contract, ethers } from "ethers";
+import { CONTRACTS } from "@/lib/eth/addresses";
+import { ORACLE_ABI } from "@/lib/eth/abi/Oracle";
 
 /* =========================
  * Types
@@ -31,18 +36,20 @@ export default function TradePair({ symbol, onChange }: Props) {
   const { pairs, loading } = usePairs();
   const [showPairSelector, setShowPairSelector] = useState(false);
 
-  const [currentPrice, setCurrentPrice] = useState(0);
-  const [priceChange, setPriceChange] = useState(0);
+  const [currentPrice, setCurrentPrice] = useState<number | null>(null);
+  const [priceChange, setPriceChange] = useState<number>(0);
 
   const wsRef = useRef<WebSocket | null>(null);
 
-  /* =========================
-   * WebSocket: price ticker
-   * ========================= */
-  useEffect(() => {
-    if (!symbol) return;
+  const currentPair = pairs.find((p) => p.symbol === symbol);
 
-    // Binance uses e.g. BTCUSDT
+  /* ============================================================
+   * Price: Binance WebSocket (chainlink)
+   * ============================================================ */
+  useEffect(() => {
+    if (!symbol || !currentPair) return;
+    if (currentPair.priceSource !== "chainlink") return;
+
     const wsSymbol = `${symbol.toLowerCase()}usdt`;
     const wsUrl = `wss://stream.binance.com:9443/ws/${wsSymbol}@ticker`;
 
@@ -59,29 +66,68 @@ export default function TradePair({ symbol, onChange }: Props) {
         setCurrentPrice(parseFloat(data.c));
         setPriceChange(parseFloat(data.P));
       } catch {
-        // ignore parse error
+        // ignore
       }
     };
 
     return () => {
       ws.close();
     };
-  }, [symbol]);
+  }, [symbol, currentPair]);
 
-  /* =========================
-   * Auto-select first pair
-   * ========================= */
+  /* ============================================================
+   * Price: Oracle (manual)
+   * ============================================================ */
   useEffect(() => {
-    if (!loading && pairs.length > 0 && !pairs.find(p => p.symbol === symbol)) {
-      onChange(pairs[0].symbol);
+    if (!symbol || !currentPair) return;
+    if (currentPair.priceSource !== "manual") return;
+
+    let cancelled = false;
+
+    (async () => {
+      try {
+        if (!window.ethereum) return;
+
+        const provider = new BrowserProvider(window.ethereum);
+        const oracle = new Contract(
+          CONTRACTS.PRICE_ORACLE,
+          ORACLE_ABI,
+          provider
+        );
+
+        const raw = await oracle.getPrice(
+          ethers.encodeBytes32String(symbol)
+        );
+
+        if (!cancelled) {
+          setCurrentPrice(Number(raw) / 1e18);
+          setPriceChange(0); // manual は変動率なし
+        }
+      } catch (e) {
+        console.error("[TradePair] load oracle price failed:", e);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [symbol, currentPair]);
+
+  /* ============================================================
+   * Auto-select first enabled pair
+   * ============================================================ */
+  useEffect(() => {
+    if (!loading && pairs.length > 0) {
+      const exists = pairs.find((p) => p.symbol === symbol);
+      if (!exists) {
+        onChange(pairs[0].symbol);
+      }
     }
   }, [loading, pairs, symbol, onChange]);
 
-  const currentPair = pairs.find(p => p.symbol === symbol);
-
-  /* =========================
+  /* ============================================================
    * Render
-   * ========================= */
+   * ============================================================ */
 
   return (
     <>
@@ -101,21 +147,32 @@ export default function TradePair({ symbol, onChange }: Props) {
 
           <div className="text-right">
             <div className="text-2xl font-bold text-white">
-              {currentPrice
+              {currentPrice !== null
                 ? currentPrice.toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })
                 : "--"}
             </div>
-            <div
-              className={`text-sm ${
-                priceChange >= 0 ? "text-green-500" : "text-red-500"
-              }`}
-            >
-              {priceChange >= 0 ? "+" : ""}
-              {priceChange.toFixed(2)}%
-            </div>
+
+            {currentPair?.priceSource === "chainlink" && (
+              <div
+                className={`text-sm ${
+                  priceChange >= 0
+                    ? "text-green-500"
+                    : "text-red-500"
+                }`}
+              >
+                {priceChange >= 0 ? "+" : ""}
+                {priceChange.toFixed(2)}%
+              </div>
+            )}
+
+            {currentPair?.priceSource === "manual" && (
+              <div className="text-xs text-white/50">
+                Manual Price
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -148,6 +205,12 @@ export default function TradePair({ symbol, onChange }: Props) {
                     {pair.symbol}
                   </div>
                 </div>
+              </div>
+
+              <div className="text-xs text-white/40">
+                {pair.priceSource === "manual"
+                  ? "Manual"
+                  : "Chainlink"}
               </div>
             </button>
           ))}

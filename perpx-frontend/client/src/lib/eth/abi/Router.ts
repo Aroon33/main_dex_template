@@ -18,6 +18,8 @@ export const ROUTER_ABI = [
   "function closePositionPartial(uint256 positionId,int256 closeSize)",
   "function claimPnL()",
 
+  "function claimPnLToMargin()",
+
   // ===== VIEWS =====
   "function getMargin(address user) view returns(uint256)",
   "function getClaimablePnL(address user) view returns(int256)",

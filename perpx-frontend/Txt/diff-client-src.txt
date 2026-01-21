@@ -1,0 +1,12 @@
+Only in /home/deploy/dex_template_com/perpx-frontend/client/src: app
+Only in /home/deploy/dex_template_com/perpx-frontend/client/src/components/dev: README.md
+Files /home/deploy/dex_template_com/perpx-frontend/client/src/contexts/AccountContext.tsx and /home/deploy/dex_template_com/perpx-frontend-clean/client/src/contexts/AccountContext.tsx differ
+Files /home/deploy/dex_template_com/perpx-frontend/client/src/contexts/WalletContext.tsx and /home/deploy/dex_template_com/perpx-frontend-clean/client/src/contexts/WalletContext.tsx differ
+Only in /home/deploy/dex_template_com/perpx-frontend/client/src: index.css
+Files /home/deploy/dex_template_com/perpx-frontend/client/src/lib/eth/events/positionClose.ts and /home/deploy/dex_template_com/perpx-frontend-clean/client/src/lib/eth/events/positionClose.ts differ
+Only in /home/deploy/dex_template_com/perpx-frontend/client/src/pages/_deprecated: Tradetab.tsx.__ignore__
+Only in /home/deploy/dex_template_com/perpx-frontend/client/src/pages: FR
+Only in /home/deploy/dex_template_com/perpx-frontend/client/src/pages: Trade.tsx.backup
+Only in /home/deploy/dex_template_com/perpx-frontend/client/src/pages: トレードTAB
+Only in /home/deploy/dex_template_com/perpx-frontend/client/src/pages: プライスサイズオプションインフォ
+Only in /home/deploy/dex_template_com/perpx-frontend/client/src/pages: 貼り付け

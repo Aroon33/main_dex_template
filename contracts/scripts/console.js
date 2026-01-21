@@ -50,6 +50,12 @@ async function load() {
     addresses.Router
   );
 
+  global.liquidation = await hre.ethers.getContractAt(
+  "LiquidationEngine",
+  addresses.LiquidationEngine
+);
+
+
   console.log("✅ console initialized");
   console.log("USER:", USER);
   console.log("Router:", await router.getAddress());

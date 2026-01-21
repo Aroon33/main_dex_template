@@ -4,18 +4,11 @@
  * ============================================================
  * Trade Page – AccountContext Only Version
  * ============================================================
- *
- * Rules:
- * - AccountContext を唯一のアカウントソースとして使用
- * - TradeReadContext / trade READ hooks は使用しない
- * - wallet 未接続でも UI は必ず描画
- * - UI 構造・デザインは変更しない
- *
- * ============================================================
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAccount } from "@/contexts/AccountContext";
+import { useLimitExecutor } from "@/hooks/limit/useLimitExecutor";
 
 // Trade components
 import TradeHeader from "./TradeHeader";
@@ -39,13 +32,26 @@ export default function Trade() {
   const [tradeMode] =
     useState<"perpetual" | "spot">("perpetual");
 
+  // UI / Binance / Chart 用（例: BTCUSDT）
   const [selectedPair, setSelectedPair] =
     useState("BTCUSDT");
+
+  // on-chain / Oracle / Router 用（例: BTC）
+  const onchainPair = selectedPair.replace("USDT", "");
+
+  /* =========================
+   * Limit Executor（裏方・常駐）
+   * ========================= */
+  const { execute } = useLimitExecutor(onchainPair);
+
+  useEffect(() => {
+    execute();
+  }, [execute]);
 
   /* =========================
    * Balance (SSOT)
    * ========================= */
-  const balance = account.collateralBalance;
+  const { marginBalance, availableBalance } = useAccount();
 
   /* =========================
    * OrderBook (UI only)
@@ -55,8 +61,7 @@ export default function Trade() {
 
   /* ============================================================
    * Render
-   * ============================================================
-   */
+   * ============================================================ */
   return (
     <div className="min-h-screen bg-background flex flex-col">
 
@@ -76,7 +81,9 @@ export default function Trade() {
 
         <TradeOrder
           tradeMode={tradeMode}
-          balance={balance}
+          marginBalance={marginBalance}
+          availableBalance={availableBalance}
+          symbol={onchainPair}
         />
 
         <TradeBottomTabs />
@@ -105,8 +112,11 @@ export default function Trade() {
         <div className="shrink-0">
           <TradeOrder
             tradeMode={tradeMode}
-            balance={balance}
+            marginBalance={marginBalance}
+            availableBalance={availableBalance}
+            symbol={onchainPair}
           />
+
           <TradeBottomTabs />
         </div>
 

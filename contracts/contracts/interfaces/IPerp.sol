@@ -1,6 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
+/**
+ * ============================================================
+ * IPerp.sol
+ * ============================================================
+ *
+ * Role:
+ * - PerpetualTrading の公開インターフェース
+ * - Router / LiquidationEngine / Frontend が参照する SSOT
+ *
+ * Design Rules:
+ * ------------------------------------------------------------
+ * - 資金移動は含まない（LiquidityPool が担当）
+ * - PnL 計算・ポジション状態は PerpetualTrading が担当
+ * ============================================================
+ */
 interface IPerp {
 
     /* ===================================================== */
@@ -27,40 +42,50 @@ interface IPerp {
     /// @notice Fully close position (realize all PnL)
     function closePosition(address user, uint256 positionId) external;
 
-    /// @notice Force close position (liquidation)
+    /// @notice Partially close position
+    function closePositionPartial(
+        address user,
+        uint256 positionId,
+        int256 closeSize
+    ) external;
+
+    /* ===================================================== */
+    /* ===================== LIQUIDATION =================== */
+    /* ===================================================== */
+
+    /// @notice Check whether position can be liquidated
+    function isLiquidatable(
+        address user,
+        uint256 positionId
+    ) external view returns (bool);
+
+    /// @notice Force close position (called by LiquidationEngine)
     function liquidate(address user, uint256 positionId) external;
 
-/* ===================================================== */
-/* ====================== PNL ========================== */
-/* ===================================================== */
+    /* ===================================================== */
+    /* ======================== PNL ======================== */
+    /* ===================================================== */
 
-/// @notice Claim realized PnL
-function claimPnL(address user) external;
+    /// @notice Claim realized PnL
+    function claimPnL(address user) external;
 
-/// @notice Get realized (claimable) PnL
-function getClaimablePnL(address user)
-    external
-    view
-    returns (int256);
+    function claimPnLToMargin(address user) external;
 
-    /// 🔑 追加（これが今回の修正点）
+    /// @notice Get realized (claimable) PnL
+    function getClaimablePnL(address user)
+        external
+        view
+        returns (int256);
+
+    /// @notice Add claimable PnL (Router / internal use)
     function addClaimablePnL(
         address user,
         int256 pnl
     ) external;
 
-
-
     /* ===================================================== */
     /* ======================= VIEWS ======================= */
     /* ===================================================== */
-
-    function closePositionPartial(
-    address user,
-    uint256 positionId,
-    int256 closeSize
-) external;
-
 
     /// @notice Get single position info
     function getPosition(address user, uint256 positionId)

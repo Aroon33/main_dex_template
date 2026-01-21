@@ -2,7 +2,7 @@
 
 /**
  * ============================================================
- * TradeHistoryTab – Closed Trades + Claim (FINAL)
+ * TradeHistoryTab – Closed Trades + Claim to Margin
  * ============================================================
  */
 
@@ -10,16 +10,26 @@ import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAccount } from "@/contexts/AccountContext";
-import { useClaimPnL } from "@/hooks/trade/write/useClaimPnL";
+import { useClaimPnLToMargin } from "@/hooks/trade/write/useClaimPnLToMargin";
 import { BrowserProvider, Contract, ethers } from "ethers";
 import { CONTRACTS } from "@/lib/eth/addresses";
 import { ROUTER_ABI } from "@/lib/eth/abi/Router";
 
+import { useLimitOrders } from "@/contexts/LimitOrderContext";
+
+
 export default function TradeHistoryTab() {
   const { address, trades, isLoading, refreshAll } = useAccount();
-  const { claimPnL, isSubmitting } = useClaimPnL();
+  const { claimToMargin, isSubmitting } = useClaimPnLToMargin();
 
   const [claimable, setClaimable] = useState<number>(0);
+
+  const { orders } = useLimitOrders();
+
+const historyOrders = orders.filter(
+  (o) => o.status !== "open"
+);
+
 
   /* ======================
      Load claimable PnL
@@ -75,12 +85,12 @@ export default function TradeHistoryTab() {
           disabled={claimable <= 0 || isSubmitting}
           onClick={async () => {
             const ok = confirm(
-              `Claim ${claimable.toFixed(2)} USD ?`
+              `Add ${claimable.toFixed(2)} USD to margin?`
             );
             if (!ok) return;
 
             try {
-              const res = await claimPnL();
+              const res = await claimToMargin();
               if (res?.success) {
                 await refreshAll();
                 setClaimable(0);
@@ -90,9 +100,51 @@ export default function TradeHistoryTab() {
             }
           }}
         >
-          {isSubmitting ? "Claiming..." : "Claim"}
+          {isSubmitting ? "Processing..." : "Add to Margin"}
         </Button>
       </div>
+
+      {/* ===== Limit Order History ===== */}
+{historyOrders.length > 0 && (
+  <div className="space-y-3">
+    <div className="text-xs text-white/50">
+      Limit Order History
+    </div>
+
+    {historyOrders.map((o) => (
+      <Card key={o.id} className="p-3 space-y-1">
+        <div className="flex justify-between">
+          <div className="font-medium">
+            {o.symbol} / USD
+          </div>
+          <div className="text-xs text-white/50">
+            LIMIT · {o.status.toUpperCase()}
+          </div>
+        </div>
+
+        <div
+          className={`text-sm ${
+            o.side === "buy"
+              ? "text-green-500"
+              : "text-red-500"
+          }`}
+        >
+          {o.side.toUpperCase()} &nbsp;
+          {o.sizeUsd.toLocaleString()} USD
+        </div>
+
+        <div className="text-xs text-white/60">
+          Price: {o.price}
+        </div>
+
+        <div className="text-xs text-white/50">
+          {new Date(o.createdAt).toLocaleString()}
+        </div>
+      </Card>
+    ))}
+  </div>
+)}
+
 
       {/* ===== Trade History ===== */}
       {(!trades || trades.length === 0) && (

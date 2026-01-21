@@ -1,0 +1,3 @@
+/home/deploy/dex_template_com/perpx-frontend/client/src/contexts/AccountContext.tsx
+/home/deploy/dex_template_com/perpx-frontend/client/src/contexts/WalletContext.tsx
+/home/deploy/dex_template_com/perpx-frontend/client/src/lib/eth/events/positionClose.ts

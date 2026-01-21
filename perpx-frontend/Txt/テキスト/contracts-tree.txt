@@ -1,0 +1,2236 @@
+contracts
+├── artifacts
+│   ├── build-info
+│   ├── contracts
+│   │   ├── core
+│   │   │   └── Router.sol
+│   │   ├── interfaces
+│   │   │   ├── IFundingRate.sol
+│   │   │   ├── ILiquidationEngine.sol
+│   │   │   ├── ILiquidityPool.sol
+│   │   │   ├── IOracle.sol
+│   │   │   ├── IOrderBook.sol
+│   │   │   └── IPerp.sol
+│   │   ├── libraries
+│   │   │   ├── FundingLib.sol
+│   │   │   ├── MathLib.sol
+│   │   │   ├── PositionLib.sol
+│   │   │   └── PriceLib.sol
+│   │   ├── liquidation
+│   │   │   └── LiquidationEngine.sol
+│   │   ├── liquidity
+│   │   │   └── LiquidityPool.sol
+│   │   ├── mocks
+│   │   │   └── MockERC20.sol
+│   │   ├── oracle
+│   │   │   └── PriceOracle.sol
+│   │   ├── perpetual
+│   │   │   ├── FundingRate.sol
+│   │   │   ├── OrderBook.sol
+│   │   │   └── PerpetualTrading.sol
+│   │   └── tokens
+│   │       └── PLP.sol
+│   └── @openzeppelin
+│       └── contracts
+│           ├── interfaces
+│           │   └── draft-IERC6093.sol
+│           ├── token
+│           │   └── ERC20
+│           │       ├── ERC20.sol
+│           │       ├── extensions
+│           │       │   └── IERC20Metadata.sol
+│           │       └── IERC20.sol
+│           └── utils
+│               └── Context.sol
+├── cache
+├── contracts
+│   ├── core
+│   │   └── Router.sol
+│   ├── interfaces
+│   │   ├── IFundingRate.sol
+│   │   ├── ILiquidationEngine.sol
+│   │   ├── ILiquidityPool.sol
+│   │   ├── IOracle.sol
+│   │   ├── IOrderBook.sol
+│   │   └── IPerp.sol
+│   ├── libraries
+│   │   ├── FundingLib.sol
+│   │   ├── MathLib.sol
+│   │   ├── PositionLib.sol
+│   │   └── PriceLib.sol
+│   ├── liquidation
+│   │   └── LiquidationEngine.sol
+│   ├── liquidity
+│   │   └── LiquidityPool.sol
+│   ├── mocks
+│   │   └── MockERC20.sol
+│   ├── oracle
+│   │   └── PriceOracle.sol
+│   ├── perpetual
+│   │   ├── FundingRate.sol
+│   │   ├── OrderBook.sol
+│   │   └── PerpetualTrading.sol
+│   ├── tokens
+│   │   └── PLP.sol
+│   └── utils
+├── node_modules
+│   ├── abbrev
+│   ├── acorn
+│   │   ├── bin
+│   │   └── dist
+│   ├── acorn-walk
+│   │   └── dist
+│   ├── adm-zip
+│   │   ├── headers
+│   │   ├── methods
+│   │   └── util
+│   ├── @adraffy
+│   │   └── ens-normalize
+│   │       └── dist
+│   ├── aes-js
+│   │   ├── lib.commonjs
+│   │   ├── lib.esm
+│   │   ├── misc
+│   │   │   └── basedirs
+│   │   │       ├── lib.commonjs
+│   │   │       └── lib.esm
+│   │   └── src.ts
+│   ├── agent-base
+│   │   ├── dist
+│   │   │   └── src
+│   │   └── src
+│   ├── aggregate-error
+│   ├── ajv
+│   │   ├── dist
+│   │   │   ├── compile
+│   │   │   │   ├── codegen
+│   │   │   │   ├── jtd
+│   │   │   │   └── validate
+│   │   │   ├── refs
+│   │   │   │   ├── json-schema-2019-09
+│   │   │   │   │   └── meta
+│   │   │   │   └── json-schema-2020-12
+│   │   │   │       └── meta
+│   │   │   ├── runtime
+│   │   │   ├── standalone
+│   │   │   ├── types
+│   │   │   └── vocabularies
+│   │   │       ├── applicator
+│   │   │       ├── core
+│   │   │       ├── discriminator
+│   │   │       ├── dynamic
+│   │   │       ├── format
+│   │   │       ├── jtd
+│   │   │       ├── unevaluated
+│   │   │       └── validation
+│   │   └── lib
+│   │       ├── compile
+│   │       │   ├── codegen
+│   │       │   ├── jtd
+│   │       │   └── validate
+│   │       ├── refs
+│   │       │   ├── json-schema-2019-09
+│   │       │   │   └── meta
+│   │       │   └── json-schema-2020-12
+│   │       │       └── meta
+│   │       ├── runtime
+│   │       ├── standalone
+│   │       ├── types
+│   │       └── vocabularies
+│   │           ├── applicator
+│   │           ├── core
+│   │           ├── discriminator
+│   │           ├── dynamic
+│   │           ├── format
+│   │           ├── jtd
+│   │           ├── unevaluated
+│   │           └── validation
+│   ├── amdefine
+│   ├── ansi-align
+│   ├── ansi-colors
+│   │   └── types
+│   ├── ansi-escapes
+│   ├── ansi-regex
+│   ├── ansi-styles
+│   ├── antlr4ts
+│   │   ├── atn
+│   │   ├── dfa
+│   │   ├── misc
+│   │   └── tree
+│   │       ├── pattern
+│   │       └── xpath
+│   ├── anymatch
+│   ├── arg
+│   ├── argparse
+│   │   └── lib
+│   ├── array-back
+│   │   └── dist
+│   ├── array-union
+│   ├── array-uniq
+│   ├── asap
+│   ├── assertion-error
+│   ├── astral-regex
+│   ├── async
+│   │   ├── dist
+│   │   └── lib
+│   ├── asynckit
+│   │   └── lib
+│   ├── at-least-node
+│   ├── available-typed-arrays
+│   │   └── test
+│   ├── axios
+│   │   ├── dist
+│   │   │   ├── browser
+│   │   │   ├── esm
+│   │   │   └── node
+│   │   └── lib
+│   │       ├── adapters
+│   │       ├── cancel
+│   │       ├── core
+│   │       ├── defaults
+│   │       ├── env
+│   │       │   └── classes
+│   │       ├── helpers
+│   │       └── platform
+│   │           ├── browser
+│   │           │   └── classes
+│   │           ├── common
+│   │           └── node
+│   │               └── classes
+│   ├── balanced-match
+│   ├── base-x
+│   │   └── src
+│   ├── bech32
+│   ├── binary-extensions
+│   ├── blakejs
+│   ├── bn.js
+│   │   └── lib
+│   ├── boxen
+│   │   └── node_modules
+│   │       ├── ansi-styles
+│   │       ├── chalk
+│   │       │   └── source
+│   │       ├── color-convert
+│   │       ├── color-name
+│   │       ├── has-flag
+│   │       ├── supports-color
+│   │       └── type-fest
+│   │           ├── source
+│   │           └── ts41
+│   ├── brace-expansion
+│   ├── braces
+│   │   └── lib
+│   ├── brorand
+│   │   └── test
+│   ├── browserify-aes
+│   │   └── modes
+│   ├── browser-stdout
+│   ├── bs58
+│   ├── bs58check
+│   ├── buffer-from
+│   ├── buffer-xor
+│   │   └── test
+│   ├── bytes
+│   ├── call-bind
+│   │   └── test
+│   ├── call-bind-apply-helpers
+│   │   └── test
+│   ├── call-bound
+│   │   └── test
+│   ├── camelcase
+│   ├── caseless
+│   ├── cbor
+│   │   ├── lib
+│   │   ├── types
+│   │   │   ├── lib
+│   │   │   └── vendor
+│   │   │       └── binary-parse-stream
+│   │   └── vendor
+│   │       └── binary-parse-stream
+│   ├── chai
+│   │   └── lib
+│   │       └── chai
+│   │           ├── core
+│   │           ├── interface
+│   │           └── utils
+│   ├── chai-as-promised
+│   │   └── lib
+│   ├── chalk
+│   │   └── types
+│   ├── charenc
+│   ├── check-error
+│   ├── chokidar
+│   │   ├── lib
+│   │   └── types
+│   ├── ci-info
+│   ├── cipher-base
+│   │   └── test
+│   ├── clean-stack
+│   ├── cli-boxes
+│   ├── cli-table3
+│   │   ├── node_modules
+│   │   │   ├── ansi-regex
+│   │   │   ├── is-fullwidth-code-point
+│   │   │   ├── string-width
+│   │   │   └── strip-ansi
+│   │   └── src
+│   ├── cliui
+│   │   └── build
+│   │       └── lib
+│   ├── color-convert
+│   ├── color-name
+│   ├── colors
+│   │   ├── examples
+│   │   ├── lib
+│   │   │   ├── custom
+│   │   │   ├── maps
+│   │   │   └── system
+│   │   └── themes
+│   ├── combined-stream
+│   │   └── lib
+│   ├── commander
+│   │   ├── lib
+│   │   └── typings
+│   ├── command-exists
+│   │   ├── lib
+│   │   └── test
+│   ├── command-line-args
+│   │   ├── dist
+│   │   └── lib
+│   ├── command-line-usage
+│   │   ├── lib
+│   │   │   └── section
+│   │   └── node_modules
+│   │       ├── array-back
+│   │       │   └── dist
+│   │       └── typical
+│   │           └── dist
+│   ├── concat-map
+│   │   ├── example
+│   │   └── test
+│   ├── concat-stream
+│   │   └── node_modules
+│   │       ├── isarray
+│   │       ├── readable-stream
+│   │       │   ├── doc
+│   │       │   │   └── wg-meetings
+│   │       │   └── lib
+│   │       │       └── internal
+│   │       │           └── streams
+│   │       ├── safe-buffer
+│   │       └── string_decoder
+│   │           └── lib
+│   ├── cookie
+│   ├── core-util-is
+│   │   └── lib
+│   ├── create-hash
+│   ├── create-hmac
+│   ├── create-require
+│   ├── crypt
+│   ├── @cspotcode
+│   │   └── source-map-support
+│   ├── death
+│   │   ├── lib
+│   │   └── test
+│   │       └── resources
+│   ├── debug
+│   │   └── src
+│   ├── decamelize
+│   ├── deep-eql
+│   ├── deep-extend
+│   │   └── lib
+│   ├── deep-is
+│   │   ├── example
+│   │   └── test
+│   ├── define-data-property
+│   │   └── test
+│   ├── delayed-stream
+│   │   └── lib
+│   ├── depd
+│   │   └── lib
+│   │       └── browser
+│   ├── diff
+│   │   ├── dist
+│   │   └── lib
+│   │       ├── convert
+│   │       ├── diff
+│   │       ├── patch
+│   │       └── util
+│   ├── difflib
+│   │   ├── dist
+│   │   ├── lib
+│   │   ├── src
+│   │   ├── test
+│   │   └── util
+│   ├── dir-glob
+│   ├── dotenv
+│   │   └── lib
+│   ├── dunder-proto
+│   │   └── test
+│   ├── elliptic
+│   │   ├── lib
+│   │   │   └── elliptic
+│   │   │       ├── curve
+│   │   │       ├── ec
+│   │   │       ├── eddsa
+│   │   │       └── precomputed
+│   │   └── node_modules
+│   │       └── bn.js
+│   │           ├── lib
+│   │           └── util
+│   ├── emoji-regex
+│   │   └── es2015
+│   ├── enquirer
+│   │   └── lib
+│   │       ├── prompts
+│   │       └── types
+│   ├── env-paths
+│   ├── escalade
+│   │   ├── dist
+│   │   └── sync
+│   ├── escape-string-regexp
+│   ├── escodegen
+│   │   ├── bin
+│   │   └── node_modules
+│   │       └── source-map
+│   │           ├── build
+│   │           ├── lib
+│   │           │   └── source-map
+│   │           └── test
+│   │               └── source-map
+│   ├── es-define-property
+│   │   └── test
+│   ├── es-errors
+│   │   └── test
+│   ├── es-object-atoms
+│   │   └── test
+│   ├── esprima
+│   │   └── bin
+│   ├── es-set-tostringtag
+│   │   └── test
+│   ├── estraverse
+│   ├── esutils
+│   │   └── lib
+│   ├── ethereum-bloom-filters
+│   │   ├── dist
+│   │   └── node_modules
+│   │       └── @noble
+│   │           └── hashes
+│   │               ├── esm
+│   │               └── src
+│   ├── ethereum-cryptography
+│   │   └── bip39
+│   │       └── wordlists
+│   ├── @ethereumjs
+│   │   ├── rlp
+│   │   │   ├── bin
+│   │   │   ├── dist
+│   │   │   │   ├── cjs
+│   │   │   │   └── esm
+│   │   │   └── src
+│   │   └── util
+│   │       ├── dist
+│   │       │   ├── cjs
+│   │       │   └── esm
+│   │       ├── node_modules
+│   │       │   ├── ethereum-cryptography
+│   │       │   │   ├── bip39
+│   │       │   │   │   └── wordlists
+│   │       │   │   └── esm
+│   │       │   │       └── bip39
+│   │       │   │           └── wordlists
+│   │       │   ├── @noble
+│   │       │   │   ├── curves
+│   │       │   │   │   ├── abstract
+│   │       │   │   │   ├── esm
+│   │       │   │   │   │   └── abstract
+│   │       │   │   │   └── src
+│   │       │   │   │       └── abstract
+│   │       │   │   └── hashes
+│   │       │   │       ├── esm
+│   │       │   │       └── src
+│   │       │   └── @scure
+│   │       │       ├── bip32
+│   │       │       │   └── lib
+│   │       │       │       └── esm
+│   │       │       └── bip39
+│   │       │           ├── esm
+│   │       │           │   └── wordlists
+│   │       │           ├── src
+│   │       │           └── wordlists
+│   │       └── src
+│   ├── ethereumjs-util
+│   │   ├── dist
+│   │   ├── dist.browser
+│   │   ├── node_modules
+│   │   │   └── ethereum-cryptography
+│   │   │       ├── bip39
+│   │   │       │   └── wordlists
+│   │   │       ├── pure
+│   │   │       │   ├── shims
+│   │   │       │   └── vendor
+│   │   │       ├── shims
+│   │   │       ├── src
+│   │   │       │   ├── bip39
+│   │   │       │   │   └── wordlists
+│   │   │       │   ├── pure
+│   │   │       │   │   ├── shims
+│   │   │       │   │   └── vendor
+│   │   │       │   ├── shims
+│   │   │       │   └── vendor
+│   │   │       └── vendor
+│   │   └── src
+│   ├── ethers
+│   │   ├── dist
+│   │   ├── lib.commonjs
+│   │   │   ├── abi
+│   │   │   │   └── coders
+│   │   │   ├── address
+│   │   │   ├── constants
+│   │   │   ├── contract
+│   │   │   ├── crypto
+│   │   │   ├── hash
+│   │   │   ├── providers
+│   │   │   ├── transaction
+│   │   │   ├── utils
+│   │   │   ├── wallet
+│   │   │   └── wordlists
+│   │   │       └── generation
+│   │   ├── lib.esm
+│   │   │   ├── abi
+│   │   │   │   └── coders
+│   │   │   ├── address
+│   │   │   ├── constants
+│   │   │   ├── contract
+│   │   │   ├── crypto
+│   │   │   ├── hash
+│   │   │   ├── providers
+│   │   │   ├── transaction
+│   │   │   ├── utils
+│   │   │   ├── wallet
+│   │   │   └── wordlists
+│   │   │       └── generation
+│   │   ├── node_modules
+│   │   │   ├── @noble
+│   │   │   │   └── hashes
+│   │   │   │       ├── esm
+│   │   │   │       └── src
+│   │   │   ├── tslib
+│   │   │   │   └── modules
+│   │   │   ├── @types
+│   │   │   │   └── node
+│   │   │   │       ├── assert
+│   │   │   │       ├── dns
+│   │   │   │       ├── fs
+│   │   │   │       ├── readline
+│   │   │   │       ├── stream
+│   │   │   │       ├── timers
+│   │   │   │       └── ts5.6
+│   │   │   ├── undici-types
+│   │   │   └── ws
+│   │   │       └── lib
+│   │   └── src.ts
+│   │       ├── abi
+│   │       │   └── coders
+│   │       ├── address
+│   │       ├── constants
+│   │       ├── contract
+│   │       ├── crypto
+│   │       ├── hash
+│   │       ├── providers
+│   │       ├── transaction
+│   │       ├── utils
+│   │       ├── wallet
+│   │       └── wordlists
+│   │           └── generation
+│   ├── @ethersproject
+│   │   ├── abi
+│   │   │   ├── lib
+│   │   │   │   └── coders
+│   │   │   ├── lib.esm
+│   │   │   │   └── coders
+│   │   │   └── src.ts
+│   │   │       └── coders
+│   │   ├── abstract-provider
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── abstract-signer
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── address
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── base64
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── basex
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── bignumber
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── bytes
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── constants
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── contracts
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── hash
+│   │   │   ├── lib
+│   │   │   │   └── ens-normalize
+│   │   │   ├── lib.esm
+│   │   │   │   └── ens-normalize
+│   │   │   └── src.ts
+│   │   │       └── ens-normalize
+│   │   ├── hdnode
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── json-wallets
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   ├── node_modules
+│   │   │   │   └── aes-js
+│   │   │   │       └── test
+│   │   │   └── src.ts
+│   │   ├── keccak256
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── logger
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── networks
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── pbkdf2
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── properties
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── providers
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   ├── node_modules
+│   │   │   │   └── ws
+│   │   │   │       └── lib
+│   │   │   └── src.ts
+│   │   ├── random
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── rlp
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── sha2
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── signing-key
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── solidity
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── strings
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── transactions
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── units
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── wallet
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   ├── web
+│   │   │   ├── lib
+│   │   │   ├── lib.esm
+│   │   │   └── src.ts
+│   │   └── wordlists
+│   │       ├── lib
+│   │       ├── lib.esm
+│   │       └── src.ts
+│   ├── eth-gas-reporter
+│   │   ├── docs
+│   │   ├── lib
+│   │   ├── mock
+│   │   │   ├── contracts
+│   │   │   │   ├── ConvertLib.sol
+│   │   │   │   ├── EncoderV2.sol
+│   │   │   │   ├── EtherRouter
+│   │   │   │   │   ├── EtherRouter.sol
+│   │   │   │   │   ├── Factory.sol
+│   │   │   │   │   ├── Resolver.sol
+│   │   │   │   │   ├── VersionA.sol
+│   │   │   │   │   └── VersionB.sol
+│   │   │   │   ├── MetaCoin.sol
+│   │   │   │   ├── Migrations.sol
+│   │   │   │   ├── MultiContractFile.sol
+│   │   │   │   ├── Undeployed.sol
+│   │   │   │   ├── VariableConstructor.sol
+│   │   │   │   ├── VariableCosts.sol
+│   │   │   │   └── Wallets
+│   │   │   │       └── Wallet.sol
+│   │   │   ├── migrations
+│   │   │   ├── scripts
+│   │   │   └── test
+│   │   │       └── TestMetacoin.sol
+│   │   ├── node_modules
+│   │   │   └── ethers
+│   │   │       ├── dist
+│   │   │       ├── lib
+│   │   │       ├── lib.esm
+│   │   │       └── src.ts
+│   │   └── scripts
+│   ├── ethjs-unit
+│   │   ├── dist
+│   │   ├── internals
+│   │   │   └── webpack
+│   │   ├── lib
+│   │   │   └── tests
+│   │   ├── node_modules
+│   │   │   └── bn.js
+│   │   │       ├── lib
+│   │   │       ├── test
+│   │   │       │   └── pummel
+│   │   │       └── util
+│   │   └── src
+│   │       └── tests
+│   ├── evp_bytestokey
+│   ├── fast-deep-equal
+│   │   └── es6
+│   ├── fast-glob
+│   │   └── out
+│   │       ├── managers
+│   │       ├── providers
+│   │       │   ├── filters
+│   │       │   ├── matchers
+│   │       │   └── transformers
+│   │       ├── readers
+│   │       ├── types
+│   │       └── utils
+│   ├── @fastify
+│   │   └── busboy
+│   │       ├── deps
+│   │       │   ├── dicer
+│   │       │   │   └── lib
+│   │       │   └── streamsearch
+│   │       └── lib
+│   │           ├── types
+│   │           └── utils
+│   ├── fast-levenshtein
+│   ├── fastq
+│   │   └── test
+│   ├── fast-uri
+│   │   ├── benchmark
+│   │   ├── lib
+│   │   ├── test
+│   │   │   └── fixtures
+│   │   └── types
+│   ├── fill-range
+│   ├── find-replace
+│   │   └── dist
+│   ├── find-up
+│   ├── flat
+│   │   └── test
+│   ├── follow-redirects
+│   ├── for-each
+│   │   └── test
+│   ├── form-data
+│   │   └── lib
+│   ├── fp-ts
+│   │   ├── es6
+│   │   ├── lib
+│   │   └── rules
+│   ├── fs-extra
+│   │   └── lib
+│   │       ├── copy
+│   │       ├── copy-sync
+│   │       ├── empty
+│   │       ├── ensure
+│   │       ├── fs
+│   │       ├── json
+│   │       ├── mkdirs
+│   │       ├── move
+│   │       ├── move-sync
+│   │       ├── output
+│   │       ├── path-exists
+│   │       ├── remove
+│   │       └── util
+│   ├── fs-readdir-recursive
+│   ├── fs.realpath
+│   ├── function-bind
+│   │   └── test
+│   ├── get-caller-file
+│   ├── get-func-name
+│   ├── get-intrinsic
+│   │   └── test
+│   ├── get-port
+│   ├── get-proto
+│   │   └── test
+│   ├── ghost-testrpc
+│   ├── glob
+│   ├── global-modules
+│   ├── global-prefix
+│   ├── globby
+│   ├── glob-parent
+│   ├── gopd
+│   │   └── test
+│   ├── graceful-fs
+│   ├── handlebars
+│   │   ├── bin
+│   │   ├── dist
+│   │   │   ├── amd
+│   │   │   │   └── handlebars
+│   │   │   │       ├── compiler
+│   │   │   │       ├── decorators
+│   │   │   │       ├── helpers
+│   │   │   │       └── internal
+│   │   │   └── cjs
+│   │   │       └── handlebars
+│   │   │           ├── compiler
+│   │   │           ├── decorators
+│   │   │           ├── helpers
+│   │   │           └── internal
+│   │   ├── lib
+│   │   │   └── handlebars
+│   │   │       ├── compiler
+│   │   │       ├── decorators
+│   │   │       ├── helpers
+│   │   │       └── internal
+│   │   └── types
+│   ├── hardhat
+│   │   ├── builtin-tasks
+│   │   │   └── utils
+│   │   ├── common
+│   │   ├── console.sol
+│   │   ├── internal
+│   │   │   ├── cli
+│   │   │   ├── core
+│   │   │   │   ├── config
+│   │   │   │   ├── jsonrpc
+│   │   │   │   │   └── types
+│   │   │   │   │       ├── input
+│   │   │   │   │       └── output
+│   │   │   │   ├── params
+│   │   │   │   ├── providers
+│   │   │   │   ├── tasks
+│   │   │   │   └── vars
+│   │   │   ├── hardhat-network
+│   │   │   │   ├── jsonrpc
+│   │   │   │   ├── provider
+│   │   │   │   │   ├── fork
+│   │   │   │   │   ├── modules
+│   │   │   │   │   ├── utils
+│   │   │   │   │   └── vm
+│   │   │   │   └── stack-traces
+│   │   │   ├── lib
+│   │   │   ├── sentry
+│   │   │   ├── solidity
+│   │   │   │   └── compiler
+│   │   │   ├── util
+│   │   │   └── vendor
+│   │   │       └── await-semaphore
+│   │   ├── node_modules
+│   │   │   ├── chokidar
+│   │   │   │   └── esm
+│   │   │   └── readdirp
+│   │   │       └── esm
+│   │   ├── sample-projects
+│   │   │   ├── javascript
+│   │   │   │   ├── contracts
+│   │   │   │   │   └── Lock.sol
+│   │   │   │   ├── ignition
+│   │   │   │   │   └── modules
+│   │   │   │   └── test
+│   │   │   ├── javascript-esm
+│   │   │   │   ├── contracts
+│   │   │   │   │   └── Lock.sol
+│   │   │   │   ├── ignition
+│   │   │   │   │   └── modules
+│   │   │   │   └── test
+│   │   │   ├── typescript
+│   │   │   │   ├── contracts
+│   │   │   │   │   └── Lock.sol
+│   │   │   │   ├── ignition
+│   │   │   │   │   └── modules
+│   │   │   │   └── test
+│   │   │   └── typescript-viem
+│   │   │       ├── contracts
+│   │   │       │   └── Lock.sol
+│   │   │       ├── ignition
+│   │   │       │   └── modules
+│   │   │       └── test
+│   │   ├── src
+│   │   │   ├── builtin-tasks
+│   │   │   │   └── utils
+│   │   │   ├── common
+│   │   │   ├── internal
+│   │   │   │   ├── cli
+│   │   │   │   ├── core
+│   │   │   │   │   ├── config
+│   │   │   │   │   ├── jsonrpc
+│   │   │   │   │   │   └── types
+│   │   │   │   │   │       ├── input
+│   │   │   │   │   │       └── output
+│   │   │   │   │   ├── params
+│   │   │   │   │   ├── providers
+│   │   │   │   │   ├── tasks
+│   │   │   │   │   └── vars
+│   │   │   │   ├── hardhat-network
+│   │   │   │   │   ├── jsonrpc
+│   │   │   │   │   ├── provider
+│   │   │   │   │   │   ├── fork
+│   │   │   │   │   │   ├── modules
+│   │   │   │   │   │   ├── utils
+│   │   │   │   │   │   └── vm
+│   │   │   │   │   └── stack-traces
+│   │   │   │   ├── lib
+│   │   │   │   ├── sentry
+│   │   │   │   ├── solidity
+│   │   │   │   │   └── compiler
+│   │   │   │   ├── util
+│   │   │   │   └── vendor
+│   │   │   │       └── await-semaphore
+│   │   │   ├── types
+│   │   │   │   └── builtin-tasks
+│   │   │   └── utils
+│   │   ├── types
+│   │   │   └── builtin-tasks
+│   │   └── utils
+│   ├── hardhat-gas-reporter
+│   │   ├── dist
+│   │   │   └── src
+│   │   └── src
+│   ├── has-flag
+│   ├── hash-base
+│   │   └── node_modules
+│   │       ├── isarray
+│   │       ├── readable-stream
+│   │       │   ├── doc
+│   │       │   │   └── wg-meetings
+│   │       │   ├── lib
+│   │       │   │   └── internal
+│   │       │   │       └── streams
+│   │       │   └── node_modules
+│   │       │       └── safe-buffer
+│   │       └── string_decoder
+│   │           ├── lib
+│   │           └── node_modules
+│   │               └── safe-buffer
+│   ├── hash.js
+│   │   ├── lib
+│   │   │   └── hash
+│   │   │       └── sha
+│   │   └── test
+│   ├── hasown
+│   ├── has-property-descriptors
+│   │   └── test
+│   ├── has-symbols
+│   │   └── test
+│   │       └── shams
+│   ├── has-tostringtag
+│   │   └── test
+│   │       └── shams
+│   ├── he
+│   │   ├── bin
+│   │   └── man
+│   ├── heap
+│   │   ├── lib
+│   │   ├── src
+│   │   └── test
+│   ├── hmac-drbg
+│   │   ├── lib
+│   │   └── test
+│   │       └── fixtures
+│   ├── http-basic
+│   │   └── lib
+│   ├── http-errors
+│   ├── http-response-object
+│   │   ├── lib
+│   │   └── node_modules
+│   │       └── @types
+│   │           └── node
+│   │               └── ts3.6
+│   ├── https-proxy-agent
+│   │   └── dist
+│   ├── iconv-lite
+│   │   ├── encodings
+│   │   │   └── tables
+│   │   └── lib
+│   ├── ignore
+│   ├── immutable
+│   │   └── dist
+│   ├── indent-string
+│   ├── inflight
+│   ├── inherits
+│   ├── ini
+│   ├── interpret
+│   ├── io-ts
+│   │   ├── es6
+│   │   └── lib
+│   ├── isarray
+│   ├── is-binary-path
+│   ├── is-callable
+│   │   └── test
+│   ├── isexe
+│   │   └── test
+│   ├── is-extglob
+│   ├── is-fullwidth-code-point
+│   ├── is-glob
+│   ├── is-hex-prefixed
+│   │   └── src
+│   │       └── tests
+│   ├── is-number
+│   ├── is-plain-obj
+│   ├── is-typed-array
+│   │   └── test
+│   ├── is-unicode-supported
+│   ├── @jridgewell
+│   │   ├── resolve-uri
+│   │   │   └── dist
+│   │   │       └── types
+│   │   ├── sourcemap-codec
+│   │   │   ├── dist
+│   │   │   ├── src
+│   │   │   └── types
+│   │   └── trace-mapping
+│   │       └── dist
+│   │           └── types
+│   ├── jsonfile
+│   ├── jsonschema
+│   │   └── lib
+│   ├── json-schema-traverse
+│   │   └── spec
+│   │       └── fixtures
+│   ├── json-stream-stringify
+│   │   └── lib
+│   │       ├── cjs
+│   │       ├── esm
+│   │       ├── types
+│   │       └── umd
+│   ├── js-sha3
+│   │   ├── build
+│   │   └── src
+│   ├── js-yaml
+│   │   ├── bin
+│   │   ├── dist
+│   │   └── lib
+│   │       ├── schema
+│   │       └── type
+│   ├── keccak
+│   │   ├── lib
+│   │   │   └── api
+│   │   ├── prebuilds
+│   │   │   ├── darwin-x64
+│   │   │   ├── linux-x64
+│   │   │   └── win32-x64
+│   │   └── src
+│   │       ├── libkeccak-32
+│   │       └── libkeccak-64
+│   ├── kind-of
+│   ├── levn
+│   │   └── lib
+│   ├── locate-path
+│   ├── lodash
+│   │   └── fp
+│   ├── lodash.camelcase
+│   ├── lodash.clonedeep
+│   ├── lodash.isequal
+│   ├── lodash.truncate
+│   ├── log-symbols
+│   │   └── node_modules
+│   │       ├── ansi-styles
+│   │       ├── chalk
+│   │       │   └── source
+│   │       ├── color-convert
+│   │       ├── color-name
+│   │       ├── has-flag
+│   │       └── supports-color
+│   ├── loupe
+│   │   └── lib
+│   ├── lru_map
+│   ├── make-error
+│   │   └── dist
+│   ├── markdown-table
+│   ├── math-intrinsics
+│   │   ├── constants
+│   │   └── test
+│   ├── md5.js
+│   ├── memorystream
+│   │   └── test
+│   ├── merge2
+│   ├── @metamask
+│   ├── micro-eth-signer
+│   │   ├── abi
+│   │   ├── esm
+│   │   │   ├── abi
+│   │   │   └── net
+│   │   ├── net
+│   │   ├── node_modules
+│   │   │   └── @noble
+│   │   │       ├── curves
+│   │   │       │   ├── abstract
+│   │   │       │   ├── esm
+│   │   │       │   │   └── abstract
+│   │   │       │   └── src
+│   │   │       │       └── abstract
+│   │   │       └── hashes
+│   │   │           ├── esm
+│   │   │           └── src
+│   │   └── src
+│   │       ├── abi
+│   │       └── net
+│   ├── micro-ftch
+│   ├── micromatch
+│   ├── micro-packed
+│   │   ├── lib
+│   │   │   └── esm
+│   │   ├── node_modules
+│   │   │   └── @scure
+│   │   │       └── base
+│   │   │           └── lib
+│   │   │               └── esm
+│   │   └── src
+│   ├── mime-db
+│   ├── mime-types
+│   ├── minimalistic-assert
+│   ├── minimalistic-crypto-utils
+│   │   ├── lib
+│   │   └── test
+│   ├── minimatch
+│   ├── minimist
+│   │   ├── example
+│   │   └── test
+│   ├── mkdirp
+│   │   └── bin
+│   ├── mnemonist
+│   │   ├── sort
+│   │   └── utils
+│   ├── mocha
+│   │   ├── bin
+│   │   ├── lib
+│   │   │   ├── browser
+│   │   │   ├── cli
+│   │   │   ├── interfaces
+│   │   │   ├── nodejs
+│   │   │   │   └── reporters
+│   │   │   └── reporters
+│   │   └── node_modules
+│   │       ├── brace-expansion
+│   │       ├── escape-string-regexp
+│   │       ├── glob
+│   │       ├── has-flag
+│   │       ├── minimatch
+│   │       │   └── lib
+│   │       └── supports-color
+│   ├── ms
+│   ├── neo-async
+│   ├── @noble
+│   │   ├── curves
+│   │   │   ├── abstract
+│   │   │   ├── esm
+│   │   │   │   └── abstract
+│   │   │   ├── node_modules
+│   │   │   │   └── @noble
+│   │   │   │       └── hashes
+│   │   │   │           ├── esm
+│   │   │   │           └── src
+│   │   │   └── src
+│   │   │       └── abstract
+│   │   ├── hashes
+│   │   │   ├── esm
+│   │   │   └── src
+│   │   └── secp256k1
+│   │       └── lib
+│   │           └── esm
+│   ├── node-addon-api
+│   │   ├── doc
+│   │   ├── external-napi
+│   │   ├── src
+│   │   └── tools
+│   ├── node-emoji
+│   │   ├── lib
+│   │   └── test
+│   ├── node-gyp-build
+│   ├── @nodelib
+│   │   ├── fs.scandir
+│   │   │   └── out
+│   │   │       ├── adapters
+│   │   │       ├── providers
+│   │   │       ├── types
+│   │   │       └── utils
+│   │   ├── fs.stat
+│   │   │   └── out
+│   │   │       ├── adapters
+│   │   │       ├── providers
+│   │   │       └── types
+│   │   └── fs.walk
+│   │       └── out
+│   │           ├── providers
+│   │           ├── readers
+│   │           └── types
+│   ├── nofilter
+│   │   ├── lib
+│   │   └── types
+│   ├── @nomicfoundation
+│   │   ├── edr
+│   │   │   └── src
+│   │   │       ├── chains
+│   │   │       ├── mock
+│   │   │       ├── provider
+│   │   │       ├── solidity_tests
+│   │   │       ├── trace
+│   │   │       └── ts
+│   │   ├── edr-darwin-arm64
+│   │   ├── edr-darwin-x64
+│   │   ├── edr-linux-arm64-gnu
+│   │   ├── edr-linux-arm64-musl
+│   │   ├── edr-linux-x64-gnu
+│   │   ├── edr-linux-x64-musl
+│   │   ├── edr-win32-x64-msvc
+│   │   ├── hardhat-chai-matchers
+│   │   │   ├── internal
+│   │   │   │   ├── calledOnContract
+│   │   │   │   ├── misc
+│   │   │   │   └── reverted
+│   │   │   └── src
+│   │   │       └── internal
+│   │   │           ├── calledOnContract
+│   │   │           ├── misc
+│   │   │           └── reverted
+│   │   ├── hardhat-ethers
+│   │   │   ├── dist
+│   │   │   │   └── src
+│   │   │   ├── internal
+│   │   │   ├── src
+│   │   │   │   ├── dist
+│   │   │   │   │   └── src
+│   │   │   │   ├── internal
+│   │   │   │   └── types
+│   │   │   └── types
+│   │   ├── hardhat-network-helpers
+│   │   │   ├── dist
+│   │   │   │   └── src
+│   │   │   │       └── helpers
+│   │   │   │           └── time
+│   │   │   │               └── duration
+│   │   │   └── src
+│   │   │       └── helpers
+│   │   │           └── time
+│   │   │               └── duration
+│   │   ├── hardhat-toolbox
+│   │   │   └── src
+│   │   ├── hardhat-verify
+│   │   │   ├── internal
+│   │   │   │   └── solc
+│   │   │   └── src
+│   │   │       └── internal
+│   │   │           └── solc
+│   │   ├── solidity-analyzer
+│   │   │   └── src
+│   │   ├── solidity-analyzer-darwin-arm64
+│   │   ├── solidity-analyzer-darwin-x64
+│   │   ├── solidity-analyzer-linux-arm64-gnu
+│   │   ├── solidity-analyzer-linux-arm64-musl
+│   │   ├── solidity-analyzer-linux-x64-gnu
+│   │   ├── solidity-analyzer-linux-x64-musl
+│   │   └── solidity-analyzer-win32-x64-msvc
+│   ├── nopt
+│   │   ├── bin
+│   │   ├── examples
+│   │   ├── lib
+│   │   └── test
+│   ├── normalize-path
+│   ├── number-to-bn
+│   │   ├── dist
+│   │   ├── internals
+│   │   │   └── webpack
+│   │   ├── node_modules
+│   │   │   └── bn.js
+│   │   │       ├── lib
+│   │   │       ├── test
+│   │   │       │   └── pummel
+│   │   │       └── util
+│   │   └── src
+│   │       └── tests
+│   ├── object-assign
+│   ├── object-inspect
+│   │   ├── example
+│   │   └── test
+│   │       └── browser
+│   ├── obliterator
+│   ├── once
+│   ├── @openzeppelin
+│   │   └── contracts
+│   │       ├── access
+│   │       │   ├── AccessControl.sol
+│   │       │   ├── extensions
+│   │       │   │   ├── AccessControlDefaultAdminRules.sol
+│   │       │   │   ├── AccessControlEnumerable.sol
+│   │       │   │   ├── IAccessControlDefaultAdminRules.sol
+│   │       │   │   └── IAccessControlEnumerable.sol
+│   │       │   ├── IAccessControl.sol
+│   │       │   ├── manager
+│   │       │   │   ├── AccessManaged.sol
+│   │       │   │   ├── AccessManager.sol
+│   │       │   │   ├── AuthorityUtils.sol
+│   │       │   │   ├── IAccessManaged.sol
+│   │       │   │   ├── IAccessManager.sol
+│   │       │   │   └── IAuthority.sol
+│   │       │   ├── Ownable2Step.sol
+│   │       │   └── Ownable.sol
+│   │       ├── account
+│   │       │   ├── Account.sol
+│   │       │   ├── extensions
+│   │       │   │   ├── draft-AccountERC7579Hooked.sol
+│   │       │   │   ├── draft-AccountERC7579.sol
+│   │       │   │   └── draft-ERC7821.sol
+│   │       │   └── utils
+│   │       │       ├── draft-ERC4337Utils.sol
+│   │       │       ├── draft-ERC7579Utils.sol
+│   │       │       └── EIP7702Utils.sol
+│   │       ├── build
+│   │       │   └── contracts
+│   │       ├── finance
+│   │       │   ├── VestingWalletCliff.sol
+│   │       │   └── VestingWallet.sol
+│   │       ├── governance
+│   │       │   ├── extensions
+│   │       │   │   ├── GovernorCountingFractional.sol
+│   │       │   │   ├── GovernorCountingOverridable.sol
+│   │       │   │   ├── GovernorCountingSimple.sol
+│   │       │   │   ├── GovernorNoncesKeyed.sol
+│   │       │   │   ├── GovernorPreventLateQuorum.sol
+│   │       │   │   ├── GovernorProposalGuardian.sol
+│   │       │   │   ├── GovernorSequentialProposalId.sol
+│   │       │   │   ├── GovernorSettings.sol
+│   │       │   │   ├── GovernorStorage.sol
+│   │       │   │   ├── GovernorSuperQuorum.sol
+│   │       │   │   ├── GovernorTimelockAccess.sol
+│   │       │   │   ├── GovernorTimelockCompound.sol
+│   │       │   │   ├── GovernorTimelockControl.sol
+│   │       │   │   ├── GovernorVotesQuorumFraction.sol
+│   │       │   │   ├── GovernorVotes.sol
+│   │       │   │   └── GovernorVotesSuperQuorumFraction.sol
+│   │       │   ├── Governor.sol
+│   │       │   ├── IGovernor.sol
+│   │       │   ├── TimelockController.sol
+│   │       │   └── utils
+│   │       │       ├── IVotes.sol
+│   │       │       ├── VotesExtended.sol
+│   │       │       └── Votes.sol
+│   │       ├── interfaces
+│   │       │   ├── draft-IERC1822.sol
+│   │       │   ├── draft-IERC4337.sol
+│   │       │   ├── draft-IERC6093.sol
+│   │       │   ├── draft-IERC6909.sol
+│   │       │   ├── draft-IERC7579.sol
+│   │       │   ├── draft-IERC7674.sol
+│   │       │   ├── draft-IERC7802.sol
+│   │       │   ├── draft-IERC7821.sol
+│   │       │   ├── IERC1155MetadataURI.sol
+│   │       │   ├── IERC1155Receiver.sol
+│   │       │   ├── IERC1155.sol
+│   │       │   ├── IERC1271.sol
+│   │       │   ├── IERC1363Receiver.sol
+│   │       │   ├── IERC1363.sol
+│   │       │   ├── IERC1363Spender.sol
+│   │       │   ├── IERC165.sol
+│   │       │   ├── IERC1820Implementer.sol
+│   │       │   ├── IERC1820Registry.sol
+│   │       │   ├── IERC1967.sol
+│   │       │   ├── IERC20Metadata.sol
+│   │       │   ├── IERC20.sol
+│   │       │   ├── IERC2309.sol
+│   │       │   ├── IERC2612.sol
+│   │       │   ├── IERC2981.sol
+│   │       │   ├── IERC3156FlashBorrower.sol
+│   │       │   ├── IERC3156FlashLender.sol
+│   │       │   ├── IERC3156.sol
+│   │       │   ├── IERC4626.sol
+│   │       │   ├── IERC4906.sol
+│   │       │   ├── IERC5267.sol
+│   │       │   ├── IERC5313.sol
+│   │       │   ├── IERC5805.sol
+│   │       │   ├── IERC6372.sol
+│   │       │   ├── IERC721Enumerable.sol
+│   │       │   ├── IERC721Metadata.sol
+│   │       │   ├── IERC721Receiver.sol
+│   │       │   ├── IERC721.sol
+│   │       │   ├── IERC777Recipient.sol
+│   │       │   ├── IERC777Sender.sol
+│   │       │   ├── IERC777.sol
+│   │       │   └── IERC7913.sol
+│   │       ├── metatx
+│   │       │   ├── ERC2771Context.sol
+│   │       │   └── ERC2771Forwarder.sol
+│   │       ├── proxy
+│   │       │   ├── beacon
+│   │       │   │   ├── BeaconProxy.sol
+│   │       │   │   ├── IBeacon.sol
+│   │       │   │   └── UpgradeableBeacon.sol
+│   │       │   ├── Clones.sol
+│   │       │   ├── ERC1967
+│   │       │   │   ├── ERC1967Proxy.sol
+│   │       │   │   └── ERC1967Utils.sol
+│   │       │   ├── Proxy.sol
+│   │       │   ├── transparent
+│   │       │   │   ├── ProxyAdmin.sol
+│   │       │   │   └── TransparentUpgradeableProxy.sol
+│   │       │   └── utils
+│   │       │       ├── Initializable.sol
+│   │       │       └── UUPSUpgradeable.sol
+│   │       ├── token
+│   │       │   ├── common
+│   │       │   │   └── ERC2981.sol
+│   │       │   ├── ERC1155
+│   │       │   │   ├── ERC1155.sol
+│   │       │   │   ├── extensions
+│   │       │   │   │   ├── ERC1155Burnable.sol
+│   │       │   │   │   ├── ERC1155Pausable.sol
+│   │       │   │   │   ├── ERC1155Supply.sol
+│   │       │   │   │   ├── ERC1155URIStorage.sol
+│   │       │   │   │   └── IERC1155MetadataURI.sol
+│   │       │   │   ├── IERC1155Receiver.sol
+│   │       │   │   ├── IERC1155.sol
+│   │       │   │   └── utils
+│   │       │   │       ├── ERC1155Holder.sol
+│   │       │   │       └── ERC1155Utils.sol
+│   │       │   ├── ERC20
+│   │       │   │   ├── ERC20.sol
+│   │       │   │   ├── extensions
+│   │       │   │   │   ├── draft-ERC20Bridgeable.sol
+│   │       │   │   │   ├── draft-ERC20TemporaryApproval.sol
+│   │       │   │   │   ├── ERC1363.sol
+│   │       │   │   │   ├── ERC20Burnable.sol
+│   │       │   │   │   ├── ERC20Capped.sol
+│   │       │   │   │   ├── ERC20FlashMint.sol
+│   │       │   │   │   ├── ERC20Pausable.sol
+│   │       │   │   │   ├── ERC20Permit.sol
+│   │       │   │   │   ├── ERC20Votes.sol
+│   │       │   │   │   ├── ERC20Wrapper.sol
+│   │       │   │   │   ├── ERC4626.sol
+│   │       │   │   │   ├── IERC20Metadata.sol
+│   │       │   │   │   └── IERC20Permit.sol
+│   │       │   │   ├── IERC20.sol
+│   │       │   │   └── utils
+│   │       │   │       ├── ERC1363Utils.sol
+│   │       │   │       └── SafeERC20.sol
+│   │       │   ├── ERC6909
+│   │       │   │   ├── draft-ERC6909.sol
+│   │       │   │   └── extensions
+│   │       │   │       ├── draft-ERC6909ContentURI.sol
+│   │       │   │       ├── draft-ERC6909Metadata.sol
+│   │       │   │       └── draft-ERC6909TokenSupply.sol
+│   │       │   └── ERC721
+│   │       │       ├── ERC721.sol
+│   │       │       ├── extensions
+│   │       │       │   ├── ERC721Burnable.sol
+│   │       │       │   ├── ERC721Consecutive.sol
+│   │       │       │   ├── ERC721Enumerable.sol
+│   │       │       │   ├── ERC721Pausable.sol
+│   │       │       │   ├── ERC721Royalty.sol
+│   │       │       │   ├── ERC721URIStorage.sol
+│   │       │       │   ├── ERC721Votes.sol
+│   │       │       │   ├── ERC721Wrapper.sol
+│   │       │       │   ├── IERC721Enumerable.sol
+│   │       │       │   └── IERC721Metadata.sol
+│   │       │       ├── IERC721Receiver.sol
+│   │       │       ├── IERC721.sol
+│   │       │       └── utils
+│   │       │           ├── ERC721Holder.sol
+│   │       │           └── ERC721Utils.sol
+│   │       ├── utils
+│   │       │   ├── Address.sol
+│   │       │   ├── Arrays.sol
+│   │       │   ├── Base64.sol
+│   │       │   ├── Blockhash.sol
+│   │       │   ├── Bytes.sol
+│   │       │   ├── CAIP10.sol
+│   │       │   ├── CAIP2.sol
+│   │       │   ├── Calldata.sol
+│   │       │   ├── Comparators.sol
+│   │       │   ├── Context.sol
+│   │       │   ├── Create2.sol
+│   │       │   ├── cryptography
+│   │       │   │   ├── draft-ERC7739Utils.sol
+│   │       │   │   ├── ECDSA.sol
+│   │       │   │   ├── EIP712.sol
+│   │       │   │   ├── Hashes.sol
+│   │       │   │   ├── MerkleProof.sol
+│   │       │   │   ├── MessageHashUtils.sol
+│   │       │   │   ├── P256.sol
+│   │       │   │   ├── RSA.sol
+│   │       │   │   ├── SignatureChecker.sol
+│   │       │   │   ├── signers
+│   │       │   │   │   ├── AbstractSigner.sol
+│   │       │   │   │   ├── draft-ERC7739.sol
+│   │       │   │   │   ├── MultiSignerERC7913.sol
+│   │       │   │   │   ├── MultiSignerERC7913Weighted.sol
+│   │       │   │   │   ├── SignerECDSA.sol
+│   │       │   │   │   ├── SignerERC7702.sol
+│   │       │   │   │   ├── SignerERC7913.sol
+│   │       │   │   │   ├── SignerP256.sol
+│   │       │   │   │   └── SignerRSA.sol
+│   │       │   │   └── verifiers
+│   │       │   │       ├── ERC7913P256Verifier.sol
+│   │       │   │       └── ERC7913RSAVerifier.sol
+│   │       │   ├── Errors.sol
+│   │       │   ├── introspection
+│   │       │   │   ├── ERC165Checker.sol
+│   │       │   │   ├── ERC165.sol
+│   │       │   │   └── IERC165.sol
+│   │       │   ├── math
+│   │       │   │   ├── Math.sol
+│   │       │   │   ├── SafeCast.sol
+│   │       │   │   └── SignedMath.sol
+│   │       │   ├── Multicall.sol
+│   │       │   ├── NoncesKeyed.sol
+│   │       │   ├── Nonces.sol
+│   │       │   ├── Packing.sol
+│   │       │   ├── Panic.sol
+│   │       │   ├── Pausable.sol
+│   │       │   ├── ReentrancyGuard.sol
+│   │       │   ├── ReentrancyGuardTransient.sol
+│   │       │   ├── ShortStrings.sol
+│   │       │   ├── SlotDerivation.sol
+│   │       │   ├── StorageSlot.sol
+│   │       │   ├── Strings.sol
+│   │       │   ├── structs
+│   │       │   │   ├── BitMaps.sol
+│   │       │   │   ├── Checkpoints.sol
+│   │       │   │   ├── CircularBuffer.sol
+│   │       │   │   ├── DoubleEndedQueue.sol
+│   │       │   │   ├── EnumerableMap.sol
+│   │       │   │   ├── EnumerableSet.sol
+│   │       │   │   ├── Heap.sol
+│   │       │   │   └── MerkleTree.sol
+│   │       │   ├── TransientSlot.sol
+│   │       │   └── types
+│   │       │       └── Time.sol
+│   │       └── vendor
+│   │           └── compound
+│   │               └── ICompoundTimelock.sol
+│   ├── optionator
+│   │   └── lib
+│   ├── ordinal
+│   │   └── test
+│   ├── os-tmpdir
+│   ├── parse-cache-control
+│   ├── path-exists
+│   ├── path-is-absolute
+│   ├── path-parse
+│   ├── path-type
+│   ├── pathval
+│   ├── pbkdf2
+│   │   └── lib
+│   ├── picocolors
+│   ├── picomatch
+│   │   └── lib
+│   ├── pify
+│   ├── p-limit
+│   ├── p-locate
+│   ├── p-map
+│   ├── possible-typed-array-names
+│   │   └── test
+│   ├── prelude-ls
+│   │   └── lib
+│   ├── prettier
+│   │   └── esm
+│   ├── process-nextick-args
+│   ├── promise
+│   │   ├── domains
+│   │   ├── lib
+│   │   ├── setimmediate
+│   │   └── src
+│   ├── proxy-from-env
+│   ├── qs
+│   │   ├── dist
+│   │   ├── lib
+│   │   └── test
+│   ├── queue-microtask
+│   ├── randombytes
+│   ├── raw-body
+│   ├── readable-stream
+│   │   └── lib
+│   │       └── internal
+│   │           └── streams
+│   ├── readdirp
+│   ├── rechoir
+│   │   └── lib
+│   ├── recursive-readdir
+│   ├── reduce-flatten
+│   ├── req-cwd
+│   ├── req-from
+│   ├── require-directory
+│   ├── require-from-string
+│   ├── resolve
+│   │   ├── example
+│   │   ├── lib
+│   │   └── test
+│   │       ├── dotdot
+│   │       │   └── abc
+│   │       ├── module_dir
+│   │       │   ├── xmodules
+│   │       │   │   └── aaa
+│   │       │   ├── ymodules
+│   │       │   │   └── aaa
+│   │       │   └── zmodules
+│   │       │       └── bbb
+│   │       ├── node_path
+│   │       │   ├── x
+│   │       │   │   ├── aaa
+│   │       │   │   └── ccc
+│   │       │   └── y
+│   │       │       ├── bbb
+│   │       │       └── ccc
+│   │       ├── pathfilter
+│   │       │   └── deep_ref
+│   │       ├── precedence
+│   │       │   ├── aaa
+│   │       │   └── bbb
+│   │       ├── resolver
+│   │       │   ├── baz
+│   │       │   ├── browser_field
+│   │       │   ├── dot_main
+│   │       │   ├── dot_slash_main
+│   │       │   ├── incorrect_main
+│   │       │   ├── invalid_main
+│   │       │   ├── multirepo
+│   │       │   │   └── packages
+│   │       │   │       ├── package-a
+│   │       │   │       └── package-b
+│   │       │   ├── nested_symlinks
+│   │       │   │   └── mylib
+│   │       │   ├── other_path
+│   │       │   │   └── lib
+│   │       │   ├── quux
+│   │       │   │   └── foo
+│   │       │   ├── same_names
+│   │       │   │   └── foo
+│   │       │   ├── symlinked
+│   │       │   │   ├── _
+│   │       │   │   │   ├── node_modules
+│   │       │   │   │   └── symlink_target
+│   │       │   │   └── package
+│   │       │   └── without_basedir
+│   │       └── shadowed_core
+│   │           └── node_modules
+│   │               └── util
+│   ├── resolve-from
+│   ├── reusify
+│   │   └── benchmarks
+│   ├── ripemd160
+│   ├── rlp
+│   │   ├── bin
+│   │   ├── dist
+│   │   ├── dist.browser
+│   │   └── src
+│   ├── run-parallel
+│   ├── safe-buffer
+│   ├── safer-buffer
+│   ├── sc-istanbul
+│   │   ├── lib
+│   │   │   ├── assets
+│   │   │   │   └── vendor
+│   │   │   ├── command
+│   │   │   │   └── common
+│   │   │   ├── report
+│   │   │   │   ├── common
+│   │   │   │   └── templates
+│   │   │   ├── store
+│   │   │   └── util
+│   │   └── node_modules
+│   │       ├── argparse
+│   │       │   └── lib
+│   │       │       ├── action
+│   │       │       │   ├── append
+│   │       │       │   └── store
+│   │       │       ├── argument
+│   │       │       └── help
+│   │       ├── glob
+│   │       ├── has-flag
+│   │       ├── js-yaml
+│   │       │   ├── bin
+│   │       │   ├── dist
+│   │       │   ├── lib
+│   │       │   │   └── js-yaml
+│   │       │   │       ├── schema
+│   │       │   │       └── type
+│   │       │   │           └── js
+│   │       │   └── node_modules
+│   │       │       └── esprima
+│   │       │           ├── bin
+│   │       │           └── dist
+│   │       ├── resolve
+│   │       │   ├── example
+│   │       │   ├── lib
+│   │       │   └── test
+│   │       │       ├── dotdot
+│   │       │       │   └── abc
+│   │       │       ├── module_dir
+│   │       │       │   ├── xmodules
+│   │       │       │   │   └── aaa
+│   │       │       │   ├── ymodules
+│   │       │       │   │   └── aaa
+│   │       │       │   └── zmodules
+│   │       │       │       └── bbb
+│   │       │       ├── node_path
+│   │       │       │   ├── x
+│   │       │       │   │   ├── aaa
+│   │       │       │   │   └── ccc
+│   │       │       │   └── y
+│   │       │       │       ├── bbb
+│   │       │       │       └── ccc
+│   │       │       ├── pathfilter
+│   │       │       │   └── deep_ref
+│   │       │       │       └── node_modules
+│   │       │       │           └── deep
+│   │       │       │               └── deeper
+│   │       │       ├── precedence
+│   │       │       │   ├── aaa
+│   │       │       │   └── bbb
+│   │       │       ├── resolver
+│   │       │       │   ├── bar
+│   │       │       │   │   └── node_modules
+│   │       │       │   │       └── foo
+│   │       │       │   ├── baz
+│   │       │       │   ├── biz
+│   │       │       │   │   └── node_modules
+│   │       │       │   │       ├── garply
+│   │       │       │   │       │   └── lib
+│   │       │       │   │       ├── grux
+│   │       │       │   │       └── tiv
+│   │       │       │   ├── incorrect_main
+│   │       │       │   ├── other_path
+│   │       │       │   │   └── lib
+│   │       │       │   ├── punycode
+│   │       │       │   │   └── node_modules
+│   │       │       │   │       └── punycode
+│   │       │       │   ├── quux
+│   │       │       │   │   └── foo
+│   │       │       │   └── without_basedir
+│   │       │       │       └── node_modules
+│   │       │       └── subdirs
+│   │       │           └── node_modules
+│   │       │               └── a
+│   │       │                   └── b
+│   │       │                       └── c
+│   │       └── supports-color
+│   ├── scrypt-js
+│   │   └── thirdparty
+│   ├── @scure
+│   │   ├── base
+│   │   │   └── lib
+│   │   │       └── esm
+│   │   ├── bip32
+│   │   │   └── lib
+│   │   │       └── esm
+│   │   └── bip39
+│   │       └── wordlists
+│   ├── secp256k1
+│   │   ├── lib
+│   │   ├── node_modules
+│   │   │   └── node-addon-api
+│   │   │       └── tools
+│   │   ├── prebuilds
+│   │   │   ├── darwin-arm64
+│   │   │   ├── linux-x64
+│   │   │   └── win32-x64
+│   │   └── src
+│   │       └── secp256k1
+│   │           ├── build-aux
+│   │           │   └── m4
+│   │           ├── contrib
+│   │           ├── include
+│   │           ├── sage
+│   │           └── src
+│   │               ├── asm
+│   │               ├── java
+│   │               │   └── org
+│   │               │       └── bitcoin
+│   │               └── modules
+│   │                   ├── ecdh
+│   │                   └── recovery
+│   ├── semver
+│   │   └── bin
+│   ├── @sentry
+│   │   ├── core
+│   │   │   ├── dist
+│   │   │   │   ├── integrations
+│   │   │   │   └── transports
+│   │   │   └── esm
+│   │   │       ├── integrations
+│   │   │       └── transports
+│   │   ├── hub
+│   │   │   ├── dist
+│   │   │   └── esm
+│   │   ├── minimal
+│   │   │   ├── dist
+│   │   │   └── esm
+│   │   ├── node
+│   │   │   ├── dist
+│   │   │   │   ├── integrations
+│   │   │   │   │   └── utils
+│   │   │   │   └── transports
+│   │   │   └── esm
+│   │   │       ├── integrations
+│   │   │       │   └── utils
+│   │   │       └── transports
+│   │   ├── tracing
+│   │   │   ├── build
+│   │   │   ├── dist
+│   │   │   │   ├── browser
+│   │   │   │   │   └── web-vitals
+│   │   │   │   │       └── lib
+│   │   │   │   └── integrations
+│   │   │   └── esm
+│   │   │       ├── browser
+│   │   │       │   └── web-vitals
+│   │   │       │       └── lib
+│   │   │       └── integrations
+│   │   ├── types
+│   │   │   ├── dist
+│   │   │   └── esm
+│   │   └── utils
+│   │       ├── dist
+│   │       └── esm
+│   ├── serialize-javascript
+│   ├── set-function-length
+│   ├── setimmediate
+│   ├── setprototypeof
+│   │   └── test
+│   ├── sha1
+│   ├── sha.js
+│   │   └── test
+│   ├── shelljs
+│   │   ├── bin
+│   │   └── src
+│   ├── side-channel
+│   │   └── test
+│   ├── side-channel-list
+│   │   └── test
+│   ├── side-channel-map
+│   │   └── test
+│   ├── side-channel-weakmap
+│   │   └── test
+│   ├── slash
+│   ├── slice-ansi
+│   │   └── node_modules
+│   │       ├── ansi-styles
+│   │       ├── color-convert
+│   │       └── color-name
+│   ├── solc
+│   │   ├── bindings
+│   │   ├── common
+│   │   └── node_modules
+│   │       └── semver
+│   │           └── bin
+│   ├── solidity-coverage
+│   │   ├── lib
+│   │   ├── node_modules
+│   │   │   ├── fs-extra
+│   │   │   │   └── lib
+│   │   │   │       ├── copy
+│   │   │   │       ├── copy-sync
+│   │   │   │       ├── empty
+│   │   │   │       ├── ensure
+│   │   │   │       ├── fs
+│   │   │   │       ├── json
+│   │   │   │       ├── mkdirs
+│   │   │   │       ├── move
+│   │   │   │       ├── move-sync
+│   │   │   │       ├── output
+│   │   │   │       ├── path-exists
+│   │   │   │       ├── remove
+│   │   │   │       └── util
+│   │   │   ├── semver
+│   │   │   │   ├── bin
+│   │   │   │   ├── classes
+│   │   │   │   ├── functions
+│   │   │   │   ├── internal
+│   │   │   │   └── ranges
+│   │   │   └── @solidity-parser
+│   │   │       └── parser
+│   │   │           ├── dist
+│   │   │           │   ├── src
+│   │   │           │   │   └── antlr
+│   │   │           │   └── test
+│   │   │           └── src
+│   │   │               └── antlr
+│   │   ├── plugins
+│   │   │   └── resources
+│   │   └── scripts
+│   ├── @solidity-parser
+│   │   └── parser
+│   │       ├── dist
+│   │       │   ├── antlr
+│   │       │   ├── src
+│   │       │   │   └── antlr
+│   │       │   └── test
+│   │       └── src
+│   │           └── antlr
+│   ├── source-map
+│   │   ├── dist
+│   │   └── lib
+│   ├── source-map-support
+│   ├── sprintf-js
+│   │   ├── demo
+│   │   ├── dist
+│   │   ├── src
+│   │   └── test
+│   ├── stacktrace-parser
+│   │   ├── dist
+│   │   └── node_modules
+│   │       └── type-fest
+│   │           └── source
+│   ├── statuses
+│   ├── string_decoder
+│   │   └── lib
+│   ├── string-format
+│   ├── string-width
+│   ├── strip-ansi
+│   ├── strip-hex-prefix
+│   │   └── src
+│   │       └── tests
+│   ├── strip-json-comments
+│   ├── supports-color
+│   ├── sync-request
+│   │   ├── lib
+│   │   ├── src
+│   │   └── test
+│   │       └── __snapshots__
+│   ├── sync-rpc
+│   │   └── lib
+│   │       ├── json-buffer
+│   │       └── __tests__
+│   ├── table
+│   │   └── dist
+│   │       └── src
+│   │           ├── generated
+│   │           ├── schemas
+│   │           └── types
+│   ├── table-layout
+│   │   ├── lib
+│   │   └── node_modules
+│   │       ├── array-back
+│   │       │   └── dist
+│   │       └── typical
+│   │           └── dist
+│   ├── then-request
+│   │   ├── lib
+│   │   └── node_modules
+│   │       ├── form-data
+│   │       │   └── lib
+│   │       └── @types
+│   │           └── node
+│   ├── tinyglobby
+│   │   ├── dist
+│   │   └── node_modules
+│   │       ├── fdir
+│   │       │   └── dist
+│   │       └── picomatch
+│   │           └── lib
+│   ├── tmp
+│   │   └── lib
+│   ├── to-buffer
+│   ├── toidentifier
+│   ├── to-regex-range
+│   ├── ts-command-line-args
+│   │   ├── coverage
+│   │   │   └── lcov-report
+│   │   │       └── src
+│   │   │           └── helpers
+│   │   ├── dist
+│   │   │   └── helpers
+│   │   ├── node_modules
+│   │   │   ├── ansi-styles
+│   │   │   ├── chalk
+│   │   │   │   └── source
+│   │   │   ├── color-convert
+│   │   │   ├── color-name
+│   │   │   ├── has-flag
+│   │   │   └── supports-color
+│   │   └── src
+│   │       └── helpers
+│   ├── @tsconfig
+│   │   ├── node10
+│   │   ├── node12
+│   │   ├── node14
+│   │   └── node16
+│   ├── ts-essentials
+│   │   └── dist
+│   ├── tslib
+│   │   ├── modules
+│   │   └── test
+│   │       └── validateModuleExportsMatchCommonJS
+│   ├── ts-node
+│   │   ├── dist
+│   │   │   ├── child
+│   │   │   └── transpilers
+│   │   ├── dist-raw
+│   │   ├── esm
+│   │   ├── node10
+│   │   ├── node12
+│   │   ├── node14
+│   │   ├── node16
+│   │   ├── node_modules
+│   │   │   └── diff
+│   │   │       ├── dist
+│   │   │       └── lib
+│   │   │           ├── convert
+│   │   │           ├── diff
+│   │   │           ├── patch
+│   │   │           └── util
+│   │   ├── register
+│   │   └── transpilers
+│   ├── tsort
+│   │   └── test
+│   ├── @typechain
+│   │   ├── ethers-v6
+│   │   │   ├── dist
+│   │   │   │   └── codegen
+│   │   │   └── static
+│   │   └── hardhat
+│   │       ├── dist
+│   │       └── node_modules
+│   │           ├── fs-extra
+│   │           │   └── lib
+│   │           │       ├── copy
+│   │           │       ├── copy-sync
+│   │           │       ├── empty
+│   │           │       ├── ensure
+│   │           │       ├── fs
+│   │           │       ├── json
+│   │           │       ├── mkdirs
+│   │           │       ├── move
+│   │           │       ├── move-sync
+│   │           │       ├── output
+│   │           │       ├── path-exists
+│   │           │       ├── remove
+│   │           │       └── util
+│   │           ├── jsonfile
+│   │           └── universalify
+│   ├── typechain
+│   │   ├── dist
+│   │   │   ├── cli
+│   │   │   ├── codegen
+│   │   │   │   └── outputTransformers
+│   │   │   ├── parser
+│   │   │   ├── typechain
+│   │   │   └── utils
+│   │   │       └── files
+│   │   └── node_modules
+│   │       ├── glob
+│   │       └── mkdirp
+│   │           ├── bin
+│   │           └── lib
+│   ├── type-check
+│   │   └── lib
+│   ├── typedarray
+│   │   ├── example
+│   │   └── test
+│   │       └── server
+│   ├── typed-array-buffer
+│   │   └── test
+│   ├── type-detect
+│   ├── type-fest
+│   │   ├── source
+│   │   └── ts41
+│   ├── @types
+│   │   ├── bn.js
+│   │   ├── chai
+│   │   ├── chai-as-promised
+│   │   ├── concat-stream
+│   │   ├── form-data
+│   │   ├── glob
+│   │   ├── minimatch
+│   │   ├── mocha
+│   │   ├── node
+│   │   │   ├── assert
+│   │   │   ├── compatibility
+│   │   │   ├── dns
+│   │   │   ├── fs
+│   │   │   ├── inspector
+│   │   │   ├── path
+│   │   │   ├── readline
+│   │   │   ├── stream
+│   │   │   ├── test
+│   │   │   ├── timers
+│   │   │   ├── ts5.6
+│   │   │   │   └── compatibility
+│   │   │   ├── ts5.7
+│   │   │   │   └── compatibility
+│   │   │   ├── util
+│   │   │   └── web-globals
+│   │   ├── pbkdf2
+│   │   ├── prettier
+│   │   ├── qs
+│   │   └── secp256k1
+│   ├── typescript
+│   │   ├── bin
+│   │   └── lib
+│   │       ├── cs
+│   │       ├── de
+│   │       ├── es
+│   │       ├── fr
+│   │       ├── it
+│   │       ├── ja
+│   │       ├── ko
+│   │       ├── pl
+│   │       ├── pt-br
+│   │       ├── ru
+│   │       ├── tr
+│   │       ├── zh-cn
+│   │       └── zh-tw
+│   ├── typical
+│   │   └── dist
+│   ├── uglify-js
+│   │   ├── bin
+│   │   ├── lib
+│   │   └── tools
+│   ├── undici
+│   │   ├── docs
+│   │   │   ├── api
+│   │   │   ├── assets
+│   │   │   └── best-practices
+│   │   ├── lib
+│   │   │   ├── api
+│   │   │   ├── cache
+│   │   │   ├── compat
+│   │   │   ├── cookies
+│   │   │   ├── core
+│   │   │   ├── fetch
+│   │   │   ├── fileapi
+│   │   │   ├── handler
+│   │   │   ├── interceptor
+│   │   │   ├── llhttp
+│   │   │   ├── mock
+│   │   │   ├── node
+│   │   │   └── websocket
+│   │   └── types
+│   ├── undici-types
+│   ├── universalify
+│   ├── unpipe
+│   ├── utf8
+│   ├── util-deprecate
+│   ├── uuid
+│   │   └── dist
+│   │       ├── bin
+│   │       ├── esm-browser
+│   │       ├── esm-node
+│   │       └── umd
+│   ├── v8-compile-cache-lib
+│   ├── web3-utils
+│   │   ├── lib
+│   │   ├── node_modules
+│   │   │   ├── ethereum-cryptography
+│   │   │   │   ├── bip39
+│   │   │   │   │   └── wordlists
+│   │   │   │   └── esm
+│   │   │   │       └── bip39
+│   │   │   │           └── wordlists
+│   │   │   ├── @ethereumjs
+│   │   │   │   ├── rlp
+│   │   │   │   │   ├── bin
+│   │   │   │   │   ├── dist
+│   │   │   │   │   └── src
+│   │   │   │   └── util
+│   │   │   │       ├── dist
+│   │   │   │       └── src
+│   │   │   ├── @noble
+│   │   │   │   ├── curves
+│   │   │   │   │   ├── abstract
+│   │   │   │   │   ├── esm
+│   │   │   │   │   │   └── abstract
+│   │   │   │   │   └── src
+│   │   │   │   │       └── abstract
+│   │   │   │   └── hashes
+│   │   │   │       ├── esm
+│   │   │   │       └── src
+│   │   │   └── @scure
+│   │   │       ├── bip32
+│   │   │       │   └── lib
+│   │   │       │       └── esm
+│   │   │       └── bip39
+│   │   │           ├── esm
+│   │   │           │   └── wordlists
+│   │   │           ├── src
+│   │   │           └── wordlists
+│   │   ├── src
+│   │   └── types
+│   │       └── tests
+│   ├── which
+│   │   └── bin
+│   ├── which-typed-array
+│   │   └── test
+│   ├── widest-line
+│   ├── word-wrap
+│   ├── wordwrap
+│   │   ├── example
+│   │   └── test
+│   ├── wordwrapjs
+│   │   └── node_modules
+│   │       └── typical
+│   │           └── dist
+│   ├── workerpool
+│   │   ├── dist
+│   │   └── src
+│   │       └── generated
+│   ├── wrap-ansi
+│   │   └── node_modules
+│   │       ├── ansi-styles
+│   │       ├── color-convert
+│   │       └── color-name
+│   ├── wrappy
+│   ├── ws
+│   │   └── lib
+│   ├── y18n
+│   │   └── build
+│   │       └── lib
+│   │           └── platform-shims
+│   ├── yargs
+│   │   ├── build
+│   │   │   └── lib
+│   │   │       ├── typings
+│   │   │       └── utils
+│   │   ├── helpers
+│   │   ├── lib
+│   │   │   └── platform-shims
+│   │   └── locales
+│   ├── yargs-parser
+│   │   └── build
+│   │       └── lib
+│   ├── yargs-unparser
+│   ├── yn
+│   └── yocto-queue
+└── scripts
+
+1987 directories, 246 files

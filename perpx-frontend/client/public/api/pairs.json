@@ -1,0 +1,25 @@
+[
+  { "symbol": "BTC",   "display": "BTC / USD",   "enabled": true },
+  { "symbol": "ETH",   "display": "ETH / USD",   "enabled": true },
+  { "symbol": "SOL",   "display": "SOL / USD",   "enabled": true },
+  { "symbol": "ARB",   "display": "ARB / USD",   "enabled": true },
+  { "symbol": "OP",    "display": "OP / USD",    "enabled": true },
+
+  { "symbol": "AVAX",  "display": "AVAX / USD",  "enabled": true },
+  { "symbol": "MATIC", "display": "MATIC / USD", "enabled": true },
+  { "symbol": "ADA",   "display": "ADA / USD",   "enabled": true },
+  { "symbol": "XRP",   "display": "XRP / USD",   "enabled": true },
+  { "symbol": "DOGE",  "display": "DOGE / USD",  "enabled": true },
+
+  { "symbol": "DOT",   "display": "DOT / USD",   "enabled": true },
+  { "symbol": "LINK",  "display": "LINK / USD",  "enabled": true },
+  { "symbol": "UNI",   "display": "UNI / USD",   "enabled": true },
+  { "symbol": "AAVE",  "display": "AAVE / USD",  "enabled": true },
+  { "symbol": "ATOM",  "display": "ATOM / USD",  "enabled": true },
+
+  { "symbol": "NEAR",  "display": "NEAR / USD",  "enabled": true },
+  { "symbol": "SUI",   "display": "SUI / USD",   "enabled": true },
+  { "symbol": "APT",   "display": "APT / USD",   "enabled": true },
+  { "symbol": "PEPE",  "display": "PEPE / USD",  "enabled": true },
+  { "symbol": "BONK",  "display": "BONK / USD",  "enabled": true }
+]

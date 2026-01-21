@@ -2,6 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Code, Key, Book, Terminal } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
+import TronConnectPanel from "@/components/tron/TronConnectPanel";
+
+
 export default function API() {
   const { t } = useLanguage();
   return (
@@ -70,6 +73,12 @@ export default function API() {
               {t('api.viewExamples')}
             </Button>
           </div>
+
+                  {/* TRON Wallet Safe Connect (Experimental) */}
+        <div className="mt-10">
+          <TronConnectPanel />
+        </div>
+
         </div>
       </div>
     </div>
